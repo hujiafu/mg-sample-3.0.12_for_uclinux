@@ -1,0 +1,34 @@
+make clean
+
+export TOOLCHAIN="/home/hujiafu/uclinux/cortexm_uclinux-master/cross_tools/arm-2010q1-uclinux/arm-uclinuxeabi"
+
+export CC=arm-uclinuxeabi-gcc
+export CPP=arm-uclinuxeabi-cpp
+export CXX=arm-uclinuxeabi-g++
+export AS=arm-uclinuxeabi-as
+export LD=arm-uclinuxeabi-ld
+export AR=arm-uclinuxeabi-ar
+export STRIP=arm-uclinuxeabi-strip
+export RANLIB=arm-uclinuxeabi-ranlib
+export OBJDUMP=arm-uclinuxeabi-objdump
+
+export CFLAGS="-I. -I./include \
+-I${TOOLCHAIN}/include/c++/4.4.1 \
+-I${TOOLCHAIN}/libc/usr/include \
+-I/usr/local/minigui/cross/arm/cortex-m3/include -mcpu=cortex-m3 -mthumb -static"
+
+export LDFLAGS="-L${TOOLCHAIN}/libc/usr/lib \
+-L/usr/local/minigui/cross/arm/cortex-m3/lib"
+
+export MINIGUI_LIBS="-lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -lpthread"
+
+export PKG_CONFIG_PATH="/usr/local/minigui/cross/arm/cortex-m3/lib/pkgconfig"
+
+./configure --build=i686-linux --host=arm-linux --target=arm-linux prefix=/usr/local/minigui/cross/arm/cortex-m3
+
+#make
+
+#make install
+
+#echo "mg-1.2.37 Make successful."
+
