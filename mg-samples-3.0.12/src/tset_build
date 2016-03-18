@@ -1,0 +1,3 @@
+#arm-uclinuxeabi-gcc -o helloworld helloworld.c -I/usr/local/minigui/cross/arm/cortex-m3/include -mcpu=cortex-m3 -mthumb -L /usr/local/minigui/cross/arm/cortex-m3/lib -L /home/hujiafu/uclinux/cortexm_uclinux-master/cross_tools/arm-2010q1-uclinux/arm-uclinuxeabi/libc/usr/lib -lminigui_ths -ljpeg -lpng -lz -lts -lm -pthread -lmyguiinput
+arm-uclinuxeabi-gcc -o helloworld helloworld.c -I/usr/local/minigui/cross/arm/cortex-m3/include -mcpu=cortex-m3 -mthumb -static -L \
+/home/hujiafu/uclinux/cortexm_uclinux-master/cross_tools/arm-2010q1-uclinux/arm-uclinuxeabi/libc/usr/lib -lpthread

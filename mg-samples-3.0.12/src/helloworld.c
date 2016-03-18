@@ -26,7 +26,7 @@
 #else
 #include "helloworld_res_en.h"
 #endif
-
+#if 0
 static char welcome_text [512];
 static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
@@ -36,7 +36,8 @@ static const char* syskey = "";
 
 static int last_key = -1;
 static int last_key_count = 0;
-
+#endif
+#if 0
 static void make_welcome_text (void)
 {
     const char* sys_charset = GetSysCharset (TRUE);
@@ -149,13 +150,17 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 
     return DefaultMainWinProc(hWnd, message, wParam, lParam);
 }
-
-int MiniGUIMain (int argc, const char* argv[])
+#endif
+//int MiniGUIMain (int argc, const char* argv[])
+int main (int argc, const char* argv[])
 {
-    MSG Msg;
-    HWND hMainWnd;
-    MAINWINCREATE CreateInfo;
 
+//    MSG Msg;
+ //   HWND hMainWnd;
+  //  MAINWINCREATE CreateInfo;
+
+	printf("test a\n");
+#if 0
 #ifdef _MGRM_PROCESSES
     JoinLayer(NAME_DEF_LAYER , "helloworld" , 0 , 0);
 #endif
@@ -189,7 +194,7 @@ int MiniGUIMain (int argc, const char* argv[])
     }
 
     MainWindowThreadCleanup (hMainWnd);
-
+#endif
     return 0;
 }
 
