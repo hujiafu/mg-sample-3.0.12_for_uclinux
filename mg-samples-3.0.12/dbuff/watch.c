@@ -45,7 +45,7 @@ static BITMAP backbitmap;
 static BITMAP digibitmap;
 static WATCH_INFO g_watch;
 
-static int my_usleep(useconds_t usec){
+static int my_usleep(suseconds_t usec){
     unsigned int now = times(NULL);
     unsigned int end = now + usec / (1000 * 10);
     while (((int)(end - now)) > 0) {
