@@ -17,14 +17,14 @@ export CFLAGS="-I. -I./include \
 -I${TOOLCHAIN}/libc/usr/include \
 -I/usr/local/minigui/cross/arm/cortex-m3/include -mcpu=cortex-m3 -mthumb -static"
 
-export LDFLAGS="-L${TOOLCHAIN}/libc/usr/lib \
+export LDFLAGS="-mcpu=cortex-m3 -mthumb -L${TOOLCHAIN}/libc/usr/lib \
 -L/usr/local/minigui/cross/arm/cortex-m3/lib"
 
-export MINIGUI_LIBS="-lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -lpthread"
+export MINIGUI_LIBS="-mcpu=cortex-m3 -mthumb -lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -pthread -lmyguiinput"
 
 export PKG_CONFIG_PATH="/usr/local/minigui/cross/arm/cortex-m3/lib/pkgconfig"
 
-./configure --build=i686-linux --host=arm-linux --target=arm-linux prefix=/usr/local/minigui/cross/arm/cortex-m3
+./configure --build=i686-linux --host=arm-linux --target=arm-linux --prefix=/usr/local/minigui/cross/arm/cortex-m3
 
 #make
 
