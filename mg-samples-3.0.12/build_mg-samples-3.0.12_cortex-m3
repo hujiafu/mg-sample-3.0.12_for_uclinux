@@ -13,14 +13,11 @@ export RANLIB=arm-uclinuxeabi-ranlib
 export OBJDUMP=arm-uclinuxeabi-objdump
 
 export CFLAGS="-I. -I./include \
--I${TOOLCHAIN}/include/c++/4.4.1 \
--I${TOOLCHAIN}/libc/usr/include \
 -I/usr/local/minigui/cross/arm/cortex-m3/include -mcpu=cortex-m3 -mthumb -static"
 
-export LDFLAGS="-mcpu=cortex-m3 -mthumb -L${TOOLCHAIN}/libc/usr/lib \
--L/usr/local/minigui/cross/arm/cortex-m3/lib"
+export LDFLAGS="-L/usr/local/minigui/cross/arm/cortex-m3/lib"
 
-export MINIGUI_LIBS="-mcpu=cortex-m3 -mthumb -lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -pthread -lmyguiinput"
+export MINIGUI_LIBS="-lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -pthread"
 
 export PKG_CONFIG_PATH="/usr/local/minigui/cross/arm/cortex-m3/lib/pkgconfig"
 
