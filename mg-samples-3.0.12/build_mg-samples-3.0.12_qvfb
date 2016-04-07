@@ -11,9 +11,9 @@ export PKG_CONFIG_PATH="/usr/local/minigui/local/lib/pkgconfig"
 
 ./configure --build=i686-linux --host=i686-linux --target=i686-linux --prefix=/usr/local/minigui/local
 
-#make
+make
 
-#make install
+make install
 
-#echo "mg-1.2.37 Make successful."
+echo "mg-1.2.37 Make successful."
 

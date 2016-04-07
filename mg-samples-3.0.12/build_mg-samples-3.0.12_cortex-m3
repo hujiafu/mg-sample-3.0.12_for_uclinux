@@ -23,9 +23,9 @@ export PKG_CONFIG_PATH="/usr/local/minigui/cross/arm/cortex-m3/lib/pkgconfig"
 
 ./configure --build=i686-linux --host=arm-linux --target=arm-linux --prefix=/usr/local/minigui/cross/arm/cortex-m3
 
-#make
+make
 
-#make install
+make install
 
-#echo "mg-1.2.37 Make successful."
+echo "mg-1.2.37 Make successful."
 
