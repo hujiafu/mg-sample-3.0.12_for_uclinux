@@ -22,6 +22,7 @@
 #include "helloworld_res_en.h"
 #endif
 #include "JointWarn_Logic.h"
+#include "JointWarn_UImain.h"
 
 static char welcome_text [512];
 static char msg_text [256];
@@ -150,14 +151,22 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 
 const char* menu_hz[]=
 { 	
-	"Œ“µƒµÁƒ‘",
+	"«Î—°‘Ò◊˜“µ«¯”Ú£°",
 	"IE‰Ø¿¿∆˜",
 	"“Ù¿÷",
 	"Õº∆¨",
 	"…„œÒª˙",
 	"ƒ÷÷”",
 };
+void test_chinese(HDC hdc){
+	TextOut(hdc,200,295,"≤‚ ‘1");
 
+}
+
+void test_output(HDC hdc, char * str)
+{
+	TextOut(hdc,300,295, str);
+}
 
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
@@ -197,9 +206,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			LoadBitmap(HDC_SCREEN,&s_bmp[5],"/usr/local/res/clock.bmp");
 #endif	
 
-			s_font = CreateLogFont(NULL,"Song","GB2312-80",
-			FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
-			FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,16,0);
+//			s_font = CreateLogFont(NULL,"Song","GB2312-80",
+//			FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
+//			FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,16,0);
 			
 			s_font1 = CreateLogFont(NULL,"Song","GB2312-80",
 			FONT_WEIGHT_REGULAR,FONT_SLANT_ROMAN,FONT_SETWIDTH_NORMAL,
@@ -212,7 +221,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
   		case MSG_PAINT:
 			printf("MSG_PAINT begin1\n");
 			hdc = BeginPaint(hWnd);
-			FillBoxWithBitmap(hdc,0,0,800,480,&s_background);
+			FillBoxWithBitmap(hdc,0,0,800,360,&s_background);
 #if 0
 			for(i=0;i<4;i++)
 			{
@@ -227,10 +236,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			FillBoxWithBitmap(hdc,0,283,240,37,&s_startbmp);
 #endif
 			SetBkMode(hdc,BM_TRANSPARENT);
-#if 0
 			SetTextColor(hdc,COLOR_lightwhite);
-			SelectFont(hdc,s_font);
-			TextOut(hdc,30,295,"ø™ º");
+//			SelectFont(hdc,s_font);
+			TextOut(hdc,30,295,"≤‚ ‘");
+			//TextOut(hdc,200,295,"≤‚ ‘");
+			test_chinese(hdc);
+			test_b(hdc);
+#if 0
 
 			SetPenColor(hdc,COLOR_black);
 			if(s_sel<4)
@@ -244,6 +256,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SelectFont(hdc,s_font1);
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
+			jointwarn_crate_mainui(hdc, g_rcScr.right, g_rcScr.bottom);
+			TextOut(hdc,400,295,"≤‚ ‘");
+
 			EndPaint(hWnd,hdc);
 
 			break;
@@ -420,11 +435,11 @@ int MiniGUIMain (int argc, const char* argv[])
 #endif
 	InitMainWindow();	
 		
-	printf("argc = %d\n", argc);
-	printf("argc[1] %d\n", atoi(argv[1]));
-	printf("argc[2] %d\n", atoi(argv[2]));
+	//printf("argc = %d\n", argc);
+	//printf("argc[1] %d\n", atoi(argv[1]));
+	//printf("argc[2] %d\n", atoi(argv[2]));
 	
-	play_rock(atoi(argv[1]), atoi(argv[2]));
+	//play_rock(atoi(argv[1]), atoi(argv[2]));
 
 	while(GetMessage(&Msg,hMainWnd))
 	{
