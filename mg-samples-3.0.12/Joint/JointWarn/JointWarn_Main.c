@@ -148,16 +148,112 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
+const char* warningText[]=
+{
+	"请选择作业区域！",
+};
 
 const char* menu_hz[]=
 { 	
-	"请选择作业区域！",
-	"IE浏览器",
-	"音乐",
-	"图片",
-	"摄像机",
-	"闹钟",
+	"轧机",
+	"接杆",
+	"导卫",
+	"压下",
+	"立轧机",
+	"活套",
+	"除尘",
+	"除鳞",
+	"小车、平台",
+	"测厚仪",
+	"液压站",
+
 };
+
+const int meun_hz_size[]=
+{
+	40,
+	40,
+	40,
+	40,
+	40,
+	40,
+	40,
+	40,
+	30,
+	40,
+	40,
+};
+
+struct textStruct menu_hiz[]=
+{
+	{
+		.name = "轧机",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "接杆",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "导卫",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "压下",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "立轧机",
+		.filesize = 40,
+		.offsetx = 15,
+		.offsety = 35,
+	},
+	{
+		.name = "活套",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "除尘",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "除鳞",
+		.filesize = 40,
+		.offsetx = 35,
+		.offsety = 35,
+	},
+	{
+		.name = "小车、平台",
+		.filesize = 29,
+		.offsetx = 2,
+		.offsety = 35,
+	},
+	{
+		.name = "测厚仪",
+		.filesize = 40,
+		.offsetx = 15,
+		.offsety = 35,
+	},
+	{
+		.name = "液压站",
+		.filesize = 40,
+		.offsetx = 15,
+		.offsety = 35,
+	},
+};
+
 void test_chinese(HDC hdc){
 	TextOut(hdc,200,295,"测试1");
 
@@ -239,10 +335,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SetBkMode(hdc,BM_TRANSPARENT);
 			SetTextColor(hdc,COLOR_lightwhite);
 //			SelectFont(hdc,s_font);
-			TextOut(hdc,30,295,"测试");
+			//TextOut(hdc,30,295,"测试");
 			//TextOut(hdc,200,295,"测试");
-			test_chinese(hdc);
-			test_b(hdc);
+			//test_chinese(hdc);
+			//test_b(hdc);
 #if 0
 
 			SetPenColor(hdc,COLOR_black);

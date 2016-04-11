@@ -14,6 +14,8 @@
 #define TOTAL_NUM	11
 
 extern const char* menu_hz[];
+extern const char* warningText[];
+extern struct textStruct menu_hiz[];
 
 void test_b(HDC hdc)
 {
@@ -27,10 +29,11 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 {
 	int column;
 	int row;
-	int i;
+	int i, j;
 	int partHeight, partWidth;
 	int hx[5], hy[5], vx[5], vy[5];
 	int xx = 0, yy = 0;
+	int x[20], y[20];
 	PLOGFONT s_font;
 
 	TextOut(hdc,100,295,"测试");
@@ -63,6 +66,23 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 		//DrawVDotLine(hdc, vx[i], vy[i], height);	
 		LineEx(hdc, vx[i], vy[i], vx[i], height - partHeight);
 	}
+	
+	SetTextColor(hdc, COLOR_lightwhite);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0xFF, 0xFF));
+	for(i=0; i<row; i++){
+		for(j=0; j<column; j++){
+			if(i*column + j >= TOTAL_NUM)
+				break;
+			x[i*column + j] = vx[j] - partWidth + 5;
+			y[i*column + j] = hy[i] - partHeight + 5;
+			printf("x = %d, y = %d\n", x[i*column + j], y[i*column + j]);
+			s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+				FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, menu_hiz[i*column + j].filesize, 0);
+			SelectFont(hdc,s_font);
+			FillBox(hdc, x[i*column + j], y[i*column + j], partWidth - 10, partHeight - 10);	
+			TextOut(hdc, x[i*column + j] + menu_hiz[i*column + j].offsetx, y[i*column + j] + menu_hiz[i*column + j].offsety, menu_hiz[i*column + j].name);	
+		}
+	}
 
 	printf("yy = %d\n", yy);
 	//Rectangle(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), height - 20);
@@ -82,7 +102,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 60, 0);
 
 	SelectFont(hdc,s_font);
-	TextOut(hdc, partWidth + 30, yy - partHeight + 30, menu_hz[0]);	
+	TextOut(hdc, partWidth + 30, yy - partHeight + 30, warningText[0]);	
 	//TextOut(hdc, partWidth + 30, yy - partHeight/2, "ABCDEF");	
 	//TextOut(hdc,100,295,"测试");
 	//test_output(hdc, "测试555");
