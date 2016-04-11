@@ -175,6 +175,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	static PLOGFONT s_font,s_font1;
 	static int s_sel=0;
 	static int s_selbak=0;
+	static int pre_x, pre_y;
 	int i;
 	HDC hdc;
 	
@@ -264,6 +265,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			break;
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
+			pre_x = LOWORD(lParam);
+			pre_y = HIWORD(lParam);
+			printf("x = %d, y = %d\n", pre_x, pre_y);
 			break;
 		case MSG_RBUTTONDOWN:
 			printf("MSG_RBUTTONDOWN:\n");
