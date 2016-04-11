@@ -26,7 +26,7 @@
 #else
 #include "helloworld_res_en.h"
 #endif
-#if 0
+#if 1
 static char welcome_text [512];
 static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
@@ -37,7 +37,7 @@ static const char* syskey = "";
 static int last_key = -1;
 static int last_key_count = 0;
 #endif
-#if 0
+#if 1
 static void make_welcome_text (void)
 {
     const char* sys_charset = GetSysCharset (TRUE);
@@ -74,37 +74,44 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 
     switch (message) {
         case MSG_CREATE:
+		printf("MSG_CREATE\n");
             make_welcome_text ();
             SetTimer (hWnd, 100, 200);
             break;
 
         case MSG_TIMER:
+		printf("MSG_TIMER\n");
             sprintf (msg_text, HL_ST_TIMER, 
                             GetTickCount ());
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
             
         case MSG_LBUTTONDOWN:
+		printf("MSG_LBUTTONDOWN\n");
             strcpy (msg_text, HL_ST_LBD);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
 
         case MSG_LBUTTONUP:
+		printf("MSG_LBUTTONUP\n");
             strcpy (msg_text, HL_ST_LBU);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
 
         case MSG_RBUTTONDOWN:
+		printf("MSG_RBUTTONDOWN\n");
             strcpy (msg_text, HL_ST_RBD);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
 
         case MSG_RBUTTONUP:
+		printf("MSG_RBUTTONUP\n");
             strcpy (msg_text, HL_ST_RBU);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
 
         case MSG_PAINT:
+		printf("MSG_PAINT\n");
             hdc = BeginPaint (hWnd);
             DrawText (hdc, welcome_text, -1, &welcome_rc, DT_LEFT | DT_WORDBREAK);
             DrawText (hdc, msg_text, -1, &msg_rc, DT_LEFT | DT_WORDBREAK);
@@ -112,8 +119,10 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
             return 0;
 
         case MSG_SYSKEYDOWN:
+		printf("MSG_SYSKEYDOWN\n");
             syskey = HL_ST_SYS;
         case MSG_KEYDOWN:
+		printf("MSG_KEYDOWN\n");
             if(last_key == wParam)
                 last_key_count++;
             else
@@ -127,21 +136,25 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
             return 0;
 
         case MSG_KEYLONGPRESS:
+		printf("MSG_SYSLONGPRESS\n");
             sprintf (msg_text, HL_ST_KEYLONG, wParam);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
 
         case MSG_KEYALWAYSPRESS:
+		printf("MSG_KEYALWAYSPRESS\n");
             sprintf (msg_text, HL_ST_KEYALWAY, wParam);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             break;
 
         case MSG_KEYUP:
+		printf("MSG_KEYUP\n");
             sprintf (msg_text, HL_ST_KEYU, wParam);
             InvalidateRect (hWnd, &msg_rc, TRUE);
             return 0;
 
         case MSG_CLOSE:
+		printf("MSG_CLOSE\n");
             KillTimer (hWnd, 100);
             DestroyMainWindow (hWnd);
             PostQuitMessage (hWnd);
@@ -151,16 +164,16 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
     return DefaultMainWinProc(hWnd, message, wParam, lParam);
 }
 #endif
-//int MiniGUIMain (int argc, const char* argv[])
-int main (int argc, const char* argv[])
+int MiniGUIMain (int argc, const char* argv[])
+//int main (int argc, const char* argv[])
 {
 
-//    MSG Msg;
- //   HWND hMainWnd;
-  //  MAINWINCREATE CreateInfo;
+    MSG Msg;
+    HWND hMainWnd;
+    MAINWINCREATE CreateInfo;
 
 	printf("test a\n");
-#if 0
+#if 1
 #ifdef _MGRM_PROCESSES
     JoinLayer(NAME_DEF_LAYER , "helloworld" , 0 , 0);
 #endif

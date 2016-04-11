@@ -5,7 +5,7 @@ export CFLAGS="-I/usr/local/minigui/local/include"
 
 export LDFLAGS="-L/usr/local/minigui/local/lib"
 
-export MINIGUI_LIBS="-lminigui_ths -lpng -lc -ljpeg -lz -lm -lpthread -lpciaccess"
+export MINIGUI_LIBS="-lminigui_ths -lpng -lc -ljpeg -lz -lm -lfreetype -lpthread -lpciaccess"
 
 export PKG_CONFIG_PATH="/usr/local/minigui/local/lib/pkgconfig"
 

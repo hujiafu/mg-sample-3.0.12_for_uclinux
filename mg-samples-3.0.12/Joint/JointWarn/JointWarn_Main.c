@@ -257,10 +257,16 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
 			jointwarn_crate_mainui(hdc, g_rcScr.right, g_rcScr.bottom);
-			TextOut(hdc,400,295,"≤‚ ‘");
+			//TextOut(hdc,400,295,"≤‚ ‘");
 
 			EndPaint(hWnd,hdc);
 
+			break;
+		case MSG_LBUTTONDOWN:
+			printf("MSG_LBUTTONDOWN\n");
+			break;
+		case MSG_RBUTTONDOWN:
+			printf("MSG_RBUTTONDOWN:\n");
 			break;
 		case MSG_CHAR:
 		printf("MSG_CHAR ok\n");

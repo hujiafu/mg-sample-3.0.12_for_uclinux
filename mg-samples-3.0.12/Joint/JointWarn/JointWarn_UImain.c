@@ -72,12 +72,18 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
 	FillBox(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), partHeight - 40);	
 	//SetBkMode(hdc,BM_TRANSPARENT);	
-	//SetTextColor(hdc,COLOR_lightwhite);
-	s_font = CreateLogFont(NULL,"Song","GB2312-80",
-                        FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
-                        FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,40,0);
+	SetTextColor(hdc,COLOR_blue);
+	//s_font = CreateLogFont(NULL,"Song","GB2312-80",
+        //                FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
+        //                FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,40,0);
+	
+	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "times", "ISO8859-1", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
+	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "simhei", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 60, 0);
+
 	SelectFont(hdc,s_font);
-	TextOut(hdc, partWidth + 30, yy - partHeight/2, menu_hz[0]);	
+	TextOut(hdc, partWidth + 30, yy - partHeight + 30, menu_hz[0]);	
+	//TextOut(hdc, partWidth + 30, yy - partHeight/2, "ABCDEF");	
 	//TextOut(hdc,100,295,"测试");
-	test_output(hdc, "测试555");
+	//test_output(hdc, "测试555");
 }
