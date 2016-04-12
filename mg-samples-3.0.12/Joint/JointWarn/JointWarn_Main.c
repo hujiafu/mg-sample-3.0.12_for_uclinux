@@ -184,6 +184,13 @@ const int meun_hz_size[]=
 	40,
 };
 
+struct textStruct back ={
+	.name = "·µ»Ø",
+	.filesize = 40,
+	.offsetx = 20,
+	.offsety = 5,
+};
+
 struct textStruct menu_hiz[]=
 {
 	{

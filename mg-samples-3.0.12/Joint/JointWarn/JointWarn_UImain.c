@@ -16,6 +16,7 @@
 extern const char* menu_hz[];
 extern const char* warningText[];
 extern struct textStruct menu_hiz[];
+extern struct textStruct back;
 
 void test_b(HDC hdc)
 {
@@ -34,7 +35,10 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	int hx[5], hy[5], vx[5], vy[5];
 	int xx = 0, yy = 0;
 	int x[20], y[20];
+	POINT s_back;
+	int back_width, back_height;
 	PLOGFONT s_font;
+	POINT s_point[2][3];
 
 	TextOut(hdc,100,295,"测试");
 	column = NUM_PRE_LINE;
@@ -86,24 +90,53 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 
 	printf("yy = %d\n", yy);
 	//Rectangle(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), height - 20);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xff, 0xFF));
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
 	FillBox(hdc, 0, yy - partHeight, width, partHeight);	
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
-	FillBox(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), partHeight - 40);	
+	FillBox(hdc, partWidth, yy - partHeight + 20, (2 * partWidth + (partWidth>>1)), partHeight - 40);	
 	//SetBkMode(hdc,BM_TRANSPARENT);	
 	SetTextColor(hdc,COLOR_blue);
 	//s_font = CreateLogFont(NULL,"Song","GB2312-80",
         //                FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
         //                FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,40,0);
-	
 	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "times", "ISO8859-1", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
 	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "simhei", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
-	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 60, 0);
-
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
 	SelectFont(hdc,s_font);
-	TextOut(hdc, partWidth + 30, yy - partHeight + 30, warningText[0]);	
+	TextOut(hdc, partWidth + 15, yy - partHeight + 40, warningText[0]);	
 	//TextOut(hdc, partWidth + 30, yy - partHeight/2, "ABCDEF");	
 	//TextOut(hdc,100,295,"测试");
 	//test_output(hdc, "测试555");
+	s_point[0][0].x = 10;
+	s_point[0][0].y = yy - partHeight + 30;
+	s_point[0][1].x = 30;
+	s_point[0][1].y = yy - partHeight + 10;
+	s_point[0][2].x = 30;
+	s_point[0][2].y = yy - partHeight + 50;
+	s_point[1][0].x = width - 10;
+	s_point[1][0].y = yy - partHeight + 30;
+	s_point[1][1].x = width - 30;
+	s_point[1][1].y = yy - partHeight + 10;
+	s_point[1][2].x = width - 30;
+	s_point[1][2].y = yy - partHeight + 50;
+	
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
+
+	FillPolygon(hdc, s_point[0], 3);
+	FillPolygon(hdc, s_point[1], 3);
+
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0xFF, 0xFF));
+	s_back.x = width - partWidth;
+	s_back.y = yy - partHeight/2;
+	back_width = partWidth-40;
+	back_height = partHeight/2 - 10;
+	FillBox(hdc, s_back.x, s_back.y, back_width, back_height);	
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, back.filesize, 0);
+	SelectFont(hdc,s_font);
+	SetTextColor(hdc, COLOR_lightwhite);
+	TextOut(hdc, s_back.x + back.offsetx, s_back.y + back.offsety, back.name);	
+	
+
 }
