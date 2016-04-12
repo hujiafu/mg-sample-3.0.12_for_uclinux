@@ -18,6 +18,8 @@ extern const char* warningText[];
 extern struct textStruct menu_hiz[];
 extern struct textStruct back;
 
+POINT s_back;
+int back_width, back_height;
 void test_b(HDC hdc)
 {
 	//HDC hdc;
@@ -35,8 +37,6 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	int hx[5], hy[5], vx[5], vy[5];
 	int xx = 0, yy = 0;
 	int x[20], y[20];
-	POINT s_back;
-	int back_width, back_height;
 	PLOGFONT s_font;
 	POINT s_point[2][3];
 

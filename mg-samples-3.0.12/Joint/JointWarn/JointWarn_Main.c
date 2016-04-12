@@ -29,6 +29,12 @@ static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
 static RECT msg_rc = {10, 100, 600, 400};
 
+extern POINT s_back; 
+extern int back_width, back_height;
+
+
+
+
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -371,6 +377,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
+			if((pre_x > s_back.x && pre_x < (s_back.x + back_width)) && (pre_y > s_back.y && pre_y < (s_back.y + back_height))){
+				printf("back pressed\n");
+				InitConfirmWindow(0, 0, 0, 0);
+			}
 			break;
 		case MSG_RBUTTONDOWN:
 			printf("MSG_RBUTTONDOWN:\n");
