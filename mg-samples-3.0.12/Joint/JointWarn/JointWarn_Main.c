@@ -8,11 +8,6 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
-#define MWINDOW_LX   0
-#define MWINDOW_TY   0
-#define MWINDOW_RX   800
-#define MWINDOW_BY   480
-
 
 #ifdef _LANG_ZHCN
 #include "helloworld_res_cn.h"
@@ -188,6 +183,41 @@ const int meun_hz_size[]=
 	30,
 	40,
 	40,
+};
+
+struct textStruct warn_message1 = {
+	.name = "轧机区域F1主电机",
+	.filesize = 35,
+	.offsetx = 10,
+	.offsety = 5,
+};
+
+struct textStruct warn_message2 = {
+	.name = "碳刷检查更新",
+	.filesize = 35,
+	.offsetx = 10,
+	.offsety = 5,
+};
+
+struct textStruct warn_message3 = {
+	.name = "F1高压开关",
+	.filesize = 35,
+	.offsetx = 10,
+	.offsety = 5,
+};
+
+struct warnForm warnform1 = {
+	.formCount = 3,
+	.text[0] = &warn_message1,
+	.text[1] = &warn_message2,
+	.text[2] = &warn_message3,
+};
+
+struct textStruct warn_canel = {
+	.name = "取消",
+	.filesize = 30,
+	.offsetx = 3,
+	.offsety = 5,
 };
 
 struct textStruct back ={
@@ -374,13 +404,15 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			break;
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
+			//hdc = BeginPaint(hWnd);
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
 			if((pre_x > s_back.x && pre_x < (s_back.x + back_width)) && (pre_y > s_back.y && pre_y < (s_back.y + back_height))){
 				printf("back pressed\n");
-				InitConfirmWindow(0, 0, 0, 0);
+				InitConfirmWindow(hWnd, 400, 300);
 			}
+			//EndPaint(hWnd,hdc);
 			break;
 		case MSG_RBUTTONDOWN:
 			printf("MSG_RBUTTONDOWN:\n");

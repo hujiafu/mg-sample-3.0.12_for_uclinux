@@ -40,7 +40,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	PLOGFONT s_font;
 	POINT s_point[2][3];
 
-	TextOut(hdc,100,295,"测试");
+	//TextOut(hdc,100,295,"测试");
 	column = NUM_PRE_LINE;
 	row = TOTAL_NUM / column;
 	if(TOTAL_NUM % column != 0){

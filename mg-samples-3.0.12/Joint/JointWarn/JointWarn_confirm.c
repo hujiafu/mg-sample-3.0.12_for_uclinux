@@ -8,16 +8,25 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include "JointWarn_UImain.h"
+
+extern struct textStruct warn_canel;
+
 static HWND hMainWnd1 = HWND_INVALID;
+
+static int warn_width;
+static int warn_height;
 
 static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)   //第二及处理消息   
 {  
 	int pre_x, pre_y;   
+	HDC hdc;
+	PLOGFONT s_font;
  
-   switch (message) {  
-       case MSG_CREATE:                  
-	printf("InitOrderProc MSG_CREATE\n");
-	SetFocusChild(hWnd); 
+	switch (message) {  
+		case MSG_CREATE:                  
+			printf("InitOrderProc MSG_CREATE\n");
+			SetFocusChild(hWnd);
        //   CreateWindow (CTRL_BUTTON,  
          //                "返回上级窗口",  
            //              WS_CHILD | BS_PUSHBUTTON | BS_CHECKED | WS_VISIBLE,  
@@ -29,7 +38,37 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
         //                 WS_CHILD | BS_PUSHBUTTON | BS_CHECKED | WS_VISIBLE,  
           //               IDC_BUTTON4, /*Button 4 */  
             //             100, 70, 80, 20, hWnd, 0);    
-       break;    
+			break;   
+		case MSG_PAINT:
+			hdc = BeginPaint(hWnd);
+			//SetBkColor(hdc, RGBA2Pixel(hdc, 0x00, 0xB2, 0xEE, 0xFF));
+			SetBkMode(hdc,BM_TRANSPARENT);			
+
+			SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
+			FillBox(hdc, 0, 0, warn_width, warn_height);
+
+			SetPenColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
+			SetPenWidth(hdc, 2);
+			SetPenCapStyle(hdc, PT_CAP_ROUND);
+			SetPenJoinStyle(hdc, PT_JOIN_ROUND);
+			LineEx(hdc, 2, 2, warn_width-2, 2);
+			LineEx(hdc, warn_width-2, 2, warn_width-2, warn_height-2);
+			LineEx(hdc, warn_width-2, warn_height-2, 2, warn_height-2);
+			LineEx(hdc, 2, warn_height-2, 2, 2);
+			//Rectangle(hdc, 2, 2, 337, 257);
+
+			SetBrushColor(hdc, RGBA2Pixel(hdc, 0x68, 0x22, 0x8B, 0xFF));
+			FillBox(hdc, warn_width - 100, warn_height - 60, 80, 40);
+		
+			s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn_canel.filesize, 0);
+        		SelectFont(hdc, s_font);
+			//SetPenWidth(hdc, 0);
+        		SetTextColor(hdc, COLOR_lightwhite);
+			TextOut(hdc, warn_width - 90 + warn_canel.offsetx, warn_height - 60 + warn_canel.offsety, warn_canel.name);
+	
+			EndPaint(hWnd,hdc);
+			break; 
  	case MSG_LBUTTONDOWN:
                         printf("MSG_LBUTTONDOWN 1\n");
                         pre_x = LOWORD(lParam);
@@ -79,30 +118,38 @@ case MSG_CLOSE:
 
 static void InitCreateInfoTWO(PMAINWINCREATE pCreateInfo)  
 {  
-	pCreateInfo->dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER;  
+	pCreateInfo->dwStyle = WS_CHILD | WS_VISIBLE;  
 	pCreateInfo->dwExStyle = WS_EX_NONE;  
 	pCreateInfo->spCaption = "";  
 	pCreateInfo->hMenu = 0;  
 	pCreateInfo->hCursor = GetSystemCursor(1);  
 	pCreateInfo->hIcon = 0;  
 	pCreateInfo->MainWindowProc = InitOrderProc; //窗体回调函数   
-	pCreateInfo->lx = (800 - 320)>>1;  
-	pCreateInfo->ty = (480 - 240)>>1;  
-	pCreateInfo->rx = 320 + pCreateInfo->lx;  
-	pCreateInfo->by = 240 + pCreateInfo->ty;  
 	pCreateInfo->iBkColor = COLOR_darkblue;  
 	pCreateInfo->dwAddData = 0;  
 }  
 
 
 
-int InitConfirmWindow(HWND hWnd, int winx, int winy, int width, int heigth)
+int InitConfirmWindow(HWND hWnd, int width, int height)
 {
 	MAINWINCREATE CreateInfo; //新建一个窗口  
-	MSG Msg; 
- 
+	MSG Msg;
+	HDC hdc; 
+	
+	//hdc = BeginPaint(hWnd); 
+	//hdc = GetClientDC(hWnd);
+	//SetPenColor(hdc, RGBA2Pixel(hdc, 0xFF, 0x00, 0x00, 0xFF));
+	//Rectangle(hdc, 300, 100, 500, 300);
+	//LineEx(hdc, 300, 100, 500, 100);
+	warn_width = width;
+	warn_height = height;	
 	InitCreateInfoTWO (&CreateInfo);  
 	CreateInfo.hHosting = hWnd;
+	CreateInfo.lx = (MWINDOW_RX - width)>>1;  
+	CreateInfo.ty = (MWINDOW_BY - height)>>1;  
+	CreateInfo.rx = width + CreateInfo.lx;  
+	CreateInfo.by = height + CreateInfo.ty;  
 	hMainWnd1 = CreateMainWindow(&CreateInfo);//建立窗口     
   
 	if(hMainWnd1 != HWND_INVALID)   
@@ -118,7 +165,8 @@ int InitConfirmWindow(HWND hWnd, int winx, int winy, int width, int heigth)
         //	}
 	//	printf("hMainWnd1 end\n");
 		return;  
-	}  
+	} 
+	//EndPaint(hWnd,hdc); 
 }
 
 
