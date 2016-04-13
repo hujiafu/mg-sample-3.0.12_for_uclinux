@@ -8,13 +8,18 @@
 
 struct textStruct{
 	char name[20];
-	int  filesize;
-	int  offsetx;
-	int  offsety;
+	char  filesize;
+	char  offsetx;
+	char  offsety;
+	int   color;
 };
 
 struct warnForm{
-	int formCount;
+	int messageCount;
+	int formColor;
+	int borderColor;
+	int width;
+	int height;
 	struct textStruct * text[3];
 };
 

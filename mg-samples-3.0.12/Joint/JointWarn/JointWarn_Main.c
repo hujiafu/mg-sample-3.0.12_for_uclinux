@@ -187,27 +187,34 @@ const int meun_hz_size[]=
 
 struct textStruct warn_message1 = {
 	.name = "轧机区域F1主电机",
-	.filesize = 35,
+	.filesize = 30,
 	.offsetx = 10,
 	.offsety = 5,
+	.color = 0xFFFFFFFF,
 };
 
 struct textStruct warn_message2 = {
 	.name = "碳刷检查更新",
-	.filesize = 35,
+	.filesize = 30,
 	.offsetx = 10,
-	.offsety = 5,
+	.offsety = 40,
+	.color = 0xFFFFFFFF,
 };
 
 struct textStruct warn_message3 = {
 	.name = "F1高压开关",
-	.filesize = 35,
+	.filesize = 30,
 	.offsetx = 10,
-	.offsety = 5,
+	.offsety = 75,
+	.color = 0xFFFFFFFF
 };
 
 struct warnForm warnform1 = {
-	.formCount = 3,
+	.messageCount = 3,
+	.formColor = 0x32CD3200,
+	.borderColor = 0xFFFFFF00,
+	.width = 300,
+	.height = 110,
 	.text[0] = &warn_message1,
 	.text[1] = &warn_message2,
 	.text[2] = &warn_message3,
@@ -311,7 +318,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
 	static BITMAP s_startbmp,s_background;
 	static BITMAP s_bmp[6];
-	static PLOGFONT s_font,s_font1;
+	static PLOGFONT s_font;
 	static int s_sel=0;
 	static int s_selbak=0;
 	static int pre_x, pre_y;
@@ -346,12 +353,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			LoadBitmap(HDC_SCREEN,&s_bmp[5],"/usr/local/res/clock.bmp");
 #endif	
 
-//			s_font = CreateLogFont(NULL,"Song","GB2312-80",
-//			FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
-//			FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,16,0);
 			
-			s_font1 = CreateLogFont(NULL,"Song","GB2312-80",
-			FONT_WEIGHT_REGULAR,FONT_SLANT_ROMAN,FONT_SETWIDTH_NORMAL,
+			//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF","mini","GB2312-80", \
+			FONT_WEIGHT_REGULAR,FONT_SLANT_ROMAN,FONT_SETWIDTH_NORMAL, \
 			FONT_SPACING_CHARCELL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,16,0);
 
 			printf("MSG_CREATE finish\n");
@@ -360,8 +364,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 		
   		case MSG_PAINT:
 			printf("MSG_PAINT begin1\n");
-			hdc = BeginPaint(hWnd);
-			FillBoxWithBitmap(hdc,0,0,800,360,&s_background);
+			//hdc = BeginPaint(hWnd);
+			//FillBoxWithBitmap(hdc,0,0,800,360,&s_background);
 #if 0
 			for(i=0;i<4;i++)
 			{
@@ -375,8 +379,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	
 			FillBoxWithBitmap(hdc,0,283,240,37,&s_startbmp);
 #endif
-			SetBkMode(hdc,BM_TRANSPARENT);
-			SetTextColor(hdc,COLOR_lightwhite);
+			//SetBkMode(hdc,BM_TRANSPARENT);
+			//SetTextColor(hdc,COLOR_lightwhite);
 //			SelectFont(hdc,s_font);
 			//TextOut(hdc,30,295,"测试");
 			//TextOut(hdc,200,295,"测试");
@@ -396,10 +400,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SelectFont(hdc,s_font1);
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
-			jointwarn_crate_mainui(hdc, g_rcScr.right, g_rcScr.bottom);
+			jointwarn_crate_mainui(hWnd, g_rcScr.right, g_rcScr.bottom);
 			//TextOut(hdc,400,295,"测试");
 
-			EndPaint(hWnd,hdc);
+			//EndPaint(hWnd,hdc);
 
 			break;
 		case MSG_LBUTTONDOWN:
@@ -410,7 +414,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			printf("x = %d, y = %d\n", pre_x, pre_y);
 			if((pre_x > s_back.x && pre_x < (s_back.x + back_width)) && (pre_y > s_back.y && pre_y < (s_back.y + back_height))){
 				printf("back pressed\n");
-				InitConfirmWindow(hWnd, 400, 300);
+				InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 			}
 			//EndPaint(hWnd,hdc);
 			break;
@@ -418,7 +422,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			printf("MSG_RBUTTONDOWN:\n");
 			break;
 		case MSG_CHAR:
-		printf("MSG_CHAR ok\n");
+			printf("MSG_CHAR ok\n");
+#if 0
 			i = 0;
 			switch(wParam)
 			{
@@ -506,14 +511,15 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 
 				EndPaint(hWnd,hdc);
 			}
+#endif
 			break;
 			
 		case MSG_CLOSE:
 		printf("MSG_CLOSE ok\n");
 			UnloadBitmap(&s_startbmp);
 			for(i=0;i<6;i++)UnloadBitmap(&s_bmp[i]);
-			DestroyLogFont(s_font);
-			DestroyLogFont(s_font1);
+			//DestroyLogFont(s_font);
+			//DestroyLogFont(s_font1);
 			DestroyMainWindow(hWnd);
 			PostQuitMessage(hWnd);
 			break;

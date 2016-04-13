@@ -28,7 +28,7 @@ void test_b(HDC hdc)
 	//EndPaint(hWnd,hdc);
 }
 
-void jointwarn_crate_mainui(HDC hdc, int width, int height)
+void jointwarn_crate_mainui(HWND hWnd, int width, int height)
 {
 	int column;
 	int row;
@@ -39,7 +39,13 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	int x[20], y[20];
 	PLOGFONT s_font;
 	POINT s_point[2][3];
+	HDC hdc;
 
+	hdc = BeginPaint(hWnd);
+
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetTextColor(hdc,COLOR_lightwhite);
+	//SetBkColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
 	//TextOut(hdc,100,295,"测试");
 	column = NUM_PRE_LINE;
 	row = TOTAL_NUM / column;
@@ -61,6 +67,8 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 		vy[i] = 0;
 		xx += partWidth;
 	}
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
+	FillBox(hdc, 0, 0, width, yy - partHeight);	
 	
 	for(i=0; i<row; i++){
 		//DrawHDotLine(hdc, hx[i], hy[i], width);
@@ -72,7 +80,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	}
 	
 	SetTextColor(hdc, COLOR_lightwhite);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0xFF, 0xFF));
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
 	for(i=0; i<row; i++){
 		for(j=0; j<column; j++){
 			if(i*column + j >= TOTAL_NUM)
@@ -85,6 +93,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 			SelectFont(hdc,s_font);
 			FillBox(hdc, x[i*column + j], y[i*column + j], partWidth - 10, partHeight - 10);	
 			TextOut(hdc, x[i*column + j] + menu_hiz[i*column + j].offsetx, y[i*column + j] + menu_hiz[i*column + j].offsety, menu_hiz[i*column + j].name);	
+			DestroyLogFont(s_font);
 		}
 	}
 
@@ -97,14 +106,10 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	FillBox(hdc, partWidth, yy - partHeight + 20, (2 * partWidth + (partWidth>>1)), partHeight - 40);	
 	//SetBkMode(hdc,BM_TRANSPARENT);	
 	SetTextColor(hdc,COLOR_blue);
-	//s_font = CreateLogFont(NULL,"Song","GB2312-80",
-        //                FONT_WEIGHT_REGULAR,FONT_SLANT_ITALIC,FONT_FLIP_NIL,
-        //                FONT_OTHER_NIL,FONT_UNDERLINE_NONE,FONT_STRUCKOUT_NONE,40,0);
-	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "times", "ISO8859-1", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
-	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "simhei", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
 	SelectFont(hdc,s_font);
 	TextOut(hdc, partWidth + 15, yy - partHeight + 40, warningText[0]);	
+	DestroyLogFont(s_font);
 	//TextOut(hdc, partWidth + 30, yy - partHeight/2, "ABCDEF");	
 	//TextOut(hdc,100,295,"测试");
 	//test_output(hdc, "测试555");
@@ -126,17 +131,19 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	FillPolygon(hdc, s_point[0], 3);
 	FillPolygon(hdc, s_point[1], 3);
 
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0xFF, 0xFF));
 	s_back.x = width - partWidth;
 	s_back.y = yy - partHeight/2;
 	back_width = partWidth-40;
 	back_height = partHeight/2 - 10;
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
 	FillBox(hdc, s_back.x, s_back.y, back_width, back_height);	
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
 		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, back.filesize, 0);
 	SelectFont(hdc,s_font);
 	SetTextColor(hdc, COLOR_lightwhite);
 	TextOut(hdc, s_back.x + back.offsetx, s_back.y + back.offsety, back.name);	
+	DestroyLogFont(s_font);
 	
+	EndPaint(hWnd,hdc);	
 
 }
