@@ -10,8 +10,10 @@
 #include "JointWarn_UImain.h"
 #include "helloworld_res_en.h"
 
-#define NUM_PRE_LINE	5
+#define NUM_PRE_LINE	3
+#define NUM_ROWS	4
 #define TOTAL_NUM	11
+#define SPARE_Y		360
 
 extern const char* menu_hz[];
 extern const char* warningText[];
@@ -48,12 +50,14 @@ void jointwarn_crate_mainui(HWND hWnd, int width, int height)
 	//SetBkColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
 	//TextOut(hdc,100,295,"测试");
 	column = NUM_PRE_LINE;
-	row = TOTAL_NUM / column;
-	if(TOTAL_NUM % column != 0){
-		row += 1;
-	}
+	row = NUM_ROWS;
+	//row = TOTAL_NUM / column;
+	//if(TOTAL_NUM % column != 0){
+	//	row += 1;
+	//}
 	
-	partHeight = height / (row + 1);
+	//partHeight = height / (row + 1);
+	partHeight = SPARE_Y / (row);
 	partWidth = width / column;
 	yy = partHeight;
 	xx = partWidth;
@@ -100,15 +104,15 @@ void jointwarn_crate_mainui(HWND hWnd, int width, int height)
 	printf("yy = %d\n", yy);
 	//Rectangle(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), height - 20);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
-	FillBox(hdc, 0, yy - partHeight, width, partHeight);	
+	FillBox(hdc, 0, SPARE_Y, width, height - SPARE_Y);	
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
-	FillBox(hdc, partWidth, yy - partHeight + 20, (2 * partWidth + (partWidth>>1)), partHeight - 40);	
+	FillBox(hdc, 0 + 100, SPARE_Y + 20, (width - partWidth - 100), height - SPARE_Y - 40);	
 	//SetBkMode(hdc,BM_TRANSPARENT);	
 	SetTextColor(hdc,COLOR_blue);
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 50, 0);
 	SelectFont(hdc,s_font);
-	TextOut(hdc, partWidth + 15, yy - partHeight + 40, warningText[0]);	
+	TextOut(hdc, 0 + 100 + 20, yy - partHeight + 40, warningText[0]);	
 	DestroyLogFont(s_font);
 	//TextOut(hdc, partWidth + 30, yy - partHeight/2, "ABCDEF");	
 	//TextOut(hdc,100,295,"测试");
@@ -125,16 +129,14 @@ void jointwarn_crate_mainui(HWND hWnd, int width, int height)
 	s_point[1][1].y = yy - partHeight + 10;
 	s_point[1][2].x = width - 30;
 	s_point[1][2].y = yy - partHeight + 50;
-	
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
-
 	FillPolygon(hdc, s_point[0], 3);
 	FillPolygon(hdc, s_point[1], 3);
 
-	s_back.x = width - partWidth;
+	s_back.x = 2 * partWidth + 100;
 	s_back.y = yy - partHeight/2;
-	back_width = partWidth-40;
-	back_height = partHeight/2 - 10;
+	back_width = 120;
+	back_height = 50;
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
 	FillBox(hdc, s_back.x, s_back.y, back_width, back_height);	
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
