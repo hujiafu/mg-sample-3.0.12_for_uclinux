@@ -22,15 +22,24 @@ extern struct textStruct menu_hiz[];
 extern struct textStruct back;
 
 int page_cnt1;
+int form_tot_cnt;
 int back_width, back_height;
 int row, column;
 int partHeight, partWidth;
 int x[TOTAL_NUM], y[TOTAL_NUM];
 int hx[5], hy[5], vx[5], vy[5];
-POINT s_point[2][3];
 struct buttonObject btn_back_1;
 struct buttonObject btn_front_page_1;
 struct buttonObject btn_next_page_1;
+POINT s_point[2][3];
+
+void jointwarn_test(HDC hdc)
+{
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetTextColor(hdc, COLOR_lightwhite);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
+	FillBox(hdc, 5, 5, 200, 300);
+}
 
 void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
 {
@@ -43,34 +52,55 @@ void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
 	for(i=0; i<row; i++){
 		for(j=0; j<column; j++){
-			//if(i*column + j >= TOTAL_NUM)
-			if(k >= count)
-				break;
-			//x[i*column + j] = vx[j] - partWidth + 5;
-			//y[i*column + j] = hy[i] - partHeight + 5;
-			//printf("x = %d, y = %d\n", x[i*column + j], y[i*column + j]);
 			x[k] = vx[j] - partWidth + 5;
 			y[k] = hy[i] - partHeight + 5;
-			printf("x = %d, y = %d\n", x[k], y[k]);
+			printf("x = %d, y = %d, %d, %d\n", x[k], y[k], partWidth - 10, partHeight - 10);
 			FillBox(hdc, x[k], y[k], partWidth - 10, partHeight - 10);
-			//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
-				FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, menu_hiz[i*column + j].filesize, 0);
+			k++;
+		}
+	}
+	k = 0;
+	for(i=0; i<row; i++){
+		for(j=0; j<column; j++){
+			if(k >= count)
+				break;
 			s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
 				FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[k].filesize, 0);
 			SelectFont(hdc,s_font);
-			//FillBox(hdc, x[i*column + j], y[i*column + j], partWidth - 10, partHeight - 10);
-			//font_len = strlen(menu_hiz[i*column + j].name);	
 			font_len = strlen(text[k].name);	
 			printf("font_len = %d\n", font_len);
 			font_len = (16 - font_len) >> 1;
-			//TextOut(hdc, x[i*column + j] + menu_hiz[i*column + j].offsetx + (FONT30_PIXEL * font_len), y[i*column + j] + menu_hiz[i*column + j].offsety, menu_hiz[i*column + j].name);	
 			TextOut(hdc, x[k] + text[k].offsetx + (FONT30_PIXEL * font_len), y[k] + text[k].offsety, text[k].name);	
 			DestroyLogFont(s_font);
 			k++;
 		}
 	}
-	
 }
+
+void jointwarn_paint_flag(HDC hdc, int left, int right)
+{
+	if(left == 0){
+		SetBrushColor(hdc, RGBA2Pixel(hdc, 0xB3, 0xB3, 0xB3, 0xFF));
+		FillPolygon(hdc, s_point[0], 3);
+		btn_front_page_1.active = 0;
+	}else{
+		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
+		FillPolygon(hdc, s_point[0], 3);
+		btn_front_page_1.active = 1;
+	}
+	
+	if(right == 0){
+		SetBrushColor(hdc, RGBA2Pixel(hdc, 0xB3, 0xB3, 0xB3, 0xFF));
+		FillPolygon(hdc, s_point[1], 3);
+		btn_next_page_1.active = 0;
+	}else{
+		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
+		FillPolygon(hdc, s_point[1], 3);
+		btn_next_page_1.active = 1;
+	}
+
+}
+
 
 void jointwarn_crate_mainui(HDC hdc, int width, int height)
 {
@@ -78,6 +108,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	int font_len;
 	int xx, yy;
 	int form_count;
+	int left, right;
 	PLOGFONT s_font;
 	//HDC hdc;
 
@@ -121,6 +152,10 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 		LineEx(hdc, vx[i], vy[i], vx[i], height - partHeight);
 	}
 
+	form_tot_cnt = TOTAL_NUM / TOTAL_FRAME;
+	if(TOTAL_NUM % TOTAL_FRAME != 0){
+		form_tot_cnt += 1;
+	}
 	form_count = TOTAL_NUM > TOTAL_FRAME ? TOTAL_FRAME : TOTAL_NUM;
 	page_cnt1 = 0; 
 	jointwarn_paint_frame(hdc, menu_hiz, form_count);
@@ -165,6 +200,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	s_point[1][1].y = btn_next_page_1.point_start.y;
 	s_point[1][2].x = btn_next_page_1.point_end.x;
 	s_point[1][2].y = btn_next_page_1.point_end.y;
+#if 0
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xB3, 0xB3, 0xB3, 0xFF));
 	FillPolygon(hdc, s_point[0], 3);
 	if(TOTAL_NUM > TOTAL_FRAME){
@@ -172,10 +208,17 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
 	}
 	FillPolygon(hdc, s_point[1], 3);
+#endif
+	left = 0;
+	right = 0;
+	if(TOTAL_NUM > TOTAL_FRAME){
+		right = 1;
+	}	
+	jointwarn_paint_flag(hdc, left, right);
 
 	back_width = 120;
 	back_height = 50;
-	btn_back_1.point_start.x = 2 * partWidth + 100;
+	btn_back_1.point_start.x = 2 * partWidth + 50;
 	btn_back_1.point_start.y = yy - partHeight/2;
 	btn_back_1.point_end.x = btn_back_1.point_start.x + back_width;
 	btn_back_1.point_end.y = btn_back_1.point_start.y + back_height;

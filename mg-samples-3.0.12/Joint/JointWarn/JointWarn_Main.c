@@ -27,8 +27,10 @@ static RECT msg_rc = {10, 100, 600, 400};
 extern struct buttonObject btn_back_1;
 extern struct buttonObject btn_front_page_1;
 extern struct buttonObject btn_next_page_1;
+extern POINT s_point[2][3];
 
-extern int page_cnt1; 
+extern int page_cnt1;
+extern int form_tot_cnt;
 extern int back_width, back_height;
 
 
@@ -244,85 +246,151 @@ struct textStruct menu_hiz[]=
 		.name = "Ôþ»úaA12131415",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "²âÊÔ²â½Ó¸Ë²âÊÔ",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "ÎÒÎÒ²âÎÒµ¼ÎÀÄúÄã",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "F1Ñ¹ÏÂ",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "Á¢Ôþ»ú",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "»îÌ×",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "³ý³¾",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "³ýÁÛ",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "Ð¡³µ¡¢Æ½Ì¨",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "²âºñÒÇ",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "ÒºÑ¹Õ¾",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ12",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
 	},
 	{
 		.name = "²âÊÔ1",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "²âÊÔ2",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
 	},
 	{
 		.name = "²âÊÔ3",
 		.filesize = 30,
 		.offsetx = 5,
-		.offsety = 20,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ4",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ5",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ6",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ7",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ8",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ9",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ10",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ11",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ12",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "²âÊÔ13",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
 	},
 };
 
@@ -347,6 +415,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	int i;
 	int form_cnt;
 	int cnt;
+	int left_flag, right_flag;
 	HDC hdc;
 	
 	switch(message)
@@ -432,7 +501,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			break;
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
-			hdc = BeginPaint(hWnd);
+			//hdc = BeginPaint(hWnd);
 			
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
@@ -446,6 +515,20 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			if(btn_front_page_1.active == 1){
 				if((pre_x > btn_front_page_1.point_start.x && pre_x < btn_front_page_1.point_end.x) && (pre_y > btn_front_page_1.point_start.y && pre_y < btn_front_page_1.point_end.y)){
 					printf("front page pressed\n");
+					page_cnt1--;
+					cnt = TOTAL_FRAME * page_cnt1;
+					jointwarn_paint_frame(hdc, &menu_hiz[cnt], TOTAL_FRAME);
+					if(page_cnt1 > 0){
+						left_flag = 1;
+					}else{
+						left_flag = 0;
+					}
+					if(page_cnt1 >= form_tot_cnt - 1){
+						right_flag = 0;
+					}else{
+						right_flag = 1;
+					}
+					jointwarn_paint_flag(hdc, left_flag, right_flag);
 				}
 			}
 			if(btn_next_page_1.active == 1){
@@ -456,10 +539,21 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					form_cnt = form_cnt > TOTAL_FRAME ? TOTAL_FRAME : form_cnt;
 					jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_cnt);
 					page_cnt1++;
+					if(page_cnt1 > 0){
+						left_flag = 1;
+					}else{
+						left_flag = 0;
+					}
+					if(page_cnt1 >= form_tot_cnt - 1){
+						right_flag = 0;
+					}else{
+						right_flag = 1;
+					}
+					jointwarn_paint_flag(hdc, left_flag, right_flag);
 				}
 			}
 			
-			EndPaint(hWnd,hdc);
+			//EndPaint(hWnd,hdc);
 			break;
 		case MSG_RBUTTONDOWN:
 			printf("MSG_RBUTTONDOWN:\n");

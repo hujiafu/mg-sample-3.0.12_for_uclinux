@@ -6,7 +6,7 @@
 #define MWINDOW_RX   800
 #define MWINDOW_BY   480
 
-#define TOTAL_NUM       14
+#define TOTAL_NUM       25
 #define TOTAL_FRAME     12
 
 
