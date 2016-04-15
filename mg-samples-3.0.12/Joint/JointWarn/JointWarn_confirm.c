@@ -9,6 +9,7 @@
 #include <minigui/window.h>
 
 #include "JointWarn_UImain.h"
+//#include <iconv.h>
 
 extern struct textStruct warn_canel;
 

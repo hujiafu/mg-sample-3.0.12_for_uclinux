@@ -6,6 +6,11 @@
 #define MWINDOW_RX   800
 #define MWINDOW_BY   480
 
+#define TOTAL_NUM       14
+#define TOTAL_FRAME     12
+
+
+
 struct textStruct{
 	char name[20];
 	char  filesize;
@@ -21,6 +26,12 @@ struct warnForm{
 	int width;
 	int height;
 	struct textStruct * text[3];
+};
+
+struct buttonObject{
+	POINT point_start;
+	POINT point_end;
+	char active;	
 };
 
 void jointwarn_crate_mainui(HDC hdc, int width, int height);
