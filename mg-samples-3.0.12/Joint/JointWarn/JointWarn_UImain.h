@@ -34,6 +34,6 @@ struct buttonObject{
 	char active;	
 };
 
-void jointwarn_crate_mainui(HDC hdc, int width, int height);
+//void jointwarn_crate_mainui(HDC hdc, int width, int height);
 
 #endif

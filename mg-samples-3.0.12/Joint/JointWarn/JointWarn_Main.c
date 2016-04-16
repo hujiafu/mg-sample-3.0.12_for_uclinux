@@ -309,7 +309,7 @@ struct textStruct menu_hiz[]=
 		.offsety = 22,
 	},
 	{
-		.name = "≤‚ ‘12",
+		.name = "≤‚ ‘0",
 		.filesize = 30,
 		.offsetx = 5,
 		.offsety = 22,
@@ -493,7 +493,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SelectFont(hdc,s_font1);
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
-			jointwarn_crate_mainui(hdc, g_rcScr.right, g_rcScr.bottom);
+			jointwarn_crate_mainui(hdc, 4, 3);
 			//TextOut(hdc,400,295,"≤‚ ‘");
 
 			EndPaint(hWnd,hdc);

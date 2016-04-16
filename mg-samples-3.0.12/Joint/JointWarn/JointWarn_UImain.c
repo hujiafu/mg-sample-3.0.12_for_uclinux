@@ -24,7 +24,7 @@ extern struct textStruct back;
 int page_cnt1;
 int form_tot_cnt;
 int back_width, back_height;
-int row, column;
+int gRow, gColumn;
 int partHeight, partWidth;
 int x[TOTAL_NUM], y[TOTAL_NUM];
 int hx[5], hy[5], vx[5], vy[5];
@@ -50,8 +50,8 @@ void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetTextColor(hdc, COLOR_lightwhite);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
-	for(i=0; i<row; i++){
-		for(j=0; j<column; j++){
+	for(i=0; i<gRow; i++){
+		for(j=0; j<gColumn; j++){
 			x[k] = vx[j] - partWidth + 5;
 			y[k] = hy[i] - partHeight + 5;
 			printf("x = %d, y = %d, %d, %d\n", x[k], y[k], partWidth - 10, partHeight - 10);
@@ -60,8 +60,8 @@ void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
 		}
 	}
 	k = 0;
-	for(i=0; i<row; i++){
-		for(j=0; j<column; j++){
+	for(i=0; i<gRow; i++){
+		for(j=0; j<gColumn; j++){
 			if(k >= count)
 				break;
 			s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
@@ -102,40 +102,36 @@ void jointwarn_paint_flag(HDC hdc, int left, int right)
 }
 
 
-void jointwarn_crate_mainui(HDC hdc, int width, int height)
+void jointwarn_crate_mainui(HDC hdc, int row, int column)
 {
 	int i, j;
 	int font_len;
 	int xx, yy;
 	int form_count;
 	int left, right;
+	int width, height;
 	PLOGFONT s_font;
 	//HDC hdc;
 
 	//hdc = BeginPaint(hWnd);
+	width = MWINDOW_RX;
+	height = MWINDOW_BY;
+	gColumn = column;
+	gRow = row;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetTextColor(hdc,COLOR_lightwhite);
-	//SetBkColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
-	//TextOut(hdc,100,295,"测试");
-	column = NUM_PRE_LINE;
-	row = NUM_ROWS;
-	//row = TOTAL_NUM / column;
-	//if(TOTAL_NUM % column != 0){
-	//	row += 1;
-	//}
 	
-	//partHeight = height / (row + 1);
-	partHeight = SPARE_Y / (row);
-	partWidth = width / column;
+	partHeight = SPARE_Y / (gRow);
+	partWidth = width / gColumn;
 	yy = partHeight;
 	xx = partWidth;
-	for(i=0; i<row; i++){
+	for(i=0; i<gRow; i++){
 		hx[i] = 0;
 		hy[i] = yy;
 		yy += partHeight;
 	}
-	for(i=0; i<column; i++){
+	for(i=0; i<gColumn; i++){
 		vx[i] = xx; 
 		vy[i] = 0;
 		xx += partWidth;
@@ -143,11 +139,11 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
 	FillBox(hdc, 0, 0, width, yy - partHeight);	
 	
-	for(i=0; i<row; i++){
+	for(i=0; i<gRow; i++){
 		//DrawHDotLine(hdc, hx[i], hy[i], width);
 		LineEx(hdc, hx[i], hy[i], width, hy[i]);
 	}
-	for(i=0; i<column; i++){
+	for(i=0; i<gColumn; i++){
 		//DrawVDotLine(hdc, vx[i], vy[i], height);	
 		LineEx(hdc, vx[i], vy[i], vx[i], height - partHeight);
 	}
@@ -200,15 +196,7 @@ void jointwarn_crate_mainui(HDC hdc, int width, int height)
 	s_point[1][1].y = btn_next_page_1.point_start.y;
 	s_point[1][2].x = btn_next_page_1.point_end.x;
 	s_point[1][2].y = btn_next_page_1.point_end.y;
-#if 0
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xB3, 0xB3, 0xB3, 0xFF));
-	FillPolygon(hdc, s_point[0], 3);
-	if(TOTAL_NUM > TOTAL_FRAME){
-		btn_next_page_1.active = 1;
-		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
-	}
-	FillPolygon(hdc, s_point[1], 3);
-#endif
+	
 	left = 0;
 	right = 0;
 	if(TOTAL_NUM > TOTAL_FRAME){
