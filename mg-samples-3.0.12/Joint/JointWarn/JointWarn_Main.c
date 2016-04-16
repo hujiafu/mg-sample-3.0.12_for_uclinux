@@ -155,39 +155,38 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
-const char* warningText[]=
-{
-	"请选择作业区域！",
+struct textStruct warn_msg[] = {
+	{
+		.name = "请选择作业区域！",
+		.filesize = 30,
+		.offsetx = 10,
+		.offsety = 5,
+		.color = 0x00008BFF,
+	},
+	{
+		.name = "请选择作业设备！",
+		.filesize = 30,
+		.offsetx = 10,
+		.offsety = 0,
+		.color = 0x00008BFF,
+	},
+	{
+		.name = "请选择作业项目！",
+		.filesize = 30,
+		.offsetx = 10,
+		.offsety = 0,
+		.color = 0x00008BFF,
+	},
 };
 
 const char* menu_hz[]=
 { 	
-	"轧机",
-	"接杆",
-	"导卫",
-	"压下",
-	"立轧机",
-	"活套",
-	"除尘",
-	"除鳞",
-	"小车、平台",
-	"测厚仪",
 	"液压站",
 
 };
 
 const int meun_hz_size[]=
 {
-	40,
-	40,
-	40,
-	40,
-	40,
-	40,
-	40,
-	40,
-	30,
-	40,
 	40,
 };
 
@@ -493,7 +492,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SelectFont(hdc,s_font1);
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
-			jointwarn_crate_mainui(hdc, 4, 3);
+			jointwarn_crate_mainui(hdc, 4, 3, menu_hiz, warn_msg, 3);
 			//TextOut(hdc,400,295,"测试");
 
 			EndPaint(hWnd,hdc);
