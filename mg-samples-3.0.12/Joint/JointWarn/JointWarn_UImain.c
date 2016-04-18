@@ -12,10 +12,9 @@
 
 #define NUM_PRE_LINE	3
 #define NUM_ROWS	4
-#define SPARE_Y		360
 #define FONT35_PIXEL	19	//FORNT SIZE 35
 #define FONT30_PIXEL	16	//FORNT SIZE 30
-#define FONT30_HIGH_PIXEL	30
+#define FONT30_HIGH_PIXEL	35
 #define WARN_FRAME_HIGH		20
 
 extern const char* menu_hz[];
@@ -104,6 +103,44 @@ void jointwarn_paint_flag(HDC hdc, int left, int right)
 
 }
 
+void jointwarn_paint_warning(HDC hdc, struct textStruct * warn_text, int msg_linecnt)
+{
+	int offsety;
+	int font_len, font_cnt = 0;
+	int i, tmp;
+	PLOGFONT s_font;
+
+	SetBkMode(hdc,BM_TRANSPARENT);        
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+	FillBox(hdc, 0 + 100, SPARE_Y, (BACK_XOFFSET - 100), MWINDOW_BY - SPARE_Y);
+	if(msg_linecnt == 1){
+		offsety = 30;
+	}
+	if(msg_linecnt == 2){
+		offsety = 15;
+	}
+	if(msg_linecnt == 3){
+		offsety = 0;
+	}
+	for(i=0; i<msg_linecnt; i++){
+		tmp = strlen(warn_text[i].name);
+		font_cnt = font_cnt > tmp ? font_cnt : tmp;
+	}
+	font_len = font_cnt * FONT30_PIXEL;
+	printf("font_len = %d\n", font_len);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
+	FillBox(hdc, 0 + 100, SPARE_Y + offsety + 3, (font_len + 10), warn_text[0].offsety + FONT30_HIGH_PIXEL * msg_linecnt);
+	SetTextColor(hdc,COLOR_blue);
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+	FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn_text[0].filesize, 0);
+	SelectFont(hdc,s_font);
+	for(i=0; i<msg_linecnt; i++){
+		TextOut(hdc, 0 + 100 + warn_text[i].offsetx, SPARE_Y + offsety + 5 + warn_text[i].offsety + FONT30_HIGH_PIXEL * i, warn_text[i].name);
+	}
+	DestroyLogFont(s_font);
+
+
+}
 
 void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * text, struct textStruct * warn_text, int msg_linecnt)
 {
@@ -169,13 +206,14 @@ void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * te
 
 
 
-
-	
+#if 0
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+	FillBox(hdc, 0 + 100, SPARE_Y, (BACK_XOFFSET - 100), height - SPARE_Y);	
 	if(msg_linecnt == 1){
-		offsety = 20;
+		offsety = 30;
 	}
 	if(msg_linecnt == 2){
-		offsety = 10;
+		offsety = 15;
 	}
 	if(msg_linecnt == 3){
 		offsety = 0;
@@ -186,19 +224,18 @@ void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * te
 	}
 	font_len = font_cnt * FONT30_PIXEL;
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
-	FillBox(hdc, 0 + 100, SPARE_Y + offsety + 5, (font_len + 10), WARN_FRAME_HIGH + FONT30_HIGH_PIXEL * msg_linecnt);	
+	FillBox(hdc, 0 + 100, SPARE_Y + offsety + 3, (font_len + 10), warn_text[0].offsety + FONT30_HIGH_PIXEL * msg_linecnt);	
 	//SetBkMode(hdc,BM_TRANSPARENT);	
 	SetTextColor(hdc,COLOR_blue);
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
 		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn_text[0].filesize, 0);
 	SelectFont(hdc,s_font);
 	for(i=0; i<msg_linecnt; i++){
-		TextOut(hdc, 0 + 100 + warn_text[i].offsetx, SPARE_Y + offsety + 5 + warn_text[i].offsety + 40 * i, warn_text[i].name);	
+		TextOut(hdc, 0 + 100 + warn_text[i].offsetx, SPARE_Y + offsety + 5 + warn_text[i].offsety + FONT30_HIGH_PIXEL * i, warn_text[i].name);	
 	}
 	DestroyLogFont(s_font);
-	//TextOut(hdc, partWidth + 30, yy - partHeight/2, "ABCDEF");	
-	//TextOut(hdc,100,295,"测试");
-	//test_output(hdc, "测试555");
+#endif	
+	jointwarn_paint_warning(hdc, warn_text, msg_linecnt);
 
 
 
@@ -238,7 +275,7 @@ void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * te
 
 	back_width = 120;
 	back_height = 50;
-	btn_back_1.point_start.x = 2 * partWidth + 50;
+	btn_back_1.point_start.x = BACK_XOFFSET;
 	btn_back_1.point_start.y = yy - partHeight/2;
 	btn_back_1.point_end.x = btn_back_1.point_start.x + back_width;
 	btn_back_1.point_end.y = btn_back_1.point_start.y + back_height;

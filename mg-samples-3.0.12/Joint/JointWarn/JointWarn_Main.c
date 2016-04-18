@@ -167,14 +167,14 @@ struct textStruct warn_msg[] = {
 		.name = "请选择作业设备！",
 		.filesize = 30,
 		.offsetx = 10,
-		.offsety = 0,
+		.offsety = 5,
 		.color = 0x00008BFF,
 	},
 	{
 		.name = "请选择作业项目！",
 		.filesize = 30,
 		.offsetx = 10,
-		.offsety = 0,
+		.offsety = 5,
 		.color = 0x00008BFF,
 	},
 };
