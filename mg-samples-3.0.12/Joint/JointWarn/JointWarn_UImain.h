@@ -9,7 +9,7 @@
 #define SPARE_Y         360
 
 #define TOTAL_NUM       25
-#define TOTAL_FRAME     12
+//#define TOTAL_FRAME     12
 
 
 

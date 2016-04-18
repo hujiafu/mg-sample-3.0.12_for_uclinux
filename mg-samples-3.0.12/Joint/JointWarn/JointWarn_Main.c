@@ -24,6 +24,7 @@ static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
 static RECT msg_rc = {10, 100, 600, 400};
 
+
 extern struct buttonObject btn_back_1;
 extern struct buttonObject btn_front_page_1;
 extern struct buttonObject btn_next_page_1;
@@ -32,8 +33,8 @@ extern POINT s_point[2][3];
 extern int page_cnt1;
 extern int form_tot_cnt;
 extern int back_width, back_height;
-
-
+extern int partHeight, partWidth;
+extern int x[100], y[100];
 
 
 HWND hMainWnd;
@@ -42,6 +43,15 @@ static const char* syskey = "";
 
 static int last_key = -1;
 static int last_key_count = 0;
+int window_no = 0;
+int area_window_frame_cnt = 0;
+int equipment_window_frame_cnt = 0;
+int project_window_frame_cnt = 0;
+int window_frame_cnt = 0;
+int total_frame_cnt = 0;
+int form_count = 0;
+int select_no = 0;
+int gRow, gColumn;
 
 static void make_welcome_text (void)
 {
@@ -155,6 +165,13 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
+const char * select_msg[]=
+{
+	"请选择作业区域！",
+	"请选择作业设备！",
+	"请选择作业项目！",
+};
+
 struct textStruct warn_msg[] = {
 	{
 		.name = "请选择作业区域！",
@@ -237,6 +254,95 @@ struct textStruct back ={
 	.filesize = 40,
 	.offsetx = 20,
 	.offsety = 5,
+};
+
+struct textStruct menu_equipment[]=
+{
+	{
+		.name = "F0主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F1主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F2主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F3主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F4主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F5主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F6主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F7主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F8主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F9主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F10主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F11主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F12主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+	{
+		.name = "F13主电机",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 22,
+	},
+
 };
 
 struct textStruct menu_hiz[]=
@@ -403,6 +509,18 @@ void test_output(HDC hdc, char * str)
 	TextOut(hdc,300,295, str);
 }
 
+void create_equipment_window(HDC hdc)
+{
+	gRow = 4;
+	gColumn = 3;
+	window_no = 2;
+	total_frame_cnt = 14;
+	window_frame_cnt = gRow * gColumn;
+	strcpy(warn_msg[0].name, menu_hiz[select_no].name);
+	strcpy(warn_msg[1].name, select_msg[1]);
+	jointwarn_crate_mainui(hdc, menu_equipment, warn_msg, 2);
+}
+
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
 	static BITMAP s_startbmp,s_background;
@@ -412,7 +530,6 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	static int s_selbak=0;
 	static int pre_x, pre_y;
 	int i;
-	int form_cnt;
 	int cnt;
 	int left_flag, right_flag;
 	HDC hdc;
@@ -492,22 +609,30 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SelectFont(hdc,s_font1);
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
-			jointwarn_crate_mainui(hdc, 4, 3, menu_hiz, warn_msg, 3);
+			gRow = 4;
+			gColumn = 3;
+			window_no = 1;
+			total_frame_cnt = 25;
+			window_frame_cnt = gRow * gColumn;
+			jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 3);
 			//TextOut(hdc,400,295,"测试");
 
 			EndPaint(hWnd,hdc);
-
 			break;
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
 			//hdc = BeginPaint(hWnd);
-			
+	
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
 			if(btn_back_1.active == 1){
 				if((pre_x > btn_back_1.point_start.x && pre_x < btn_back_1.point_end.x) && (pre_y > btn_back_1.point_start.y && pre_y < btn_back_1.point_end.y)){
 					printf("back pressed\n");
+					
+					//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x8A, 0x8A, 0x8A, 0x10));
+					//FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);
+					EnableWindow(hWnd, FALSE);
 					InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 				}
 			}
@@ -515,8 +640,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if((pre_x > btn_front_page_1.point_start.x && pre_x < btn_front_page_1.point_end.x) && (pre_y > btn_front_page_1.point_start.y && pre_y < btn_front_page_1.point_end.y)){
 					printf("front page pressed\n");
 					page_cnt1--;
-					cnt = TOTAL_FRAME * page_cnt1;
-					jointwarn_paint_frame(hdc, &menu_hiz[cnt], TOTAL_FRAME);
+					cnt = window_frame_cnt * page_cnt1;
+					form_count = window_frame_cnt;
+					jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
 					if(page_cnt1 > 0){
 						left_flag = 1;
 					}else{
@@ -533,10 +659,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			if(btn_next_page_1.active == 1){
 				if((pre_x > btn_next_page_1.point_end.x && pre_x < btn_next_page_1.point_start.x) && (pre_y > btn_next_page_1.point_start.y && pre_y < btn_next_page_1.point_end.y)){
 					printf("next page pressed\n");
-					cnt = TOTAL_FRAME * (page_cnt1 + 1);
-					form_cnt = TOTAL_NUM - cnt; 
-					form_cnt = form_cnt > TOTAL_FRAME ? TOTAL_FRAME : form_cnt;
-					jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_cnt);
+					cnt = window_frame_cnt * (page_cnt1 + 1);
+					form_count = total_frame_cnt - cnt; 
+					form_count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
+					jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
 					page_cnt1++;
 					if(page_cnt1 > 0){
 						left_flag = 1;
@@ -551,7 +677,21 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					jointwarn_paint_flag(hdc, left_flag, right_flag);
 				}
 			}
-			
+			if(((pre_x > 5) && (pre_x < (MWINDOW_RX - 5))) && ((pre_y > 5) && (pre_y < (MWINDOW_BY - 5)))){
+				//printf("form_count = %d\n", form_count);
+				for(i=0; i<form_count; i++){
+					if(pre_x >= x[i] && pre_x <= (x[i] + partWidth - 10) && pre_y >= y[i] && pre_y <= (y[i] + partHeight - 10)){
+						select_no = i + window_frame_cnt * page_cnt1;
+						printf("frame %d select \n", select_no);
+
+						printf("window_no = %d\n", window_no);
+						if(1 == window_no){
+							create_equipment_window(hdc);
+						}
+						break;
+					}
+				}
+			}
 			//EndPaint(hWnd,hdc);
 			break;
 		case MSG_RBUTTONDOWN:

@@ -22,13 +22,18 @@ extern const char* menu_hz[];
 //extern struct textStruct menu_hiz[];
 //extern struct textStruct warn_msg[];
 extern struct textStruct back;
+extern int gRow;
+extern int gColumn;
+extern int window_frame_cnt;
+extern int total_frame_cnt;
+extern int form_count;
 
 int page_cnt1;
 int form_tot_cnt;
+	//SetBkMode(hdc,BM_TRANSPARENT);        
 int back_width, back_height;
-int gRow, gColumn;
 int partHeight, partWidth;
-int x[TOTAL_NUM], y[TOTAL_NUM];
+int x[100], y[100];
 int hx[5], hy[5], vx[5], vy[5];
 struct buttonObject btn_back_1;
 struct buttonObject btn_front_page_1;
@@ -142,24 +147,20 @@ void jointwarn_paint_warning(HDC hdc, struct textStruct * warn_text, int msg_lin
 
 }
 
-void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * text, struct textStruct * warn_text, int msg_linecnt)
+void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct * warn_text, int msg_linecnt)
 {
 	int i, j;
 	int font_len, font_cnt;
 	int xx, yy;
-	int form_count;
 	int left, right;
 	int width, height;
 	int offsety;
 	int tmp;
 	PLOGFONT s_font;
-	//HDC hdc;
 
-	//hdc = BeginPaint(hWnd);
+	printf("jointwarn_crate_mainui \n");
 	width = MWINDOW_RX;
 	height = MWINDOW_BY;
-	gColumn = column;
-	gRow = row;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetTextColor(hdc,COLOR_lightwhite);
@@ -190,15 +191,15 @@ void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * te
 		LineEx(hdc, vx[i], vy[i], vx[i], height - partHeight);
 	}
 
-	form_tot_cnt = TOTAL_NUM / TOTAL_FRAME;
-	if(TOTAL_NUM % TOTAL_FRAME != 0){
+	form_tot_cnt = total_frame_cnt / window_frame_cnt;
+	if(total_frame_cnt % window_frame_cnt != 0){
 		form_tot_cnt += 1;
 	}
-	form_count = TOTAL_NUM > TOTAL_FRAME ? TOTAL_FRAME : TOTAL_NUM;
+	form_count = total_frame_cnt > window_frame_cnt ? window_frame_cnt : total_frame_cnt;
 	page_cnt1 = 0; 
 	jointwarn_paint_frame(hdc, text, form_count);
 	
-	printf("partWidth = %d\n", partWidth);
+	printf("partWidth = %d, form_count = %d\n", partWidth, form_count);
 	//Rectangle(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), height - 20);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
 	FillBox(hdc, 0, SPARE_Y, width, height - SPARE_Y);	
@@ -268,7 +269,7 @@ void jointwarn_crate_mainui(HDC hdc, int row, int column, struct textStruct * te
 	
 	left = 0;
 	right = 0;
-	if(TOTAL_NUM > TOTAL_FRAME){
+	if(total_frame_cnt > window_frame_cnt){
 		right = 1;
 	}	
 	jointwarn_paint_flag(hdc, left, right);

@@ -20,7 +20,6 @@ static int warn_height;
 static struct warnForm *gform;
 static int gformCount;
 
-
 static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)   //第二及处理消息   
 {  
 	int pre_x, pre_y;   
@@ -145,12 +144,14 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
 #endif  
        break;  
       
-case MSG_DESTROY:  
+case MSG_DESTROY: 
+	printf("2 MSG_DESTROY:\n");
            DestroyAllControls (hWnd);  
            hMainWnd1 = HWND_INVALID;  
 return 0;    
   
 case MSG_CLOSE:  
+	printf("2 MSG_CLOSE:\n");
            DestroyMainWindow (hWnd);  
            MainWindowCleanup (hWnd);  
       return 0;  
@@ -200,8 +201,8 @@ int InitConfirmWindow(HWND hWnd, int width, int height, struct warnForm *form, i
 	if(hMainWnd1 != HWND_INVALID)   
 	{ 
 		printf("hMainWnd1\n");
-	//	EnableWindow(hWnd, FALSE);
-	//	ShowWindow(hMainWnd1, SW_SHOWNORMAL); //显示窗口   
+//		EnableWindow(hWnd, FALSE);
+		ShowWindow(hMainWnd1, SW_SHOWNORMAL); //显示窗口   
 		
 	//	while(GetMessage(&Msg,hMainWnd1))
         //	{
