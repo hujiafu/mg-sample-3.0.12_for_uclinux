@@ -39,6 +39,8 @@ int hx[5], hy[5], vx[5], vy[5];
 struct buttonObject btn_back_1;
 struct buttonObject btn_front_page_1;
 struct buttonObject btn_next_page_1;
+struct buttonObject select_apply;
+struct buttonObject select_canel;
 POINT s_point[2][3];
 
 void jointwarn_test(HDC hdc)
@@ -152,6 +154,29 @@ void jointwarn_paint_warning(HDC hdc, struct textStruct * warn_text, int msg_lin
 
 }
 
+void jointwarn_paint_back(HDC hdc)
+{
+	PLOGFONT s_font;
+	
+	back_width = 120;
+	back_height = 50;
+	btn_back_1.point_start.x = BACK_XOFFSET;
+	btn_back_1.point_start.y = SPARE_Y + 35;
+	btn_back_1.point_end.x = btn_back_1.point_start.x + back_width;
+	btn_back_1.point_end.y = btn_back_1.point_start.y + back_height;
+	btn_back_1.active = 1;
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
+	FillBox(hdc, btn_back_1.point_start.x, btn_back_1.point_start.y, back_width, back_height);	
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, back.filesize, 0);
+	SelectFont(hdc,s_font);
+	SetTextColor(hdc, COLOR_lightwhite);
+	TextOut(hdc, btn_back_1.point_start.x + back.offsetx, btn_back_1.point_start.y + back.offsety, back.name);	
+	DestroyLogFont(s_font);
+
+}
+
+
 void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct * warn_text, int msg_linecnt)
 {
 	int i, j;
@@ -186,7 +211,7 @@ void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct
 		xx += partWidth;
 	}
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
-	FillBox(hdc, 0, 0, width, yy - partHeight);	
+	FillBox(hdc, 0, 0, width, SPARE_Y);	
 	
 	for(i=0; i<gRow; i++){
 		//DrawHDotLine(hdc, hx[i], hy[i], width);
@@ -298,4 +323,66 @@ void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct
 	
 	//EndPaint(hWnd,hdc);	
 
+}
+
+void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruct *warn)
+{
+	int frame_width = 400;
+	int frame_height = 100;
+	int start_x, start_y;
+	int i;
+	PLOGFONT s_font;
+	
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
+	FillBox(hdc, 0, 0, MWINDOW_RX, SPARE_Y);	
+	
+	SetTextColor(hdc, COLOR_lightwhite);
+
+	for(i=0; i<2; i++){
+		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
+		start_x = (MWINDOW_RX - frame_width) >> 1;
+		if(i == 1){
+			start_y = SPARE_Y >> 1;
+			select_canel.point_start.x = start_x;
+			select_canel.point_start.y = start_y;
+			select_canel.point_end.x = start_x + frame_width;
+			select_canel.point_end.y = start_y + frame_height;
+			select_canel.active = 1;
+		}else{
+			start_y = ((SPARE_Y >> 1) - frame_height) >> 1;
+			select_apply.point_start.x = start_x;
+			select_apply.point_start.y = start_y;
+			select_apply.point_end.x = start_x + frame_width;
+			select_apply.point_end.y = start_y + frame_height;
+			select_apply.active = 1;
+		}
+		FillBox(hdc, start_x, start_y, frame_width, frame_height);
+			
+		SetPenColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
+        	SetPenWidth(hdc, 1);
+        	LineEx(hdc, start_x + 1, start_y + 1, start_x + frame_width - 1, start_y + 1);
+        	LineEx(hdc, start_x + frame_width - 1, start_y + 1, start_x + frame_width - 1, start_y + frame_height - 1);
+        	LineEx(hdc, start_x + frame_width - 1, start_y + frame_height - 1, start_x + 1, start_y + frame_height - 1);
+        	LineEx(hdc, start_x + 1, start_y + frame_height - 1, start_x + 1, start_y + 1);
+
+		SetTextColor(hdc, COLOR_lightwhite);
+		s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+			FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[i].filesize, 0);
+		SelectFont(hdc,s_font);
+		TextOut(hdc, start_x + text[i].offsetx, start_y + text[i].offsety, text[i].name);	
+		DestroyLogFont(s_font);
+	}
+
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+	FillBox(hdc, 0, SPARE_Y, MWINDOW_RX, MWINDOW_BY - SPARE_Y);	
+	jointwarn_paint_warning(hdc, warn, 1);
+	jointwarn_paint_back(hdc);
+	//start_x = (MWINDOW_RX - frame_width) >> 1;
+	//start_y = (SPARE_Y >> 1);
+	//FillBox(hdc, start_x, start_y, frame_width, frame_height);	
+//	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
+//	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[k].filesize, 0);
+//	SelectFont(hdc,s_font);
 }

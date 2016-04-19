@@ -28,6 +28,8 @@ static RECT msg_rc = {10, 100, 600, 400};
 extern struct buttonObject btn_back_1;
 extern struct buttonObject btn_front_page_1;
 extern struct buttonObject btn_next_page_1;
+extern struct buttonObject select_apply;
+extern struct buttonObject select_canel;
 extern POINT s_point[2][3];
 
 extern int page_cnt1;
@@ -167,11 +169,34 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
+struct textStruct menu_hz1[] = {
+	{
+		.name = "申请作业项目",
+		.filesize = 50,
+		.offsetx = 60,
+		.offsety = 25,
+	},
+	{
+		.name = "撤销作业项目",
+		.filesize = 50,
+		.offsetx = 60,
+		.offsety = 25,
+	},
+}; 
+
 const char * select_msg[]=
 {
 	"请选择作业区域！",
 	"请选择作业设备！",
 	"请选择作业项目！",
+};
+
+struct textStruct menu_hz1_warn = {
+	.name = "请选择操作项目",
+	.filesize = 30,
+	.offsetx = 10,
+	.offsety = 5,
+	.color = 0x00008BFF,
 };
 
 struct textStruct warn_msg[] = {
@@ -641,6 +666,12 @@ void create_area_window(HDC hdc)
 
 }
 
+void create_select_window(HDC hdc, struct textStruct * text, struct textStruct *warn)
+{
+	window_no = 4;
+	jointwarn_create_select(hdc, text, warn);
+}
+
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
 	static BITMAP s_startbmp,s_background;
@@ -736,8 +767,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//window_frame_cnt = gRow * gColumn;
 			//jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 3);
 			//TextOut(hdc,400,295,"测试");
-			create_area_window(hdc);
 
+
+			//create_area_window(hdc);
+			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:
@@ -747,6 +780,18 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
+			if(window_no == 4){
+				if(select_apply.active == 1){
+					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
+						printf("select_apply press\n");
+					}
+				}
+				if(select_canel.active == 1){
+					if((pre_x > select_canel.point_start.x && pre_x < select_canel.point_end.x) && (pre_y > select_canel.point_start.y && pre_y < select_canel.point_end.y)){
+						printf("select_canel press\n");
+					}
+				}
+			}
 			if(btn_back_1.active == 1){
 				if((pre_x > btn_back_1.point_start.x && pre_x < btn_back_1.point_end.x) && (pre_y > btn_back_1.point_start.y && pre_y < btn_back_1.point_end.y)){
 					printf("back pressed\n");
@@ -757,10 +802,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					if(3 == window_no){
 						create_equipment_window(hdc);
 					}
+					if(4 == window_no){
+						printf("back to 100-2\n");
+					}
 					//EnableWindow(hWnd, FALSE);
 					//InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 				}
 			}
+			if(window_no >= 1 && window_no <=3){
 			if(btn_front_page_1.active == 1){
 				if((pre_x > btn_front_page_1.point_start.x && pre_x < btn_front_page_1.point_end.x) && (pre_y > btn_front_page_1.point_start.y && pre_y < btn_front_page_1.point_end.y)){
 					printf("front page pressed\n");
@@ -842,6 +891,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						break;
 					}
 				}
+			}
+
 			}
 			//EndPaint(hWnd,hdc);
 			break;
