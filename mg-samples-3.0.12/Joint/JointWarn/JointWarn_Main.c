@@ -44,13 +44,15 @@ static const char* syskey = "";
 static int last_key = -1;
 static int last_key_count = 0;
 int window_no = 0;
-int area_window_frame_cnt = 0;
-int equipment_window_frame_cnt = 0;
-int project_window_frame_cnt = 0;
+//int area_window_frame_cnt = 0;
+//int equipment_window_frame_cnt = 0;
+//int project_window_frame_cnt = 0;
 int window_frame_cnt = 0;
 int total_frame_cnt = 0;
 int form_count = 0;
-int select_no = 0;
+int area_select_no = 0;
+int equipment_select_no = 0;
+int project_select_no = 0;
 int gRow, gColumn;
 
 static void make_welcome_text (void)
@@ -254,6 +256,100 @@ struct textStruct back ={
 	.filesize = 40,
 	.offsetx = 20,
 	.offsety = 5,
+};
+
+struct textStruct menu_project[]=
+{
+	{
+		.name = "主电机碳刷检查更新0",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新1",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新2",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新3",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新4",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新5",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新6",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新7",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新8",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新9",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新10",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新11",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新12",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新13",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
+	{
+		.name = "主电机碳刷检查更新14",
+		.filesize = 30,
+		.offsetx = 5,
+		.offsety = 15,
+	},
 };
 
 struct textStruct menu_equipment[]=
@@ -509,6 +605,18 @@ void test_output(HDC hdc, char * str)
 	TextOut(hdc,300,295, str);
 }
 
+void create_project_window(HDC hdc)
+{
+	gRow = 5;
+	gColumn = 2;
+	window_no = 3;
+	total_frame_cnt = 15;
+	window_frame_cnt = gRow * gColumn;
+	strcpy(warn_msg[1].name, menu_equipment[equipment_select_no].name);
+	strcpy(warn_msg[2].name, select_msg[2]);
+	jointwarn_crate_mainui(hdc, menu_project, warn_msg, 3);
+}
+
 void create_equipment_window(HDC hdc)
 {
 	gRow = 4;
@@ -516,9 +624,21 @@ void create_equipment_window(HDC hdc)
 	window_no = 2;
 	total_frame_cnt = 14;
 	window_frame_cnt = gRow * gColumn;
-	strcpy(warn_msg[0].name, menu_hiz[select_no].name);
+	strcpy(warn_msg[0].name, menu_hiz[area_select_no].name);
 	strcpy(warn_msg[1].name, select_msg[1]);
 	jointwarn_crate_mainui(hdc, menu_equipment, warn_msg, 2);
+}
+
+void create_area_window(HDC hdc)
+{
+	gRow = 4;
+	gColumn = 3;
+	window_no = 1;
+	total_frame_cnt = 25;
+	window_frame_cnt = gRow * gColumn;
+	strcpy(warn_msg[0].name, select_msg[0]);
+	jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 1);
+
 }
 
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
@@ -609,13 +729,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			SelectFont(hdc,s_font1);
 			TextOut(hdc,130,295,menu_hz[s_sel]);
 #endif
-			gRow = 4;
-			gColumn = 3;
-			window_no = 1;
-			total_frame_cnt = 25;
-			window_frame_cnt = gRow * gColumn;
-			jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 3);
+			//gRow = 4;
+			//gColumn = 3;
+			//window_no = 1;
+			//total_frame_cnt = 25;
+			//window_frame_cnt = gRow * gColumn;
+			//jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 3);
 			//TextOut(hdc,400,295,"测试");
+			create_area_window(hdc);
 
 			EndPaint(hWnd,hdc);
 			break;
@@ -630,10 +751,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if((pre_x > btn_back_1.point_start.x && pre_x < btn_back_1.point_end.x) && (pre_y > btn_back_1.point_start.y && pre_y < btn_back_1.point_end.y)){
 					printf("back pressed\n");
 					
-					//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x8A, 0x8A, 0x8A, 0x10));
-					//FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);
-					EnableWindow(hWnd, FALSE);
-					InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
+					if(2 == window_no){
+						create_area_window(hdc);
+					}
+					if(3 == window_no){
+						create_equipment_window(hdc);
+					}
+					//EnableWindow(hWnd, FALSE);
+					//InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 				}
 			}
 			if(btn_front_page_1.active == 1){
@@ -642,7 +767,15 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					page_cnt1--;
 					cnt = window_frame_cnt * page_cnt1;
 					form_count = window_frame_cnt;
-					jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+					if(1 == window_no){
+						jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+					}
+					if(2 == window_no){
+						jointwarn_paint_frame(hdc, &menu_equipment[cnt], form_count);
+					}
+					if(3 == window_no){
+						jointwarn_paint_frame(hdc, &menu_project[cnt], form_count);
+					}
 					if(page_cnt1 > 0){
 						left_flag = 1;
 					}else{
@@ -662,7 +795,15 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					cnt = window_frame_cnt * (page_cnt1 + 1);
 					form_count = total_frame_cnt - cnt; 
 					form_count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
-					jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+					if(1 == window_no){
+						jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+					}
+					if(2 == window_no){
+						jointwarn_paint_frame(hdc, &menu_equipment[cnt], form_count);
+					}
+					if(3 == window_no){
+						jointwarn_paint_frame(hdc, &menu_project[cnt], form_count);
+					}
 					page_cnt1++;
 					if(page_cnt1 > 0){
 						left_flag = 1;
@@ -681,11 +822,21 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				//printf("form_count = %d\n", form_count);
 				for(i=0; i<form_count; i++){
 					if(pre_x >= x[i] && pre_x <= (x[i] + partWidth - 10) && pre_y >= y[i] && pre_y <= (y[i] + partHeight - 10)){
-						select_no = i + window_frame_cnt * page_cnt1;
-						printf("frame %d select \n", select_no);
 
 						printf("window_no = %d\n", window_no);
+						if(3 == window_no){
+							project_select_no = i + window_frame_cnt * page_cnt1;
+							printf("frame %d project select \n", project_select_no);
+							//create_project_window(hdc);
+						}
+						if(2 == window_no){
+							equipment_select_no = i + window_frame_cnt * page_cnt1;
+							printf("frame %d equipment select \n", equipment_select_no);
+							create_project_window(hdc);
+						}
 						if(1 == window_no){
+							area_select_no = i + window_frame_cnt * page_cnt1;
+							printf("frame %d area select \n", area_select_no);
 							create_equipment_window(hdc);
 						}
 						break;

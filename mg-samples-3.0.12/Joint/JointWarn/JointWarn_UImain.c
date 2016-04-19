@@ -30,6 +30,7 @@ extern int form_count;
 
 int page_cnt1;
 int form_tot_cnt;
+int max_font_cnt;
 	//SetBkMode(hdc,BM_TRANSPARENT);        
 int back_width, back_height;
 int partHeight, partWidth;
@@ -75,8 +76,12 @@ void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
 				FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[k].filesize, 0);
 			SelectFont(hdc,s_font);
 			font_len = strlen(text[k].name);	
-			printf("font_len = %d\n", font_len);
-			font_len = (16 - font_len) >> 1;
+			printf("font_len = %d, start = %d\n", font_len, x[k]);
+			//if(font_len >= 16){
+			//	font_len = 0;
+			//}else{
+				font_len = (max_font_cnt - font_len) >> 1;
+			//}
 			TextOut(hdc, x[k] + text[k].offsetx + (FONT30_PIXEL * font_len), y[k] + text[k].offsety, text[k].name);	
 			DestroyLogFont(s_font);
 			k++;
@@ -167,6 +172,7 @@ void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct
 	
 	partHeight = SPARE_Y / (gRow);
 	partWidth = width / gColumn;
+	max_font_cnt = partWidth / FONT30_PIXEL;
 	yy = partHeight;
 	xx = partWidth;
 	for(i=0; i<gRow; i++){

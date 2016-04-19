@@ -14,7 +14,7 @@
 
 
 struct textStruct{
-	char name[20];
+	char name[30];
 	char  filesize;
 	char  offsetx;
 	char  offsety;
