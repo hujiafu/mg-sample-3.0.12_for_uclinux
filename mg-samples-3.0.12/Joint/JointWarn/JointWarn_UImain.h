@@ -10,7 +10,10 @@
 
 #define TOTAL_NUM       25
 //#define TOTAL_FRAME     12
-
+#define FONT35_PIXEL    19      //FORNT SIZE 35
+#define FONT30_PIXEL    16      //FORNT SIZE 30
+#define FONT30_HIGH_PIXEL       35
+#define WARN_FRAME_HIGH         20
 
 
 struct textStruct{

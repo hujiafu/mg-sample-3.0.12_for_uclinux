@@ -769,8 +769,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//TextOut(hdc,400,295,"≤‚ ‘");
 
 
-			//create_area_window(hdc);
-			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			create_area_window(hdc);
+			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:

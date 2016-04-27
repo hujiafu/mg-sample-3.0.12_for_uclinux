@@ -7,6 +7,6 @@ export CFLAGS="-I. -I./include \
 
 export LDFLAGS="-L/usr/local/minigui/local/lib"
 
-export LIBS="-lminigui_ths -lfreetype -lpng -lc -ljpeg -lz -lm -pthread -lpciaccess"
+export LIBS="-lminigui_ths -lfreetype -lpng -lc -ljpeg -lz -lm -pthread"
 
 make
