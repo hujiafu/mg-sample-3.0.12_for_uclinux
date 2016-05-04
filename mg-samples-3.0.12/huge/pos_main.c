@@ -8,9 +8,94 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include <sys/time.h>
+#include <signal.h>
+#include <unistd.h>
 #include "pos_main.h"
 
 HWND hMainWnd;
+HDC	ghdc;
+
+extern unsigned char gtime[20];
+
+unsigned char posStr[50];
+unsigned char posIdStr[10];
+unsigned long posId = 1;
+unsigned int  posSize;
+unsigned int  posCount;
+long usedCount;
+long leaveCount;
+unsigned char leaveStr[10];
+
+
+void display_time(){
+
+	HDC hdc;
+	hdc = BeginPaint(hMainWnd);
+	get_time();
+	FillBox(hdc, 0, 400, MWINDOW_RX, 80);
+	TextOut(ghdc, 20, 420, gtime);
+	EndPaint(hMainWnd, hdc);
+}
+
+int timer_init(){
+
+	int res = 0;
+	struct itimerval tick;
+    
+	signal(SIGALRM, display_time);
+	memset(&tick, 0, sizeof(tick));
+
+	//Timeout to run first time
+	tick.it_value.tv_sec = 1;
+	tick.it_value.tv_usec = 0;
+
+	//After first, the Interval time for clock
+	tick.it_interval.tv_sec = 1;
+	tick.it_interval.tv_usec = 0;
+
+	if(setitimer(ITIMER_REAL, &tick, NULL) < 0)
+            printf("Set timer failed!\n");
+
+}
+
+
+int cal_pos_history(){
+
+}
+
+void pos_create_main_ui(HDC hdc){
+
+	PLOGFONT s_font;
+
+
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+	FillBox(hdc, MWINDOW_LX, MWINDOW_TY, MWINDOW_RX, MWINDOW_BY);
+
+	SetTextColor(hdc,RGBA2Pixel(hdc, 0x0, 0x0, 0x0, 0xFF));
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+        FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 40, 0);
+        SelectFont(hdc,s_font);
+
+	sprintf(posIdStr, "%d", posId);
+	strcpy(posStr, "»úºÅ : ");
+	strcat(posStr, posIdStr);
+	TextOut(hdc, 20, 20, posStr);
+
+	posSize = sizeof(struct posData);
+	posCount = CONTEXT_SIZE / posSize;
+	leaveCount = posCount - usedCount;
+	printf("posCount = %d, leaveCount = %d\n", posCount, leaveCount);
+	strcpy(posStr, "Ê£ÓàÈÝÁ¿ : ");
+	sprintf(leaveStr, "%d", leaveCount);
+	strcat(posStr, leaveStr);
+	TextOut(hdc, 420, 20, posStr);
+	DestroyLogFont(s_font);
+
+	timer_init();
+
+}
 
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
@@ -33,7 +118,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
   		case MSG_PAINT:
 			printf("MSG_PAINT begin1\n");
 			hdc = BeginPaint(hWnd);
-
+			pos_create_main_ui(hdc);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:

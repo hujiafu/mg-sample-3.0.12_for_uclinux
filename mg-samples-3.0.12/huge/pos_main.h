@@ -6,6 +6,15 @@
 #define MWINDOW_RX   800
 #define MWINDOW_BY   480
 
+#define CONTEXT_SIZE	6000000
+
+struct posData{
+        int	posValue;
+        char	time[20];
+        char	posId[10];
+        int	counted;
+};
+
 
 
 #endif

@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+unsigned char gtime[30];
+
 int get_time()
 {
 	time_t timep;
@@ -10,8 +12,8 @@ int get_time()
 
 	time(&timep);
 	p=localtime(&timep);
-	printf ("%d%d%d", (1900+p->tm_year),(1 + p->tm_mon), p->tm_mday);
-	printf("%d:%d:%d\n",p->tm_hour, p->tm_min, p->tm_sec);
+	sprintf (gtime, "%d-%d-%d %d:%d:%d", (1900+p->tm_year),(1 + p->tm_mon), p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+	return 0;
 }
 
 
