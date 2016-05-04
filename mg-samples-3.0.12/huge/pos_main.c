@@ -31,11 +31,16 @@ unsigned char leaveStr[10];
 void display_time(){
 
 	HDC hdc;
-	hdc = BeginPaint(hMainWnd);
+	PLOGFONT s_font;
+
+	hdc = GetDC(hMainWnd);	
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+        FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 40, 0);
+        SelectFont(hdc,s_font);
 	get_time();
 	FillBox(hdc, 0, 400, MWINDOW_RX, 80);
-	TextOut(ghdc, 20, 420, gtime);
-	EndPaint(hMainWnd, hdc);
+	TextOut(hdc, 20, 420, gtime);
+	DestroyLogFont(s_font);
 }
 
 int timer_init(){
@@ -118,6 +123,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
   		case MSG_PAINT:
 			printf("MSG_PAINT begin1\n");
 			hdc = BeginPaint(hWnd);
+			//ghdc = hdc;
 			pos_create_main_ui(hdc);
 			EndPaint(hWnd,hdc);
 			break;
