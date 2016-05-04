@@ -1,0 +1,12 @@
+make clean
+
+export CC=gcc
+
+export CFLAGS="-I. -I./include \
+-I/usr/local/minigui/local/include -static"
+
+export LDFLAGS="-L/usr/local/minigui/local/lib"
+
+export LIBS="-lminigui_ths -lfreetype -lpng -lc -ljpeg -lz -lm -pthread -lpciaccess"
+
+make
