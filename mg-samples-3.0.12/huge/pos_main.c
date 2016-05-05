@@ -17,6 +17,11 @@ HWND hMainWnd;
 HDC	ghdc;
 
 extern unsigned char gtime[20];
+extern int histroy_cnt;
+extern int page_num;
+extern int page_cnt;
+extern int page_no;
+extern int item_no;
 
 unsigned char posStr[50];
 unsigned char posIdStr[10];
@@ -26,6 +31,104 @@ unsigned int  posCount;
 long usedCount;
 long leaveCount;
 unsigned char leaveStr[10];
+int windows_no;
+
+struct cardData def_card = {
+        .cardId = "00001",
+        .userName = "张三",
+        .cardState = "正常",
+};
+
+struct posData def_detil[] = {
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "13.5",
+		.time = "2016-3-12 9:1:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "8.5",
+		.time = "2016-3-12 10:1:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "13",
+		.time = "2016-3-12 15:1:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "14",
+		.time = "2016-3-12 15:3:42",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "15.5",
+		.time = "2016-3-12 16:8:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "16.5",
+		.time = "2016-3-12 17:18:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "18.5",
+		.time = "2016-3-12 17:20:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "19.5",
+		.time = "2016-3-12 17:33:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "15.5",
+		.time = "2016-3-12 17:36:11",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "3.5",
+		.time = "2016-3-12 17:45:13",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "20.5",
+		.time = "2016-3-12 19:28:23",
+	},
+	{
+		.cardId = "00001",
+		.userName = "张三",
+		.posValue = "28.5",
+		.time = "2016-3-12 20:12:23",
+	},
+
+};
+
+const char * sz_menu[]=
+{
+        "卡号",
+        "姓名",
+        "消费状态",
+};
+
+const char * sz_menu1[]=
+{
+        "卡号",
+        "姓名",
+        "消费金额",
+        "消费日期",
+};
 
 
 void display_time(){
@@ -114,6 +217,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	int cnt;
 	int left_flag, right_flag;
 	HDC hdc;
+	int tmp;
 	
 	switch(message)
 	{
@@ -129,12 +233,53 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			break;
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
+			//create_query_ui(hdc);
+			query_detil(hdc);
 			break;
 		case MSG_RBUTTONDOWN:
 			printf("MSG_RBUTTONDOWN:\n");
 			break;
 		case MSG_CHAR:
 			printf("MSG_CHAR ok\n");
+			printf("0x%x\n", wParam);
+
+			hdc = GetDC(hMainWnd);
+			switch(wParam)
+			{
+				case 'p' :
+					if(windows_no == 2){
+						if(item_no > 0){
+							item_no--;
+						}
+					}
+
+					if(windows_no == 3){
+						if(page_no > 0){
+							page_no--;
+							tmp = histroy_cnt - page_no * PAGE_PRE_COUNT;
+							page_cnt = tmp > PAGE_PRE_COUNT ? PAGE_PRE_COUNT : tmp; 
+							printf("page_cnt = %d, page_no = %d\n", page_cnt, page_no); 
+							display_detil(hdc, &def_detil[page_no * PAGE_PRE_COUNT]);
+						}
+					}
+					break;
+				case 'n' :
+					if(windows_no == 3){
+						if(page_no < (page_num - 1)){
+							page_no++;
+							tmp = histroy_cnt - page_no * PAGE_PRE_COUNT;
+							page_cnt = tmp > PAGE_PRE_COUNT ? PAGE_PRE_COUNT : tmp;
+							printf("page_cnt = %d, page_no = %d\n", page_cnt, page_no); 
+							display_detil(hdc, &def_detil[page_no * PAGE_PRE_COUNT]);
+						}
+					}
+					break;
+				case 'm' :
+					if(windows_no == 0){
+						create_pos_item(hdc);
+					}		
+					break;
+			}
 #if 0
 			i = 0;
 			switch(wParam)
