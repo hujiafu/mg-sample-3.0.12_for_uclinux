@@ -18,12 +18,36 @@ int item_num;
 int item_no;
 int item_pos[ITEM_NUM][2];
 
+void clear_pos_item(HDC hdc, int itemNo)
+{
+	int start_x, start_y;
+
+	start_x = item_pos[itemNo][0] - 13;
+	start_y = item_pos[itemNo][1] - 13;
+	
+	SetBkMode(hdc,BM_TRANSPARENT);
+        SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+        FillBox(hdc, start_x, start_y, 62, 62);
+	FillBoxWithBitmap(hdc, item_pos[itemNo][0], item_pos[itemNo][1], 32, 32, &s_bmp[itemNo]);
+}
+
 void select_pos_item(HDC hdc, int itemNo)
 {
+	int start_x, start_y;
 	SetBkMode(hdc,BM_TRANSPARENT);
-        SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0xFF, 0xFF));
-        FillBox(hdc, item_pos[itemNo][0] - 13, item_pos[itemNo][1] - 13, 60, 60);
 
+        //SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0xFF, 0xFF));
+        //FillBox(hdc, item_pos[itemNo][0] - 13, item_pos[itemNo][1] - 13, 60, 60);
+	SetPenColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0xFF, 0xFF));
+	SetPenWidth(hdc, 1);
+
+	start_x = item_pos[itemNo][0] - 13;
+	start_y = item_pos[itemNo][1] - 13;
+	LineEx(hdc, start_x, start_y, start_x + 60, start_y);
+	LineEx(hdc, start_x + 60, start_y, start_x + 60, start_y + 60);
+	LineEx(hdc, start_x + 60, start_y + 60, start_x, start_y + 60);
+	LineEx(hdc, start_x, start_y + 60, start_x, start_y);
+	
 	printf("itemNo = %d\n", itemNo);
 	printf("%d, %d\n", item_pos[itemNo][0], item_pos[itemNo][1]);
 }
@@ -52,7 +76,7 @@ void create_pos_item(HDC hdc)
 
 	for(i=0; i<2; i++){
 		for(j=0; j<6; j++){
-			if((i * 6 + j) >= (item_num - 1)){
+			if((i * 6 + j) > (item_num - 1)){
 				return;
 			}
 			item_pos[i * 6 + j][0] = 80 + j*120;

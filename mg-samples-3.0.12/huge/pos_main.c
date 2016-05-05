@@ -22,6 +22,7 @@ extern int page_num;
 extern int page_cnt;
 extern int page_no;
 extern int item_no;
+extern int item_num;
 
 unsigned char posStr[50];
 unsigned char posIdStr[10];
@@ -249,7 +250,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				case 'p' :
 					if(windows_no == 2){
 						if(item_no > 0){
+							clear_pos_item(hdc, item_no);
 							item_no--;
+							select_pos_item(hdc,item_no);							
 						}
 					}
 
@@ -264,6 +267,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					}
 					break;
 				case 'n' :
+					if(windows_no == 2){
+						if(item_no < (item_num - 1)){
+							clear_pos_item(hdc, item_no);
+							item_no++;
+							select_pos_item(hdc,item_no);							
+						}
+					}
 					if(windows_no == 3){
 						if(page_no < (page_num - 1)){
 							page_no++;
