@@ -8,6 +8,7 @@
 
 #define CONTEXT_SIZE	6000000
 #define PAGE_PRE_COUNT  8
+#define COS_MAX_NO	4
 
 struct posData{
         char	posValue[10];

@@ -35,7 +35,7 @@ void create_query_ui(HDC hdc)
 	PLOGFONT s_font;
 
 
-	windows_no = 2;
+	windows_no = 6;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
@@ -88,7 +88,7 @@ void query_detil(HDC hdc)
 	int i;
 	PLOGFONT s_font;
 
-	windows_no = 3;
+	windows_no = 7;
         SetBkMode(hdc,BM_TRANSPARENT);
         SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
         FillBox(hdc, MWINDOW_LX, MWINDOW_TY, MWINDOW_RX, MWINDOW_BY);
@@ -101,7 +101,6 @@ void query_detil(HDC hdc)
         TextOut(hdc, 200, 20, sz_menu1[1]);
         TextOut(hdc, 350, 20, sz_menu1[2]);
         TextOut(hdc, 500, 20, sz_menu1[3]);
-
 
 	histroy_cnt = 12;
 	page_num = histroy_cnt / PAGE_PRE_COUNT + 1;

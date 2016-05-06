@@ -12,6 +12,7 @@
 #define ITEM_NUM	10
 
 extern int windows_no;
+extern const char * item_menu[];
 
 static BITMAP s_bmp[ITEM_NUM];
 int item_num;
@@ -55,10 +56,15 @@ void select_pos_item(HDC hdc, int itemNo)
 void create_pos_item(HDC hdc)
 {
 	int i, j;
-	
+	PLOGFONT s_font;	
+
 	windows_no = 2;
 
 	item_num = 9;
+
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+        FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 15, 0);
+	SelectFont(hdc,s_font);
 
 	SetBkMode(hdc,BM_TRANSPARENT);
         SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
@@ -77,7 +83,7 @@ void create_pos_item(HDC hdc)
 	for(i=0; i<2; i++){
 		for(j=0; j<6; j++){
 			if((i * 6 + j) > (item_num - 1)){
-				return;
+				break;
 			}
 			item_pos[i * 6 + j][0] = 80 + j*120;
 			item_pos[i * 6 + j][1] = 40 + i*140;
@@ -88,6 +94,9 @@ void create_pos_item(HDC hdc)
 				select_pos_item(hdc, item_no);
 			}
 			FillBoxWithBitmap(hdc, item_pos[i * 6 + j][0], item_pos[i * 6 + j][1], 32, 32, &s_bmp[i * 6 + j]);
+			TextOut(hdc, item_pos[i * 6 + j][0] - 15, item_pos[i * 6 + j][1] + 60, item_menu[i * 6 + j]);
 		}
 	}
+
+	DestroyLogFont(s_font);
 }

@@ -23,6 +23,16 @@ extern int page_cnt;
 extern int page_no;
 extern int item_no;
 extern int item_num;
+extern int cos_no;
+extern unsigned int cos_isconst_value;
+extern unsigned int cos_isconst_count;
+extern unsigned char cos_pos_value_fstr[10];
+extern unsigned char cos_pos_value_str[10];
+extern unsigned int cos_pos_value_cnt;
+extern unsigned char cos_pos_count_fstr[10];
+extern unsigned char cos_pos_count_str[10];
+extern unsigned int cos_pos_count_cnt;
+
 
 unsigned char posStr[50];
 unsigned char posIdStr[10];
@@ -131,6 +141,32 @@ const char * sz_menu1[]=
         "消费日期",
 };
 
+const char * item_menu[]=
+{
+	"管理员操作",
+	"消费参数",
+	"系统初始化",
+	"音量设置",
+	"用户管理",
+	"设置管理卡",
+	"通信设置",
+	"日期设置",
+	"消费参数",
+};
+
+const char * cos_menu[]=
+{
+        "定额",
+        "是否计次",
+        "是否定额",
+        "定次",
+};
+
+const char * cos_menu1[]=
+{
+	"是",
+	"否",
+};
 
 void display_time(){
 
@@ -144,6 +180,7 @@ void display_time(){
 	get_time();
 	FillBox(hdc, 0, 400, MWINDOW_RX, 80);
 	TextOut(hdc, 20, 420, gtime);
+	
 	DestroyLogFont(s_font);
 }
 
@@ -206,6 +243,26 @@ void pos_create_main_ui(HDC hdc){
 
 }
 
+void pos_cos_input(HDC hdc, char param){
+	
+	if(cos_no == 0){
+		if(cos_pos_value_cnt<6){
+			cos_pos_value_str[cos_pos_value_cnt] = param;
+			printf("cos_pos_value_str %s\n", cos_pos_value_str);
+			cos_pos_value_cnt++;
+			pos_set_const_value(hdc, cos_no);
+		}
+	}
+	if(cos_no == 3){
+		if(cos_pos_count_cnt<6){
+			cos_pos_count_str[cos_pos_count_cnt] = param;
+			printf("cos_pos_count_str %s\n", cos_pos_count_str);
+			cos_pos_count_cnt++;
+			pos_set_const_value(hdc, cos_no);
+		}
+	}
+}
+
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
 	static BITMAP s_startbmp,s_background;
@@ -235,7 +292,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
 			//create_query_ui(hdc);
-			query_detil(hdc);
+			//query_detil(hdc);
 			break;
 		case MSG_RBUTTONDOWN:
 			printf("MSG_RBUTTONDOWN:\n");
@@ -256,7 +313,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						}
 					}
 
-					if(windows_no == 3){
+					if(windows_no == 7){
 						if(page_no > 0){
 							page_no--;
 							tmp = histroy_cnt - page_no * PAGE_PRE_COUNT;
@@ -265,6 +322,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							display_detil(hdc, &def_detil[page_no * PAGE_PRE_COUNT]);
 						}
 					}
+					if(windows_no == 4){
+						if(cos_no > 0){
+							pos_cos_clear(hdc, cos_no);
+							cos_no--;
+							pos_cos_sel(hdc, cos_no);
+						}
+					}
+
 					break;
 				case 'n' :
 					if(windows_no == 2){
@@ -274,7 +339,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							select_pos_item(hdc,item_no);							
 						}
 					}
-					if(windows_no == 3){
+					if(windows_no == 7){
 						if(page_no < (page_num - 1)){
 							page_no++;
 							tmp = histroy_cnt - page_no * PAGE_PRE_COUNT;
@@ -283,11 +348,132 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							display_detil(hdc, &def_detil[page_no * PAGE_PRE_COUNT]);
 						}
 					}
+					if(windows_no == 4){
+						if(cos_no < (COS_MAX_NO - 1)){
+							pos_cos_clear(hdc, cos_no);
+							cos_no++;
+							pos_cos_sel(hdc, cos_no);
+						}
+					}
 					break;
 				case 'm' :
 					if(windows_no == 0){
 						create_pos_item(hdc);
 					}		
+					break;
+				case 'q' :
+					if(windows_no == 4 || windows_no == 6){
+						create_pos_item(hdc);
+					}
+					if(windows_no == 7){
+						create_query_ui(hdc);
+					}
+					break;
+				case 0xd :
+					if(windows_no == 6){
+						query_detil(hdc);
+					}
+					if(windows_no == 4){
+						if(cos_no == 1){
+							cos_isconst_count = cos_isconst_count == 0 ? 1 : 0;
+							pos_set_const_state(hdc, cos_no);
+						}
+						if(cos_no == 2){
+							cos_isconst_value = cos_isconst_value == 0 ? 1 : 0;
+							pos_set_const_state(hdc, cos_no);
+						}
+						if(cos_no == 0){
+							strcpy(cos_pos_value_fstr, cos_pos_value_str);
+							cos_pos_value_cnt = 0;
+							memset(cos_pos_value_str, 0, 10);
+						}
+						if(cos_no == 3){
+							strcpy(cos_pos_count_fstr, cos_pos_count_str);
+							cos_pos_count_cnt = 0;
+							memset(cos_pos_count_str, 0, 10);
+						}
+					}
+					if(windows_no == 2){
+						if(item_no == 8){
+							create_poscos_set(hdc);
+						}
+						if(item_no == 4){
+							create_query_ui(hdc);
+						}
+					}
+					break;
+				case 0x7f :
+					if(windows_no == 4){
+						if(cos_no == 0){
+							if(cos_pos_value_cnt > 0){
+								cos_pos_value_cnt--;
+								cos_pos_value_str[cos_pos_value_cnt] = 0;	
+								pos_set_const_value(hdc, cos_no);
+							}
+						}
+						if(cos_no == 3){
+							if(cos_pos_count_cnt > 0){
+								cos_pos_count_cnt--;
+								cos_pos_count_str[cos_pos_count_cnt] = 0;	
+								pos_set_const_value(hdc, cos_no);
+							}
+						}
+					}
+					break;
+				case '0':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '1':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '2':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '3':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '4':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '5':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '6':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '7':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '8':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '9':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
+					break;
+				case '.':
+					if(windows_no == 4){
+						pos_cos_input(hdc, wParam);
+					}
 					break;
 			}
 #if 0
