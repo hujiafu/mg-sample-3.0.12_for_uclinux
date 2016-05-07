@@ -57,11 +57,12 @@ void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)
 	DestroyLogFont(s_font);
 }
 
-void JointWarn_calc_msglen(unsigned char * msg)
+int JointWarn_calc_msglen(unsigned char * msg)
 {
 	int font_len, font_cnt;
 
 	font_cnt = strlen(msg) + 2;
+	printf("font_cnt = %d\n", font_cnt);
 	font_len = FONT30_PIXEL * font_cnt;
 	return font_len;
 }

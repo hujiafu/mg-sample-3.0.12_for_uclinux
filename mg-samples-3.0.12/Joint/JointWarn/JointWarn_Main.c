@@ -234,12 +234,12 @@ const int meun_hz_size[]=
 	40,
 };
 
-const char* test_menu_hz1[] =
+const char test_menu_hz1[] =
 {
 	"申请作业项目：轧机区域F1主电机碳刷检查更换",
 };
 
-const char* msg_hz1[] = 
+const char msg_hz1[] = 
 {
 	"项目作业中，不能重复选择，请规范操作！",
 };
@@ -781,7 +781,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//TextOut(hdc,400,295,"测试");
 
 
-			create_area_window(hdc);
+			//create_area_window(hdc);
+			JointWarn_create_105_2(hdc);
 			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;

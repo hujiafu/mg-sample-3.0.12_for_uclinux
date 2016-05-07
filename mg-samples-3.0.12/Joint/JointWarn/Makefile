@@ -6,11 +6,13 @@ all:
 	$(CC) $(CFLAGS) -c -o JointWarn_UImain.o JointWarn_UImain.c
 	$(CC) $(CFLAGS) -c -o JointWarn_Main.o JointWarn_Main.c
 	$(CC) $(CFLAGS) -c -o JointWarn_lib.o JointWarn_lib.c
+	$(CC) $(CFLAGS) -c -o JointWarn_105.o JointWarn_105.c
 	$(CC) -o JointWarn JointWarn_confirm.o \
 			   JointWarn_UImain.o \
 			   JointWarn_Logic.o \
 			   JointWarn_Main.o \
 			   JointWarn_lib.o \
+			   JointWarn_105.o \
 		           $(LDFLAGS) $(LIBS)
 	
 clean:
