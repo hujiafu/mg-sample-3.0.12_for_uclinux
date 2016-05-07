@@ -234,6 +234,16 @@ const int meun_hz_size[]=
 	40,
 };
 
+const char* test_menu_hz1[] =
+{
+	"申请作业项目：轧机区域F1主电机碳刷检查更换",
+};
+
+const char* msg_hz1[] = 
+{
+	"项目作业中，不能重复选择，请规范操作！",
+};
+
 struct textStruct warn_message1 = {
 	.name = "轧机区域F1主电机",
 	.filesize = 30,
@@ -619,6 +629,8 @@ struct textStruct menu_hiz[]=
 		.offsety = 22,
 	},
 };
+
+
 
 void test_chinese(HDC hdc){
 	TextOut(hdc,200,295,"测试1");
