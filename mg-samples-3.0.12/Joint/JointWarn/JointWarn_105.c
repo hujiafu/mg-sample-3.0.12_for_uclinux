@@ -9,10 +9,12 @@
 
 #include "JointWarn_UImain.h"
 
-extern const char* test_menu_hz1[];
-extern const char* msg_hz1[];
+extern const char test_menu_hz1[];
+extern const char msg_hz1[];
+extern const char msg_hz2[];
+extern const char msg_hz3[];
 
-void JointWarn_create_105_2(HDC hdc)
+void JointWarn_create_105(HDC hdc, int index)
 {
 	unsigned char msg_str[2][100];
 	struct warnForm warn[2];
@@ -23,7 +25,15 @@ void JointWarn_create_105_2(HDC hdc)
 	
 	strcpy(text_msg[0].name, test_menu_hz1);
 	printf("test_menu_hz1 = %d\n", strlen(test_menu_hz1));
-	strcpy(text_msg[1].name, msg_hz1);
+	if(index == 1){
+		strcpy(text_msg[1].name, msg_hz2);
+	}
+	if(index == 2){
+		strcpy(text_msg[1].name, msg_hz1);
+	}
+	if(index == 3){
+		strcpy(text_msg[1].name, msg_hz3);
+	}
 	font_len1 = JointWarn_calc_msglen(text_msg[0].name);	
 	font_len2 = JointWarn_calc_msglen(text_msg[1].name);
 	printf("font_len1 = %d, font_len2 = %d\n", font_len1, font_len2);
@@ -45,7 +55,10 @@ void JointWarn_create_105_2(HDC hdc)
 	printf("tmp = %d, offsetx = %d\n", tmp, text_msg[1].offsetx);
 
 	warn[0].messageCount = 1;
-	warn[0].formColor = 0xff0000ff;
+	if(index == 1 || index == 3)
+		warn[0].formColor = 0x228b22ff;
+	if(index == 2)
+		warn[0].formColor = 0xff0000ff;
 	warn[0].width = font_len;
 	warn[0].height = FONT30_HIGH_PIXEL * 2;
 	warn[0].text[0] = &text_msg[0];
@@ -62,3 +75,4 @@ void JointWarn_create_105_2(HDC hdc)
 	JointWarn_create_msg(hdc, warn, 2);
 
 }
+

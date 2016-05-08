@@ -19,8 +19,8 @@
 struct textStruct{
 	char name[100];
 	char  filesize;
-	char  offsetx;
-	char  offsety;
+	int  offsetx;
+	int  offsety;
 	int   color;
 };
 

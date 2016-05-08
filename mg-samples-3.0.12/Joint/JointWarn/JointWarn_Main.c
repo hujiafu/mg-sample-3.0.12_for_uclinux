@@ -244,6 +244,16 @@ const char msg_hz1[] =
 	"项目作业中，不能重复选择，请规范操作！",
 };
 
+const char msg_hz2[] = 
+{
+	"请作业负责人打卡确认！",
+};
+
+const char msg_hz3[] = 
+{
+	"请勿越权选择，请重新选择作业申请项目！",
+};
+
 struct textStruct warn_message1 = {
 	.name = "轧机区域F1主电机",
 	.filesize = 30,
@@ -782,7 +792,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 
 
 			//create_area_window(hdc);
-			JointWarn_create_105_2(hdc);
+			JointWarn_create_105(hdc, 3);
 			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
