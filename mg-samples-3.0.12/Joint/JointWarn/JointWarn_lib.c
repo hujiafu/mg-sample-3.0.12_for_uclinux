@@ -14,6 +14,52 @@ extern struct textStruct back;
 extern struct buttonObject btn_back_1;
 extern int back_width, back_height;
 
+void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)
+{
+
+}
+
+void JointWarn_create_lib(HDC hdc, struct warnForm *warn, unsigned char border)
+{
+	PLOGFONT s_font;
+	unsigned char red, green, blue;
+	int start_x, start_y;
+
+	SetBkMode(hdc,BM_TRANSPARENT);
+
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                               FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, \
+			       FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn[0].text[0]->filesize, 0);
+        SelectFont(hdc, s_font);
+	
+	start_x = warn[0].startx;
+	start_y = warn[0].starty;
+
+	red = (warn[0].formColor & 0xff000000) >> 24; 
+	green = (warn[0].formColor & 0x00ff0000) >> 16; 
+	blue = (warn[0].formColor & 0x0000ff00) >> 8; 
+	SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+	FillBox(hdc, start_x, start_y, warn[0].width, warn[0].height);
+
+	if(border == 1){
+		red = (warn[0].borderColor & 0xff000000) >> 24; 
+		green = (warn[0].borderColor & 0x00ff0000) >> 16; 
+		blue = (warn[0].borderColor & 0x0000ff00) >> 8;
+		SetPenColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+		SetPenWidth(hdc, 1);
+		LineEx(hdc, start_x, start_y, start_x + warn[0].width, start_y); 
+		LineEx(hdc, start_x, start_y + warn[0].height, start_x + warn[0].width, start_y + warn[0].height); 
+	}
+	
+	red = (warn[0].text[0]->color & 0xff000000) >> 24;
+        green = (warn[0].text[0]->color & 0x00ff0000) >> 16;
+        blue = (warn[0].text[0]->color & 0x0000ff00) >> 8;
+	SetTextColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+	TextOut(hdc, start_x + warn[0].text[0]->offsetx, start_y + warn[0].text[0]->offsety, warn[0].text[0]->name);
+	
+	DestroyLogFont(s_font);
+}
+
 void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)
 {
 	PLOGFONT s_font;
