@@ -14,6 +14,20 @@
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
 
+void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn1, int cnt)
+{	
+	int i;
+	struct warnForm warn[1];
+
+	warn[0].formColor = 0x3cb371ff;
+	JointWarn_create_select(hdc, warn);
+	
+	for(i=0; i<cnt; i++){
+		JointWarn_repaint_select(hdc, warn[i], i, 1);
+		JointWarn_repaint_select(hdc, warn1[i], i, 2);
+	}
+}
+
 void JointWarn_create_106(HDC hdc, int index)
 {
 	unsigned int back_color;

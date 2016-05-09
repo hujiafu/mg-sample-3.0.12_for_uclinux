@@ -13,6 +13,10 @@
 extern struct textStruct back;
 extern struct buttonObject btn_back_1;
 extern int back_width, back_height;
+extern POINT s_point[2][3];
+extern struct buttonObject btn_front_page_1;
+extern struct buttonObject btn_next_page_1;
+
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -270,3 +274,66 @@ void JointWarn_paint_back(HDC hdc, int color){
 
 }
 
+void jointwarn_repaint_flag(HDC hdc, int left, int right)
+{
+        if(left == 0){
+                SetBrushColor(hdc, RGBA2Pixel(hdc, 0xB3, 0xB3, 0xB3, 0xFF));
+                FillPolygon(hdc, s_point[0], 3);
+                btn_front_page_1.active = 0;
+        }else{
+                SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
+                FillPolygon(hdc, s_point[0], 3);
+                btn_front_page_1.active = 1;
+        }
+
+        if(right == 0){
+                SetBrushColor(hdc, RGBA2Pixel(hdc, 0xB3, 0xB3, 0xB3, 0xFF));
+                FillPolygon(hdc, s_point[1], 3);
+                btn_next_page_1.active = 0;
+        }else{
+                SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0xFF, 0x00, 0xFF));
+                FillPolygon(hdc, s_point[1], 3);
+                btn_next_page_1.active = 1;
+        }
+
+}
+
+
+void JointWarn_create_flag(HDC hdc, int sel_cnt, int total_cnt)
+{
+	int left, right;
+
+	left = 0;
+	right = 0;
+	
+	btn_front_page_1.point_start.x = 10;
+        btn_front_page_1.point_start.y = SPARE_Y + 10;
+        btn_front_page_1.point_end.x = 50;
+        btn_front_page_1.point_end.y = SPARE_Y + 50;
+        btn_front_page_1.active = 0;
+        btn_next_page_1.point_start.x = MWINDOW_RX - 10;
+        btn_next_page_1.point_start.y = SPARE_Y + 10;
+        btn_next_page_1.point_end.x = MWINDOW_RX - 50;
+        btn_next_page_1.point_end.y = SPARE_Y + 50;
+        btn_next_page_1.active = 0;
+        printf("%d, %d, %d, %d\n", btn_next_page_1.point_start.x, btn_next_page_1.point_end.x, btn_next_page_1.point_start.y, btn_next_page_1.point_end.y);
+        s_point[0][0].x = btn_front_page_1.point_start.x;
+        s_point[0][0].y = (btn_front_page_1.point_start.y + btn_front_page_1.point_end.y) >> 1;
+        s_point[0][1].x = btn_front_page_1.point_end.x;
+        s_point[0][1].y = btn_front_page_1.point_start.y;
+        s_point[0][2].x = btn_front_page_1.point_end.x;
+        s_point[0][2].y = btn_front_page_1.point_end.y;
+        s_point[1][0].x = btn_next_page_1.point_start.x;
+        s_point[1][0].y = (btn_next_page_1.point_start.y + btn_next_page_1.point_end.y) >> 1;
+        s_point[1][1].x = btn_next_page_1.point_end.x;
+        s_point[1][1].y = btn_next_page_1.point_start.y;
+        s_point[1][2].x = btn_next_page_1.point_end.x;
+        s_point[1][2].y = btn_next_page_1.point_end.y;
+
+	if(sel_cnt > total_cnt){
+                right = 1;
+        }
+	jointwarn_repaint_flag(hdc, left, right);
+
+
+}
