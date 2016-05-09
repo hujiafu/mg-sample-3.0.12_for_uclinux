@@ -254,6 +254,18 @@ const char msg_hz3[] =
 	"请勿越权选择，请重新选择作业申请项目！",
 };
 
+const char * test_msg_hz2[] = 
+{
+	"F1高压开关",
+	"F1力磁进线单元",
+	"F1主回路接触器",
+};
+const char * test_tmsg_hz1[] = 
+{
+	"请安全关闭！",
+	"安全关闭绑定完成！",
+};
+
 struct textStruct warn_message1 = {
 	.name = "轧机区域F1主电机",
 	.filesize = 30,
@@ -792,7 +804,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 
 
 			//create_area_window(hdc);
-			JointWarn_create_105(hdc, 3);
+			//JointWarn_create_105(hdc, 3);
+			JointWarn_create_106(hdc, 1);
 			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
