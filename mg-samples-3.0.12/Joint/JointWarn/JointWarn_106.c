@@ -14,13 +14,28 @@
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
 
+
+void JointWarn_106_parper()
+{
+	
+		testText[0].color = 0xffffffff;
+		testText[0].filesize = 20;
+		testText[0].offsetx = 5;
+		testText[0].offsety = 20;
+		strcpy(testText[0].name, test_msg_hz2[i]);
+		testWarn[0].formColor = 0x3cb371ff;
+		//testWarn[0].formColor = 0xff0000ff;
+		testWarn[0].text[0] = &testText[0];
+
+}
+
 void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn1, int cnt)
 {	
 	int i;
-	struct warnForm warn[1];
+	struct warnForm warn2[1];
 
-	warn[0].formColor = 0x3cb371ff;
-	JointWarn_create_select(hdc, warn);
+	warn2[0].formColor = 0x3cb371ff;
+	JointWarn_create_select(hdc, warn2);
 	
 	for(i=0; i<cnt; i++){
 		JointWarn_repaint_select(hdc, warn[i], i, 1);
