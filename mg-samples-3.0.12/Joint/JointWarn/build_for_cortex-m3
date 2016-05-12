@@ -7,6 +7,6 @@ export CFLAGS="-I. -I./include \
 
 export LDFLAGS="-L/usr/local/minigui/cross/arm/cortex-m3/lib"
 
-export LIBS="-lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -pthread"
+export LIBS="-ljson-c -lminigui_ths -lpng -lts -lc -ljpeg -lz -lm -pthread"
 
 make

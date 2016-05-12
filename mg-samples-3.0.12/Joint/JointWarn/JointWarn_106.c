@@ -14,7 +14,7 @@
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
 
-
+#if 0
 void JointWarn_106_parper()
 {
 	
@@ -28,7 +28,7 @@ void JointWarn_106_parper()
 		testWarn[0].text[0] = &testText[0];
 
 }
-
+#endif
 void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn1, int cnt)
 {	
 	int i;

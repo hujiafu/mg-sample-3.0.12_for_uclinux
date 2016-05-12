@@ -802,7 +802,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 3);
 			//TextOut(hdc,400,295,"≤‚ ‘");
 
-
+			test_select_json();
 			//create_area_window(hdc);
 			//JointWarn_create_105(hdc, 3);
 			JointWarn_create_106(hdc, 1);
