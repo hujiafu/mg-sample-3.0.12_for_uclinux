@@ -9,13 +9,24 @@
 #include <minigui/window.h>
 
 #include "JointWarn_UImain.h"
+#include "JointWarn_Json.h"
 
 
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
 
+
+static unsigned char test_106_1[300] = "{\"sn\" : \"JointCtrl1\", \"action\" : \"update_sel\", \"selects\" : \
+        [{\"index\" : \"1\", \"color\" : \"green\", \"text1\" : \"mytest1\", \"text2\" : \"mytext2\"},\
+        {\"index\" : \"2\", \"color\" : \"red\", \"text1\" : \"mytest3\", \"text2\" : \"mytext4\"}\
+        ]}";
+
+
 #if 0
-void JointWarn_106_parper()
+
+
+
+void JointWarn_106_parper(const unsigned char *originStr)
 {
 	
 		testText[0].color = 0xffffffff;
