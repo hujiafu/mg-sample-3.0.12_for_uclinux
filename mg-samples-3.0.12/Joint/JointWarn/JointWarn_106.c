@@ -11,35 +11,85 @@
 #include "JointWarn_UImain.h"
 #include "JointWarn_Json.h"
 
-
+extern int window_no;
+extern int form_tot_cnt;
+extern int total_frame_cnt;
+extern int window_frame_cnt;
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
+extern unsigned char test_106_1[400];
 
+struct selStruct * gPsel;
 
-static unsigned char test_106_1[300] = "{\"sn\" : \"JointCtrl1\", \"action\" : \"update_sel\", \"selects\" : \
-        [{\"index\" : \"1\", \"color\" : \"green\", \"text1\" : \"mytest1\", \"text2\" : \"mytext2\"},\
-        {\"index\" : \"2\", \"color\" : \"red\", \"text1\" : \"mytest3\", \"text2\" : \"mytext4\"}\
-        ]}";
+unsigned char * JointWarn_106_get_data(){
+	//TODO: get data from server
 
-
-#if 0
-
-
-
-void JointWarn_106_parper(const unsigned char *originStr)
-{
 	
-		testText[0].color = 0xffffffff;
-		testText[0].filesize = 20;
-		testText[0].offsetx = 5;
-		testText[0].offsety = 20;
-		strcpy(testText[0].name, test_msg_hz2[i]);
-		testWarn[0].formColor = 0x3cb371ff;
-		//testWarn[0].formColor = 0xff0000ff;
-		testWarn[0].text[0] = &testText[0];
+	return test_106_1; //only for test
 
 }
-#endif
+
+struct selStruct * JointWarn_106_parepar_data(unsigned char * originStr)
+{
+	struct selStruct * psel;
+	unsigned int ptr;
+
+	total_frame_cnt = JointAnalysisCmdLine(originStr, &ptr);	
+	psel = (struct selStruct *)ptr;
+
+	return psel;
+}
+
+void JointWarn_free_data(struct selStruct * psel)
+{	
+	if(psel != NULL){
+		free(psel);
+	}
+}
+
+void JointWarn_106_repaint_sel(HDC hdc, struct selStruct * psel, int start_index, int count)
+{
+	int i;
+	struct textStruct testText[1];
+	struct warnForm warn[1];
+	
+	if(psel != NULL){
+		for(i=0; i<count; i++){
+			testText[0].color = 0xffffffff;
+			testText[0].filesize = 20;
+			testText[0].offsetx = 5;
+			testText[0].offsety = 20;
+			strcpy(testText[0].name, psel[i + start_index].text1);
+			if(0 == strcmp("green", psel[i + start_index].color)){
+				warn[0].formColor = 0x3cb371ff;
+			}else{
+				warn[0].formColor = 0xff0000ff;
+			}
+			warn[0].text[0] = &testText[0];
+			JointWarn_repaint_select(hdc, warn, i, 1);
+		
+			testText[0].color = 0xff0000ff;
+			testText[0].filesize = 20;
+			testText[0].offsetx = 5;
+			testText[0].offsety = 20;
+			strcpy(testText[0].name, psel[i + start_index].text2);
+			warn[0].formColor = 0xffffffff;
+			warn[0].text[0] = &testText[0];
+			JointWarn_repaint_select(hdc, warn, i, 2);
+		}	
+	}
+
+
+}
+
+void JointWarn_clear_sel(HDC hdc)
+{
+	struct warnForm warn[1];
+
+	warn[0].formColor = 0x3cb371ff;
+	JointWarn_create_select(hdc, warn);
+}
+
 void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn1, int cnt)
 {	
 	int i;
@@ -61,8 +111,13 @@ void JointWarn_create_106(HDC hdc, int index)
 	struct warnForm warn[1];
 	struct warnForm testWarn[3];
 	struct textStruct testText[3];
+	unsigned char * origin_str;
+	struct selStruct * psel;
 
 	int i;
+
+	window_no = 8;
+	window_frame_cnt = SEL_MAX_COUNT;
 
 	back_color = 0x473c8bff;
         JointWarn_paint_back(hdc, back_color);
@@ -77,6 +132,18 @@ void JointWarn_create_106(HDC hdc, int index)
 	warn[0].formColor = 0x3cb371ff;
 	JointWarn_create_select(hdc, warn);
 
+	origin_str = JointWarn_106_get_data();
+	psel = JointWarn_106_parepar_data(origin_str);
+	gPsel = psel;
+	count = total_frame_cnt > SEL_MAX_COUNT ? SEL_MAX_COUNT : total_frame_cnt;
+	form_tot_cnt = total_frame_cnt / SEL_MAX_COUNT + 1;
+	JointWarn_106_repaint_sel(hdc, psel, 0, count);
+	if(total_frame_cnt <= SEL_MAX_COUNT){
+		JointWarn_free_data(psel);
+	}
+
+	JointWarn_create_flag(hdc, total_frame_cnt, SEL_MAX_COUNT);
+#if 0	
 	for(i=0; i<3; i++){
 		testText[0].color = 0xffffffff;
 		testText[0].filesize = 20;
@@ -99,4 +166,5 @@ void JointWarn_create_106(HDC hdc, int index)
 		
 		JointWarn_repaint_select(hdc, testWarn, i, 2);
 	}
+#endif
 }

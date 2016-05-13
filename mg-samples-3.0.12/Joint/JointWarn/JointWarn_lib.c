@@ -16,7 +16,7 @@ extern int back_width, back_height;
 extern POINT s_point[2][3];
 extern struct buttonObject btn_front_page_1;
 extern struct buttonObject btn_next_page_1;
-
+extern int page_cnt1;
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -299,13 +299,15 @@ void jointwarn_repaint_flag(HDC hdc, int left, int right)
 }
 
 
-void JointWarn_create_flag(HDC hdc, int sel_cnt, int total_cnt)
+void JointWarn_create_flag(HDC hdc, int total_cnt, int win_cnt)
 {
 	int left, right;
 
 	left = 0;
 	right = 0;
-	
+
+
+	page_cnt1 = 0;	
 	btn_front_page_1.point_start.x = 10;
         btn_front_page_1.point_start.y = SPARE_Y + 10;
         btn_front_page_1.point_end.x = 50;
@@ -330,7 +332,7 @@ void JointWarn_create_flag(HDC hdc, int sel_cnt, int total_cnt)
         s_point[1][2].x = btn_next_page_1.point_end.x;
         s_point[1][2].y = btn_next_page_1.point_end.y;
 
-	if(sel_cnt > total_cnt){
+	if(total_cnt > win_cnt){
                 right = 1;
         }
 	jointwarn_repaint_flag(hdc, left, right);

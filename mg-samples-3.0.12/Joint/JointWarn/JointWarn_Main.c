@@ -37,7 +37,7 @@ extern int form_tot_cnt;
 extern int back_width, back_height;
 extern int partHeight, partWidth;
 extern int x[100], y[100];
-
+extern struct selStruct * gPsel;
 
 HWND hMainWnd;
 
@@ -652,6 +652,17 @@ struct textStruct menu_hiz[]=
 	},
 };
 
+unsigned char test_106_1[800] = 
+	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_sel\", \"selects\" : \
+        [{\"index\" : \"1\", \"color\" : \"green\", \"text1\" : \"mytest1\", \"text2\" : \"mytext2\"},\
+        {\"index\" : \"2\", \"color\" : \"red\", \"text1\" : \"mytest3\", \"text2\" : \"mytext4\"},\
+        {\"index\" : \"3\", \"color\" : \"green\", \"text1\" : \"²âÊÔ1\", \"text2\" : \"²âÊÔ2\"},\
+        {\"index\" : \"4\", \"color\" : \"green\", \"text1\" : \"²âÊÔ4-1\", \"text2\" : \"²âÊÔ4-2\"},\
+        {\"index\" : \"5\", \"color\" : \"green\", \"text1\" : \"²âÊÔ5-1\", \"text2\" : \"²âÊÔ5-2\"},\
+        {\"index\" : \"6\", \"color\" : \"green\", \"text1\" : \"²âÊÔ6-1\", \"text2\" : \"²âÊÔ6-2\"},\
+        {\"index\" : \"7\", \"color\" : \"green\", \"text1\" : \"²âÊÔ7-1\", \"text2\" : \"²âÊÔ7-2\"}\
+        ]}";
+
 
 
 void test_chinese(HDC hdc){
@@ -717,6 +728,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	int i;
 	int cnt;
 	int left_flag, right_flag;
+	int count;
 	HDC hdc;
 	
 	switch(message)
@@ -802,11 +814,11 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 3);
 			//TextOut(hdc,400,295,"²âÊÔ");
 
-			test_select_json();
+			//test_select_json();
 			//create_area_window(hdc);
 			//JointWarn_create_105(hdc, 3);
-			JointWarn_create_106(hdc, 1);
-			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			//JointWarn_create_106(hdc, 1);
+			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:
@@ -845,7 +857,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					//InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 				}
 			}
-			if(window_no >= 1 && window_no <=3){
+			if((window_no >= 1 && window_no <=3) || window_no == 8){
 			if(btn_front_page_1.active == 1){
 				if((pre_x > btn_front_page_1.point_start.x && pre_x < btn_front_page_1.point_end.x) && (pre_y > btn_front_page_1.point_start.y && pre_y < btn_front_page_1.point_end.y)){
 					printf("front page pressed\n");
@@ -860,6 +872,11 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					}
 					if(3 == window_no){
 						jointwarn_paint_frame(hdc, &menu_project[cnt], form_count);
+					}
+					if(8 == window_no){
+						JointWarn_clear_sel(hdc);
+						count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
+						JointWarn_106_repaint_sel(hdc, gPsel, cnt, count);	
 					}
 					if(page_cnt1 > 0){
 						left_flag = 1;
@@ -878,7 +895,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if((pre_x > btn_next_page_1.point_end.x && pre_x < btn_next_page_1.point_start.x) && (pre_y > btn_next_page_1.point_start.y && pre_y < btn_next_page_1.point_end.y)){
 					printf("next page pressed\n");
 					cnt = window_frame_cnt * (page_cnt1 + 1);
-					form_count = total_frame_cnt - cnt; 
+					printf("page_cnt1 = %d, window_frame_cnt = %d\n", page_cnt1, window_frame_cnt);
+					form_count = total_frame_cnt - cnt;
+					printf("form_count = %d\n", form_count); 
 					form_count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
 					if(1 == window_no){
 						jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
@@ -888,6 +907,12 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					}
 					if(3 == window_no){
 						jointwarn_paint_frame(hdc, &menu_project[cnt], form_count);
+					}
+					if(8 == window_no){
+						JointWarn_clear_sel(hdc);
+						count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
+						printf("cnt = %d, count = %d\n", cnt, count);
+						JointWarn_106_repaint_sel(hdc, gPsel, cnt, count);	
 					}
 					page_cnt1++;
 					if(page_cnt1 > 0){
