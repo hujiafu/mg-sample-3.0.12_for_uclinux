@@ -18,6 +18,7 @@
 #endif
 #include "JointWarn_Logic.h"
 #include "JointWarn_UImain.h"
+#include "JointWarn_Json.h"
 
 static char welcome_text [512];
 static char msg_text [256];
@@ -38,7 +39,9 @@ extern int back_width, back_height;
 extern int partHeight, partWidth;
 extern int x[100], y[100];
 extern struct selStruct * gPsel;
-
+extern struct formStruct * gPform_area;
+extern struct formStruct * gPform_equi;
+extern struct formStruct * gPform_pro;
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -652,6 +655,72 @@ struct textStruct menu_hiz[]=
 	},
 };
 
+unsigned char test_104[] = 
+	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_pro\", \"selects\" : \
+        [{\"index\" : \"1\", \"text1\" : \"promytest1\"},\
+        {\"index\" : \"2\", \"text1\" : \"promytest2\"},\
+        {\"index\" : \"3\", \"text1\" : \"promytest3\"},\
+        {\"index\" : \"4\", \"text1\" : \"promytest4\"},\
+        {\"index\" : \"5\", \"text1\" : \"promytest5\"},\
+        {\"index\" : \"6\", \"text1\" : \"promytest6\"},\
+        {\"index\" : \"7\", \"text1\" : \"promytest7\"},\
+        {\"index\" : \"8\", \"text1\" : \"promytest8\"},\
+        {\"index\" : \"9\", \"text1\" : \"promytest9\"},\
+        {\"index\" : \"10\", \"text1\" : \"promytest10\"},\
+        {\"index\" : \"11\", \"text1\" : \"promytest11\"},\
+        {\"index\" : \"12\", \"text1\" : \"promytest12\"},\
+        {\"index\" : \"13\", \"text1\" : \"promytest13\"},\
+        {\"index\" : \"14\", \"text1\" : \"promytest14\"},\
+        ]}";
+
+unsigned char test_103[] = 
+	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_equi\", \"selects\" : \
+        [{\"index\" : \"1\", \"text1\" : \"eqmytest1\"},\
+        {\"index\" : \"2\", \"text1\" : \"eqmytest2\"},\
+        {\"index\" : \"3\", \"text1\" : \"eqmytest3\"},\
+        {\"index\" : \"4\", \"text1\" : \"eqmytest4\"},\
+        {\"index\" : \"5\", \"text1\" : \"eqmytest5\"},\
+        {\"index\" : \"6\", \"text1\" : \"eqmytest6\"},\
+        {\"index\" : \"7\", \"text1\" : \"eqmytest7\"},\
+        {\"index\" : \"8\", \"text1\" : \"eqmytest8\"},\
+        {\"index\" : \"9\", \"text1\" : \"eqmytest9\"},\
+        {\"index\" : \"10\", \"text1\" : \"eqmytest10\"},\
+        {\"index\" : \"11\", \"text1\" : \"eqmytest11\"},\
+        {\"index\" : \"12\", \"text1\" : \"eqmytest12\"},\
+        {\"index\" : \"13\", \"text1\" : \"eqmytest13\"},\
+        {\"index\" : \"14\", \"text1\" : \"eqmytest14\"},\
+        {\"index\" : \"15\", \"text1\" : \"eqmytest15\"}\
+        ]}";
+
+unsigned char test_102[] = 
+	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_area\", \"selects\" : \
+        [{\"index\" : \"1\", \"text1\" : \"mytest1\"},\
+        {\"index\" : \"2\", \"text1\" : \"mytest2\"},\
+        {\"index\" : \"3\", \"text1\" : \"mytest3\"},\
+        {\"index\" : \"4\", \"text1\" : \"mytest4\"},\
+        {\"index\" : \"5\", \"text1\" : \"mytest5\"},\
+        {\"index\" : \"6\", \"text1\" : \"mytest6\"},\
+        {\"index\" : \"7\", \"text1\" : \"mytest7\"},\
+        {\"index\" : \"8\", \"text1\" : \"mytest8\"},\
+        {\"index\" : \"9\", \"text1\" : \"mytest9\"},\
+        {\"index\" : \"10\", \"text1\" : \"mytest10\"},\
+        {\"index\" : \"11\", \"text1\" : \"mytest11\"},\
+        {\"index\" : \"12\", \"text1\" : \"mytest12\"},\
+        {\"index\" : \"13\", \"text1\" : \"mytest13\"},\
+        {\"index\" : \"14\", \"text1\" : \"mytest14\"},\
+        {\"index\" : \"15\", \"text1\" : \"mytest15\"},\
+        {\"index\" : \"16\", \"text1\" : \"mytest16\"},\
+        {\"index\" : \"17\", \"text1\" : \"mytest17\"},\
+        {\"index\" : \"18\", \"text1\" : \"mytest18\"},\
+        {\"index\" : \"19\", \"text1\" : \"mytest19\"},\
+        {\"index\" : \"20\", \"text1\" : \"mytest20\"},\
+        {\"index\" : \"21\", \"text1\" : \"mytest21\"},\
+        {\"index\" : \"22\", \"text1\" : \"mytest22\"},\
+        {\"index\" : \"23\", \"text1\" : \"mytest23\"},\
+        {\"index\" : \"24\", \"text1\" : \"mytest24\"},\
+        {\"index\" : \"25\", \"text1\" : \"mytest25\"}\
+        ]}";
+
 unsigned char test_106_1[800] = 
 	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_sel\", \"selects\" : \
         [{\"index\" : \"1\", \"color\" : \"green\", \"text1\" : \"mytest1\", \"text2\" : \"mytext2\"},\
@@ -677,37 +746,56 @@ void test_output(HDC hdc, char * str)
 
 void create_project_window(HDC hdc)
 {
+	unsigned char * origin_str;
+	struct formStruct * pform;
+	
 	gRow = 5;
 	gColumn = 2;
 	window_no = 3;
 	total_frame_cnt = 15;
 	window_frame_cnt = gRow * gColumn;
-	strcpy(warn_msg[1].name, menu_equipment[equipment_select_no].name);
+	strcpy(warn_msg[1].name, gPform_equi[equipment_select_no].text1);
 	strcpy(warn_msg[2].name, select_msg[2]);
-	jointwarn_crate_mainui(hdc, menu_project, warn_msg, 3);
+	
+	origin_str = JointWarn_104_get_data();
+	pform = JointWarn_102_4_parepar_data(origin_str, 2);
+	jointwarn_crate_mainui(hdc, pform, warn_msg, 3);
 }
 
 void create_equipment_window(HDC hdc)
 {
+	unsigned char * origin_str;
+	struct formStruct * pform;
+	
 	gRow = 4;
 	gColumn = 3;
 	window_no = 2;
 	total_frame_cnt = 14;
 	window_frame_cnt = gRow * gColumn;
-	strcpy(warn_msg[0].name, menu_hiz[area_select_no].name);
+	strcpy(warn_msg[0].name, gPform_area[area_select_no].text1);
 	strcpy(warn_msg[1].name, select_msg[1]);
-	jointwarn_crate_mainui(hdc, menu_equipment, warn_msg, 2);
+	
+	origin_str = JointWarn_103_get_data();
+	pform = JointWarn_102_4_parepar_data(origin_str, 1);
+	jointwarn_crate_mainui(hdc, pform, warn_msg, 2);
 }
 
 void create_area_window(HDC hdc)
 {
+	unsigned char * origin_str;
+	struct formStruct * pform;
+
 	gRow = 4;
 	gColumn = 3;
 	window_no = 1;
 	total_frame_cnt = 25;
 	window_frame_cnt = gRow * gColumn;
 	strcpy(warn_msg[0].name, select_msg[0]);
-	jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 1);
+
+	origin_str = JointWarn_102_get_data();
+	pform = JointWarn_102_4_parepar_data(origin_str, 0);
+	//jointwarn_crate_mainui(hdc, menu_hiz, warn_msg, 1);
+	jointwarn_crate_mainui(hdc, pform, warn_msg, 1);
 
 }
 
@@ -845,9 +933,11 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					printf("back pressed\n");
 					
 					if(2 == window_no){
+						JointWarn_free_area_buf();
 						create_area_window(hdc);
 					}
 					if(3 == window_no){
+						JointWarn_free_equi_buf();
 						create_equipment_window(hdc);
 					}
 					if(4 == window_no){
@@ -865,13 +955,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					cnt = window_frame_cnt * page_cnt1;
 					form_count = window_frame_cnt;
 					if(1 == window_no){
-						jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
 					}
 					if(2 == window_no){
-						jointwarn_paint_frame(hdc, &menu_equipment[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
 					}
 					if(3 == window_no){
-						jointwarn_paint_frame(hdc, &menu_project[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
 					}
 					if(8 == window_no){
 						JointWarn_clear_sel(hdc);
@@ -900,13 +991,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					printf("form_count = %d\n", form_count); 
 					form_count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
 					if(1 == window_no){
-						jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
 					}
 					if(2 == window_no){
-						jointwarn_paint_frame(hdc, &menu_equipment[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
 					}
 					if(3 == window_no){
-						jointwarn_paint_frame(hdc, &menu_project[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
 					}
 					if(8 == window_no){
 						JointWarn_clear_sel(hdc);
@@ -942,11 +1034,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						if(2 == window_no){
 							equipment_select_no = i + window_frame_cnt * page_cnt1;
 							printf("frame %d equipment select \n", equipment_select_no);
+							JointWarn_free_pro_buf();
 							create_project_window(hdc);
 						}
 						if(1 == window_no){
 							area_select_no = i + window_frame_cnt * page_cnt1;
 							printf("frame %d area select \n", area_select_no);
+							JointWarn_free_equi_buf();
 							create_equipment_window(hdc);
 						}
 						break;

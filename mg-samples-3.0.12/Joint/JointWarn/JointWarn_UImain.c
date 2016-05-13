@@ -8,6 +8,7 @@
 #include <minigui/window.h>
 
 #include "JointWarn_UImain.h"
+#include "JointWarn_Json.h"
 #include "helloworld_res_en.h"
 
 #define NUM_PRE_LINE	3
@@ -27,6 +28,9 @@ extern int gColumn;
 extern int window_frame_cnt;
 extern int total_frame_cnt;
 extern int form_count;
+extern unsigned char test_102[];
+extern unsigned char test_103[];
+extern unsigned char test_104[];
 
 int page_cnt1;
 int form_tot_cnt;
@@ -42,6 +46,9 @@ struct buttonObject btn_next_page_1;
 struct buttonObject select_apply;
 struct buttonObject select_canel;
 POINT s_point[2][3];
+struct formStruct * gPform_area;
+struct formStruct * gPform_equi;
+struct formStruct * gPform_pro;
 
 void jointwarn_test(HDC hdc)
 {
@@ -51,12 +58,82 @@ void jointwarn_test(HDC hdc)
 	FillBox(hdc, 5, 5, 200, 300);
 }
 
-void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
+unsigned char * JointWarn_102_get_data(){
+        //TODO: get data from server
+
+
+        return test_102; //only for test
+
+}
+unsigned char * JointWarn_103_get_data(){
+        //TODO: get data from server
+
+
+        return test_103; //only for test
+
+}
+unsigned char * JointWarn_104_get_data(){
+        //TODO: get data from server
+
+
+        return test_104; //only for test
+
+}
+
+void JointWarn_free_area_buf()
+{
+	if(gPform_area != NULL)
+		free(gPform_area);
+	gPform_area = NULL;
+}
+
+void JointWarn_free_equi_buf()
+{
+	if(gPform_equi != NULL)
+		free(gPform_equi);
+	gPform_equi = NULL;
+}
+
+void JointWarn_free_pro_buf()
+{
+	if(gPform_pro != NULL)
+		free(gPform_pro);
+	gPform_pro = NULL;
+}
+
+
+struct formStruct * JointWarn_102_4_parepar_data(unsigned char * originStr, int index)
+{
+        struct formStruct * psel;
+        unsigned int ptr;
+
+        total_frame_cnt = JointAnalysisCmdLine(originStr, &ptr);
+	printf("total_frame_cnt = %d\n", total_frame_cnt);
+        psel = (struct formStruct *)ptr;
+	if(index == 0)
+		gPform_area = psel;
+	if(index == 1)
+		gPform_equi = psel;
+	if(index == 2)
+		gPform_pro = psel;
+
+        return psel;
+}
+
+
+//void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
+void jointwarn_paint_frame(HDC hdc, struct formStruct *form, int count, int index)
 {
 	int i, j, k = 0;
 	int font_len;
+	int offsetx = 5;
+	int offsety = 22;
+	int filesize = 30;
 	PLOGFONT s_font;
 	
+	if(index == 3)
+		offsety = 10;
+
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetTextColor(hdc, COLOR_lightwhite);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
@@ -74,17 +151,21 @@ void jointwarn_paint_frame(HDC hdc, struct textStruct *text, int count)
 		for(j=0; j<gColumn; j++){
 			if(k >= count)
 				break;
+			//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+			//	FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[k].filesize, 0);
 			s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
-				FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[k].filesize, 0);
+				FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, filesize, 0);
 			SelectFont(hdc,s_font);
-			font_len = strlen(text[k].name);	
+			//font_len = strlen(text[k].name);	
+			font_len = strlen(form[k].text1);	
 			printf("font_len = %d, start = %d\n", font_len, x[k]);
 			//if(font_len >= 16){
 			//	font_len = 0;
 			//}else{
 				font_len = (max_font_cnt - font_len) >> 1;
 			//}
-			TextOut(hdc, x[k] + text[k].offsetx + (FONT30_PIXEL * font_len), y[k] + text[k].offsety, text[k].name);	
+			//TextOut(hdc, x[k] + text[k].offsetx + (FONT30_PIXEL * font_len), y[k] + text[k].offsety, text[k].name);	
+			TextOut(hdc, x[k] + offsetx + (FONT30_PIXEL * font_len), y[k] + offsety, form[k].text1);	
 			DestroyLogFont(s_font);
 			k++;
 		}
@@ -177,7 +258,8 @@ void jointwarn_paint_back(HDC hdc)
 }
 
 
-void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct * warn_text, int msg_linecnt)
+//void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct * warn_text, int msg_linecnt)
+void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct * warn_text, int msg_linecnt)
 {
 	int i, j;
 	int font_len, font_cnt;
@@ -228,7 +310,7 @@ void jointwarn_crate_mainui(HDC hdc, struct textStruct * text, struct textStruct
 	}
 	form_count = total_frame_cnt > window_frame_cnt ? window_frame_cnt : total_frame_cnt;
 	page_cnt1 = 0; 
-	jointwarn_paint_frame(hdc, text, form_count);
+	jointwarn_paint_frame(hdc, text, form_count, msg_linecnt);
 	
 	printf("partWidth = %d, form_count = %d\n", partWidth, form_count);
 	//Rectangle(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), height - 20);

@@ -198,7 +198,8 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(pform[i].text1, tmp, tmpLen);	
+				memcpy(pform[i].text1, tmp, tmpLen);
+				printf("%s\n", pform[i].text1);	
 			}
 		}	
 	}
