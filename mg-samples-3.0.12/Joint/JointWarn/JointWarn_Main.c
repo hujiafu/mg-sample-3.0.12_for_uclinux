@@ -721,7 +721,7 @@ unsigned char test_102[] =
         {\"index\" : \"25\", \"text1\" : \"mytest25\"}\
         ]}";
 
-unsigned char test_106_1[800] = 
+unsigned char test_106_1[] = 
 	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_sel\", \"selects\" : \
         [{\"index\" : \"1\", \"color\" : \"green\", \"text1\" : \"mytest1\", \"text2\" : \"mytext2\"},\
         {\"index\" : \"2\", \"color\" : \"red\", \"text1\" : \"mytest3\", \"text2\" : \"mytext4\"},\

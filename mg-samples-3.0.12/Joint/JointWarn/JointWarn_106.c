@@ -17,7 +17,7 @@ extern int total_frame_cnt;
 extern int window_frame_cnt;
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
-extern unsigned char test_106_1[400];
+extern unsigned char test_106_1[];
 
 struct selStruct * gPsel;
 
