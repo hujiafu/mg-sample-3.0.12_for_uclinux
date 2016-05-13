@@ -815,10 +815,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//TextOut(hdc,400,295,"≤‚ ‘");
 
 			//test_select_json();
-			//create_area_window(hdc);
+			create_area_window(hdc);
 			//JointWarn_create_105(hdc, 3);
 			//JointWarn_create_106(hdc, 1);
-			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:

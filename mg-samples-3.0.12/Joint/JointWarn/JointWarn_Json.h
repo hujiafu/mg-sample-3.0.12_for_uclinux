@@ -8,6 +8,11 @@ struct selStruct{
 	unsigned char text2[22];
 };
 
+struct formStruct{
+        unsigned char index[4];
+	unsigned char text1[22];
+};
+
 
 
 #endif 

@@ -3,7 +3,8 @@
 /**
 Json format
 
-更新选项
+更新SEL选项
+	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_sel",			更新选项
 	"selects" : [ 
@@ -12,7 +13,7 @@ Json format
 		"color" : "green"		red or green
 		"text1"  : "具体内容"           具体内容		
 		"text2"  : "提示内容"           提示内容		
-	} 
+	}, 
 	{
 		"index" : "2"
 		"color" : "red"		red or green
@@ -20,6 +21,55 @@ Json format
 		"text2"  : "提示内容"           提示内容		
 	} 
 	]
+	}
+
+更新选择区域选项
+	{
+	"sn" : "abcd", 				设备号
+	"action" : "update_area",		更新选项
+	"selects" : [ 
+	{
+		"index" : "1"
+		"text1"  : "具体内容"           具体内容		
+	}, 
+	{
+		"index" : "2"
+		"text1"  : "具体内容"           具体内容		
+	} 
+	]
+	}
+
+更新选择设备选项
+	{
+	"sn" : "abcd", 				设备号
+	"action" : "update_equi",		更新选项
+	"selects" : [ 
+	{
+		"index" : "1"
+		"text1"  : "具体内容"           具体内容		
+	}, 
+	{
+		"index" : "2"
+		"text1"  : "具体内容"           具体内容		
+	} 
+	]
+	}
+
+更新选择项目选项
+	{
+	"sn" : "abcd", 				设备号
+	"action" : "update_pro",		更新选项
+	"selects" : [ 
+	{
+		"index" : "1"
+		"text1"  : "具体内容"           具体内容		
+	}, 
+	{
+		"index" : "2"
+		"text1"  : "具体内容"           具体内容		
+	} 
+	]
+	}
 **/
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,6 +97,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	unsigned char *tmp;
 	int tmpLen;
 	struct selStruct * psel;
+	struct formStruct * pform;
 	
 	newObject = json_tokener_parse(orignStr);
 	if(newObject == NULL){
@@ -114,6 +165,42 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			}
 			json_object_put(tmpObject);
 		}
+	}
+	if((0 == strcmp(action, "update_area")) || (0 == strcmp(action, "update_equi")) || (0 == strcmp(action, "update_pro"))){
+		selArrayObject = json_object_object_get(newObject, "selects");
+		count = json_object_array_length(selArrayObject);
+		printf("json count = %d\n", count);
+		size = count * sizeof(struct formStruct);
+		pform = malloc(size);
+		if(pform == NULL){
+			printf("malloc failed\n");
+			return 0;
+		}
+		memset(pform, 0, size);
+		*ptr = pform;
+		for(i=0; i < json_object_array_length(selArrayObject); i++){
+			selObject = json_object_array_get_idx(selArrayObject, i);
+			if(selObject == NULL){
+				printf("selObject NULL\n");
+				continue;
+			}else{
+				selObject = json_tokener_parse(json_object_get_string(selObject));
+			}
+			
+			tmpObject = json_object_object_get(selObject, "index");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+				memcpy(pform[i].index, tmp, tmpLen);	
+			}
+			
+			tmpObject = json_object_object_get(selObject, "text1");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				memcpy(pform[i].text1, tmp, tmpLen);	
+			}
+		}	
 	}
 
 	json_object_put(newObject);
