@@ -70,6 +70,35 @@ Json format
 	} 
 	]
 	}
+==========================================================================
+设备发送请求
+==========================================================================
+设备发送区域请求
+	{
+		"sn" : "abcd",
+		"action" : "request_area"
+	}
+
+设备发送设备请求
+	{
+		"sn" : "abcd",
+		"action" : "request_equi",
+		"area_no"  : "1"
+	}
+
+设备发送项目请求
+	{
+		"sn" : "abcd",
+		"action" : "request_pro",
+		"equi_no" : "1"
+	}
+
+设备发送申请请求
+	{
+		"sn" : "abcd",
+		"action" : "request_oper",
+		"pro_no" : "1"
+	}
 **/
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,9 +114,76 @@ Json format
 
 #include "json-c/json.h"
 
+
+extern unsigned char jointwarn_sn[4];
+extern unsigned char area_sel_no_str[4];
+extern unsigned char equi_sel_no_str[4];
+extern unsigned char pro_sel_no_str[4];
+
 unsigned int select_cnt;
 unsigned char sn[20];
 unsigned char action[20];
+unsigned char gTxBuf[TX_MAX_LEN];
+
+int JointCreateAreaRequest(unsigned char * resultBuf)
+{
+	json_object *postObject;
+
+	postObject = json_object_new_object();
+	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
+	json_object_object_add(postObject, "action", json_object_new_string("request_area"));
+
+	strcpy(resultBuf, json_object_get_string(postObject));
+	json_object_put(postObject);
+
+	return;
+}
+
+int JointCreateEquiRequest(unsigned char * resultBuf)
+{
+	json_object *postObject;
+
+	postObject = json_object_new_object();
+	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
+	json_object_object_add(postObject, "action", json_object_new_string("request_equi"));
+	json_object_object_add(postObject, "area_no", json_object_new_string(area_sel_no_str));
+
+	strcpy(resultBuf, json_object_get_string(postObject));
+	json_object_put(postObject);
+
+	return;
+}
+
+int JointCreateProRequest(unsigned char * resultBuf)
+{
+	json_object *postObject;
+
+	postObject = json_object_new_object();
+	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
+	json_object_object_add(postObject, "action", json_object_new_string("request_pro"));
+	json_object_object_add(postObject, "equi_no", json_object_new_string(equi_sel_no_str));
+
+	strcpy(resultBuf, json_object_get_string(postObject));
+	json_object_put(postObject);
+
+	return;
+}
+
+int JointCreateOperRequest(unsigned char * resultBuf)
+{
+	json_object *postObject;
+
+	postObject = json_object_new_object();
+	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
+	json_object_object_add(postObject, "action", json_object_new_string("request_oper"));
+	json_object_object_add(postObject, "pro_no", json_object_new_string(pro_sel_no_str));
+
+	strcpy(resultBuf, json_object_get_string(postObject));
+	json_object_put(postObject);
+
+	return;
+}
+
 
 int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 

@@ -1,6 +1,8 @@
 #ifndef __JOINT_WARN_JOSN_H__
 #define	__JOINT_WARN_JOSN_H__
 
+#define TX_MAX_LEN	1024
+
 struct selStruct{
         unsigned char index[4];
         unsigned char color[10];

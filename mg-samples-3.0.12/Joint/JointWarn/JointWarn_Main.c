@@ -24,7 +24,7 @@ static char welcome_text [512];
 static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
 static RECT msg_rc = {10, 100, 600, 400};
-
+unsigned char jointwarn_sn[4] = "001";
 
 extern struct buttonObject btn_back_1;
 extern struct buttonObject btn_front_page_1;
@@ -59,6 +59,9 @@ int area_select_no = 0;
 int equipment_select_no = 0;
 int project_select_no = 0;
 int gRow, gColumn;
+unsigned char area_sel_no_str[4];
+unsigned char equi_sel_no_str[4];
+unsigned char pro_sel_no_str[4];
 
 static void make_welcome_text (void)
 {
@@ -1028,18 +1031,21 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						printf("window_no = %d\n", window_no);
 						if(3 == window_no){
 							project_select_no = i + window_frame_cnt * page_cnt1;
-							printf("frame %d project select \n", project_select_no);
+							sprintf(pro_sel_no_str,"%d", project_select_no);
+							printf("frame %s project select \n", pro_sel_no_str);
 							//create_project_window(hdc);
 						}
 						if(2 == window_no){
 							equipment_select_no = i + window_frame_cnt * page_cnt1;
-							printf("frame %d equipment select \n", equipment_select_no);
+							sprintf(equi_sel_no_str,"%d", equipment_select_no);
+							printf("frame %s equipment select \n", equi_sel_no_str);
 							JointWarn_free_pro_buf();
 							create_project_window(hdc);
 						}
 						if(1 == window_no){
 							area_select_no = i + window_frame_cnt * page_cnt1;
-							printf("frame %d area select \n", area_select_no);
+							sprintf(area_sel_no_str,"%d", area_select_no);
+							printf("frame %s area select \n", area_sel_no_str);
 							JointWarn_free_equi_buf();
 							create_equipment_window(hdc);
 						}
