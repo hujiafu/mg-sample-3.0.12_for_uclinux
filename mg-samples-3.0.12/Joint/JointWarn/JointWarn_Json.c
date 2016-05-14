@@ -70,6 +70,27 @@ Json format
 	} 
 	]
 	}
+
+显示 105-1
+	{
+	"sn" : "abcd",
+	"action" : "display_105",
+	"sub_no" : "1",
+	}
+
+显示 105-2
+	{
+	"sn" : "abcd",
+	"action" : "display_105",
+	"sub_no" : "2",
+	}
+
+显示 105-3
+	{
+	"sn" : "abcd",
+	"action" : "display_105",
+	"sub_no" : "3",
+	}
 ==========================================================================
 设备发送请求
 ==========================================================================
@@ -119,6 +140,7 @@ extern unsigned char jointwarn_sn[4];
 extern unsigned char area_sel_no_str[4];
 extern unsigned char equi_sel_no_str[4];
 extern unsigned char pro_sel_no_str[4];
+extern int index_105;
 
 unsigned int select_cnt;
 unsigned char sn[20];
@@ -213,6 +235,15 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	}
 	strcpy(action, json_object_get_string(tmpObject));
 
+	if(0 == strcmp(action, "display_105")){
+		tmpObject = json_object_object_get(newObject, "sub_no");
+		if(tmpObject == NULL){
+			printf("sub_no NULL\n");
+			return 0;
+		}
+		sprintf(index_105, "%s", json_object_get_string(tmpObject));	
+		
+	}
 	if(0 == strcmp(action, "update_sel")){
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);

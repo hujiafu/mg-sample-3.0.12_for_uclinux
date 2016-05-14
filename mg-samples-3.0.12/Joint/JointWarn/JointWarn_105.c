@@ -14,6 +14,8 @@ extern const char msg_hz1[];
 extern const char msg_hz2[];
 extern const char msg_hz3[];
 
+int index_105 = 0;
+
 void JointWarn_create_105(HDC hdc, int index)
 {
 	unsigned char msg_str[2][100];
