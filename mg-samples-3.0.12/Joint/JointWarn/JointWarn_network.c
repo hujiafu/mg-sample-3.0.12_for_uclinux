@@ -15,7 +15,7 @@
 #include <netdb.h> 
 #include<fcntl.h> 
 
-#define SLEF_PORT 7788
+#define PORT 7788
 #define UDP_MAX_LEN 2048
 
 unsigned char udp_buf[UDP_MAX_LEN];

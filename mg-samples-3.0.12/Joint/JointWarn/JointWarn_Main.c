@@ -62,6 +62,7 @@ int gRow, gColumn;
 unsigned char area_sel_no_str[4];
 unsigned char equi_sel_no_str[4];
 unsigned char pro_sel_no_str[4];
+unsigned char final_cmd = 0;
 
 static void make_welcome_text (void)
 {
@@ -1203,10 +1204,19 @@ int InitMainWindow(void)
 	else return(1);
 }
 
+unsigned long gCounter;
+
+void check_task(int *counter)
+{
+	printf("check_task\n");
+	return;
+}
+
 
 int MiniGUIMain (int argc, const char* argv[])
 {
 	MSG Msg;
+	pthread_t thrd;
 	//HWND hMainWnd;
 	//MAINWINCREATE CreateInfo;
 #if 0	    
@@ -1233,6 +1243,7 @@ int MiniGUIMain (int argc, const char* argv[])
 
     	ShowWindow(hMainWnd, SW_SHOWNORMAL);
 #endif
+	pthread_create(&thrd, NULL, (void*)check_task, (void*)&gCounter);
 	InitMainWindow();	
 		
 	//printf("argc = %d\n", argc);

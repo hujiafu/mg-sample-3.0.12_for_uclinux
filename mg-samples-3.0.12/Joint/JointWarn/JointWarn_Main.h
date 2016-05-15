@@ -1,0 +1,68 @@
+#ifndef __JOINT_WARN_MAIN_H__
+#define __JOINT_WARN_MAIN_H__
+
+
+#define CMD_NULL		0x0
+#define CMD_CREATE_100_1	0x01
+#define CMD_CREATE_100_2	0x02
+#define CMD_CREATE_101		0x03
+#define CMD_CREATE_102		0x04
+#define CMD_CREATE_103		0x05
+#define CMD_CREATE_104_1	0x06
+#define CMD_CREATE_104_2	0x07
+#define CMD_CREATE_105_1	0x08
+#define CMD_CREATE_105_2	0x09
+#define CMD_CREATE_105_3	0x0A
+#define CMD_CREATE_106_1	0x0B
+#define CMD_CREATE_106_2	0x0C
+#define CMD_CREATE_106_3	0x0D
+#define CMD_CREATE_107		0x0E
+#define CMD_CREATE_108_1	0x0E
+#define CMD_CREATE_108_2	0x0F
+#define CMD_CREATE_108_3	0x10
+#define CMD_CREATE_108_4	0x11
+#define CMD_CREATE_109_1	0x12
+#define CMD_CREATE_109_2	0x13
+#define CMD_CREATE_110_1	0x14
+#define CMD_CREATE_110_2	0x15
+#define CMD_CREATE_110_3	0x16
+#define CMD_CREATE_111_1	0x17
+#define CMD_CREATE_111_2	0x18
+#define CMD_CREATE_112		0x19
+#define CMD_CREATE_113_1	0x1A
+#define CMD_CREATE_113_2	0x1B
+#define CMD_CREATE_113_3	0x1C
+#define CMD_CREATE_114_1	0x1D
+#define CMD_CREATE_114_2	0x1E
+#define CMD_CREATE_114_3	0x1F
+#define CMD_CREATE_115		0x20
+#define CMD_CREATE_116_1	0x21
+#define CMD_CREATE_116_2	0x22
+#define CMD_CREATE_116_3	0x23
+#define CMD_CREATE_116_4	0x24
+#define CMD_CREATE_117_1	0x25
+#define CMD_CREATE_117_2	0x26
+#define CMD_CREATE_118_1	0x27
+#define CMD_CREATE_118_2	0x28
+#define CMD_CREATE_118_3	0x29
+#define CMD_CREATE_119_1	0x2A
+#define CMD_CREATE_119_2	0x2B
+#define CMD_CREATE_120		0x2C
+#define CMD_CREATE_121_1	0x2D
+#define CMD_CREATE_121_2	0x2E
+#define CMD_CREATE_122		0x2F
+#define CMD_CREATE_123_1	0x30
+#define CMD_CREATE_123_2	0x31
+
+
+
+
+
+
+
+
+
+
+
+
+#endif
