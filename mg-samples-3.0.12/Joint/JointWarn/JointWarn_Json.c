@@ -3,7 +3,7 @@
 /**
 Json format
 
-更新SEL选项
+更新SEL选项 //106-1, 106-2, 106-3
 	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_sel",			更新选项
@@ -130,6 +130,7 @@ Json format
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include "JointWarn_Main.h"
 #include "JointWarn_UImain.h"
 #include "JointWarn_Json.h"
 
@@ -141,6 +142,7 @@ extern unsigned char area_sel_no_str[4];
 extern unsigned char equi_sel_no_str[4];
 extern unsigned char pro_sel_no_str[4];
 extern int index_105;
+extern int final_cmd;
 
 unsigned int select_cnt;
 unsigned char sn[20];
@@ -241,7 +243,16 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			printf("sub_no NULL\n");
 			return 0;
 		}
-		sprintf(index_105, "%s", json_object_get_string(tmpObject));	
+		sprintf(index_105, "%s", json_object_get_string(tmpObject));
+		if(0 == strcmp(index_105, "1")){
+			final_cmd = CMD_CREATE_105_1;
+		}	
+		if(0 == strcmp(index_105, "2")){
+			final_cmd = CMD_CREATE_105_2;
+		}	
+		if(0 == strcmp(index_105, "3")){
+			final_cmd = CMD_CREATE_105_3;
+		}	
 		
 	}
 	if(0 == strcmp(action, "update_sel")){

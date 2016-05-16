@@ -907,10 +907,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//TextOut(hdc,400,295,"²âÊÔ");
 
 			//test_select_json();
-			create_area_window(hdc);
+			//create_area_window(hdc);
 			//JointWarn_create_105(hdc, 3);
 			//JointWarn_create_106(hdc, 1);
-			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:
@@ -924,6 +924,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
 						printf("select_apply press\n");
+						create_area_window(hdc);
 					}
 				}
 				if(select_canel.active == 1){
@@ -1034,6 +1035,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							project_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(pro_sel_no_str,"%d", project_select_no);
 							printf("frame %s project select \n", pro_sel_no_str);
+							JointWarn_create_105(hdc, 3);
 							//create_project_window(hdc);
 						}
 						if(2 == window_no){
