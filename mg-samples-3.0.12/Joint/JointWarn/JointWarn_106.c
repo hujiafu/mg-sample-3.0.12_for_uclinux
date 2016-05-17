@@ -18,6 +18,8 @@ extern int window_frame_cnt;
 extern const char * test_msg_hz2[];
 extern const char * test_tmsg_hz1[];
 extern unsigned char test_106_1[];
+extern unsigned char select_project_str[50];
+extern const char * title_warn_106[];
 
 struct selStruct * gPsel;
 
@@ -113,6 +115,7 @@ void JointWarn_create_106(HDC hdc, int index)
 	struct textStruct testText[3];
 	unsigned char * origin_str;
 	struct selStruct * psel;
+	int len;
 
 	int i;
 
@@ -123,6 +126,40 @@ void JointWarn_create_106(HDC hdc, int index)
         JointWarn_paint_back(hdc, back_color);
 	JointWarn_create_spare(hdc);
 
+	//top title
+	warn[0].startx = 0;
+	warn[0].starty = 10;
+	warn[0].width = MWINDOW_RX;
+	warn[0].height = 50;
+	warn[0].formColor = 0x3cb371ff;
+	warn[0].borderColor = 0xffff00ff;
+	testText[0].color = 0xffffffff;
+	testText[0].filesize = 30;
+	testText[0].offsety = 5;
+	len = strlen(select_project_str) > 50 ? 50 : strlen(select_project_str);
+	memset(testText[0].name, 0, 50);
+	memcpy(testText[0].name, select_project_str, len);
+	warn[0].text[0] = &testText[0];
+	testText[0].offsetx = (MWINDOW_RX - (FONT30_PIXEL * len)) >> 1;
+	JointWarn_create_title(hdc, warn, 1);
+	
+	//bottom title
+	warn[0].startx = 0;
+	warn[0].starty = 300;
+	warn[0].width = MWINDOW_RX;
+	warn[0].height = 50;
+	warn[0].formColor = 0xffd700ff;
+	warn[0].borderColor = 0xffff00ff;
+	testText[0].color = 0x333399ff;
+	testText[0].filesize = 30;
+	testText[0].offsety = 10;
+	len = strlen(title_warn_106[index - 1]) > 50 ? 50 : strlen(title_warn_106[index - 1]);
+	memset(testText[0].name, 0, 50);
+	memcpy(testText[0].name, title_warn_106[index - 1], len);
+	warn[0].text[0] = &testText[0];
+	testText[0].offsetx = (MWINDOW_RX - (FONT30_PIXEL * len)) >> 1;
+	JointWarn_create_title(hdc, warn, 0);
+	
 	count = 2;
 	warn[0].formColor = 0x1e90ffff;
 	warn[0].starty = 70;

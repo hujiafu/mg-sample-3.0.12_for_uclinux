@@ -135,7 +135,7 @@ void JointWarn_repaint_select(HDC hdc, struct warnForm *warn, int index, int typ
 	DestroyLogFont(s_font);
 }
 
-void JointWarn_create_lib(HDC hdc, struct warnForm *warn, unsigned char border)
+void JointWarn_create_title(HDC hdc, struct warnForm *warn, unsigned char border)
 {
 	PLOGFONT s_font;
 	unsigned char red, green, blue;

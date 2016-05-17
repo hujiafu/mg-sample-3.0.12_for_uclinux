@@ -63,7 +63,7 @@ unsigned char area_sel_no_str[4];
 unsigned char equi_sel_no_str[4];
 unsigned char pro_sel_no_str[4];
 unsigned char final_cmd = 0;
-unsigned char select_project_str[100];
+unsigned char select_project_str[50];
 int project_str_len;
 
 static void make_welcome_text (void)
@@ -273,6 +273,12 @@ const char * test_tmsg_hz1[] =
 {
 	"请安全关闭！",
 	"安全关闭绑定完成！",
+};
+
+const char * title_warn_106[] =
+{
+	"请实施介质安全关闭",
+	"请实施部分介质安全关闭",
 };
 
 struct textStruct warn_message1 = {
@@ -943,6 +949,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
 						printf("select_apply press\n");
 						create_area_window(hdc);
+						break;
 					}
 				}
 				if(select_canel.active == 1){
@@ -1060,7 +1067,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							memcpy(select_project_str + project_str_len, warn_msg[2].name, len);
 							project_str_len += len;
 							
-							JointWarn_create_105(hdc, 3);
+							//JointWarn_create_105(hdc, 3);
+							JointWarn_create_106(hdc, 1);
 							//create_project_window(hdc);
 						}
 						if(2 == window_no){
