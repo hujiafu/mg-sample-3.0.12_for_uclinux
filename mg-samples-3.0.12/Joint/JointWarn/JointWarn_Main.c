@@ -63,6 +63,8 @@ unsigned char area_sel_no_str[4];
 unsigned char equi_sel_no_str[4];
 unsigned char pro_sel_no_str[4];
 unsigned char final_cmd = 0;
+unsigned char select_project_str[100];
+int project_str_len;
 
 static void make_welcome_text (void)
 {
@@ -752,6 +754,7 @@ void create_project_window(HDC hdc)
 {
 	unsigned char * origin_str;
 	struct formStruct * pform;
+	int len;
 	
 	gRow = 5;
 	gColumn = 2;
@@ -760,7 +763,13 @@ void create_project_window(HDC hdc)
 	window_frame_cnt = gRow * gColumn;
 	strcpy(warn_msg[1].name, gPform_equi[equipment_select_no].text1);
 	strcpy(warn_msg[2].name, select_msg[2]);
-	
+
+	len = strlen(warn_msg[1].name);
+	len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
+	memcpy(select_project_str + project_str_len, warn_msg[1].name, len);
+	project_str_len += len;
+
+
 	origin_str = JointWarn_104_get_data();
 	pform = JointWarn_102_4_parepar_data(origin_str, 2);
 	jointwarn_crate_mainui(hdc, pform, warn_msg, 3);
@@ -770,6 +779,7 @@ void create_equipment_window(HDC hdc)
 {
 	unsigned char * origin_str;
 	struct formStruct * pform;
+	int len;
 	
 	gRow = 4;
 	gColumn = 3;
@@ -778,6 +788,13 @@ void create_equipment_window(HDC hdc)
 	window_frame_cnt = gRow * gColumn;
 	strcpy(warn_msg[0].name, gPform_area[area_select_no].text1);
 	strcpy(warn_msg[1].name, select_msg[1]);
+	
+	project_str_len = 0;
+	memset(select_project_str, 0, 50);
+	len = strlen(warn_msg[0].name);
+	len = len > 50 ? 50 : len;
+	memcpy(select_project_str, warn_msg[0].name, len);
+	project_str_len += len;
 	
 	origin_str = JointWarn_103_get_data();
 	pform = JointWarn_102_4_parepar_data(origin_str, 1);
@@ -821,6 +838,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	int cnt;
 	int left_flag, right_flag;
 	int count;
+	int len;
 	HDC hdc;
 	
 	switch(message)
@@ -1035,6 +1053,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							project_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(pro_sel_no_str,"%d", project_select_no);
 							printf("frame %s project select \n", pro_sel_no_str);
+							
+							strcpy(warn_msg[2].name, gPform_pro[project_select_no].text1);
+							len = strlen(warn_msg[2].name);
+							len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
+							memcpy(select_project_str + project_str_len, warn_msg[2].name, len);
+							project_str_len += len;
+							
 							JointWarn_create_105(hdc, 3);
 							//create_project_window(hdc);
 						}

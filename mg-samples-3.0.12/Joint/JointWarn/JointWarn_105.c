@@ -13,6 +13,7 @@ extern const char test_menu_hz1[];
 extern const char msg_hz1[];
 extern const char msg_hz2[];
 extern const char msg_hz3[];
+extern unsigned char select_project_str[100];
 
 int index_105 = 0;
 
@@ -25,7 +26,8 @@ void JointWarn_create_105(HDC hdc, int index)
 	int font_len, font_len1, font_len2;
 	int tmp;
 	
-	strcpy(text_msg[0].name, test_menu_hz1);
+	//strcpy(text_msg[0].name, test_menu_hz1);
+	strcpy(text_msg[0].name, select_project_str);
 	printf("test_menu_hz1 = %d\n", strlen(test_menu_hz1));
 	if(index == 1){
 		strcpy(text_msg[1].name, msg_hz2);
