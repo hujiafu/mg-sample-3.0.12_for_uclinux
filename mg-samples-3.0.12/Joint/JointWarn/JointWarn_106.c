@@ -9,6 +9,7 @@
 #include <minigui/window.h>
 
 #include "JointWarn_UImain.h"
+#include "JointWarn_Main.h"
 #include "JointWarn_Json.h"
 
 extern int window_no;
@@ -119,7 +120,12 @@ void JointWarn_create_106(HDC hdc, int index)
 
 	int i;
 
-	window_no = 8;
+	if(index == 1)
+		window_no = WIN_106_1_NO;
+	if(index == 2)
+		window_no = WIN_106_2_NO;
+	if(index == 3)
+		window_no = WIN_107_NO;
 	window_frame_cnt = SEL_MAX_COUNT;
 
 	back_color = 0x473c8bff;

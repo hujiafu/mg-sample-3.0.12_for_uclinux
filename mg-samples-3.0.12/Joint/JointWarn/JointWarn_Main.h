@@ -55,6 +55,80 @@
 #define CMD_CREATE_123_2	0x31
 
 
+#define WIN_NULL_NO		0x00
+#define WIN_100_1_NO		0x01
+#define WIN_100_2_NO		0x02
+#define WIN_101_NO		0x03
+#define WIN_102_NO		0x04
+#define WIN_103_NO		0x05
+#define WIN_104_1_NO		0x06
+#define WIN_104_2_NO		0x07
+#define WIN_105_1_NO		0x08
+#define WIN_105_2_NO		0x09
+#define WIN_105_3_NO		0x0A
+#define WIN_106_1_NO		0x0B
+#define WIN_106_2_NO		0x0C
+#define WIN_106_3_NO		0x0D
+#define WIN_107_NO		0x0E
+#define WIN_108_1_NO		0x0F
+#define WIN_108_2_NO		0x10
+#define WIN_108_3_NO		0x11
+#define WIN_108_4_NO		0x12
+#define WIN_109_1_NO		0x13
+#define WIN_109_2_NO		0x14
+#define WIN_110_1_NO		0x15
+#define WIN_110_2_NO		0x16
+#define WIN_110_3_NO		0x17
+#define WIN_111_1_NO		0x18
+#define WIN_111_2_NO		0x19
+#define WIN_112_NO		0x1A
+#define WIN_113_1_NO		0x1B
+#define WIN_113_2_NO		0x1C
+#define WIN_113_3_NO		0x1D
+#define WIN_114_1_NO		0x1E
+#define WIN_114_2_NO		0x1F
+#define WIN_114_3_NO		0x20
+#define WIN_115_NO		0x21
+#define WIN_116_1_NO		0x22
+#define WIN_116_2_NO		0x23
+#define WIN_116_3_NO		0x24
+#define WIN_116_4_NO		0x25
+#define WIN_117_1_NO		0x26
+#define WIN_117_2_NO		0x27
+#define WIN_118_1_NO		0x28
+#define WIN_118_2_NO		0x29
+#define WIN_118_3_NO		0x2A
+#define WIN_119_1_NO		0x2B
+#define WIN_119_2_NO		0x2C
+#define WIN_120_NO		0x2D
+#define WIN_121_1_NO		0x2E
+#define WIN_121_2_NO		0x2F
+#define WIN_122_NO		0x30
+#define WIN_123_1_NO		0x31
+#define WIN_123_2_NO		0x32
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

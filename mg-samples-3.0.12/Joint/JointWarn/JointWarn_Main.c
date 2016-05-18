@@ -18,6 +18,7 @@
 #endif
 #include "JointWarn_Logic.h"
 #include "JointWarn_UImain.h"
+#include "JointWarn_Main.h"
 #include "JointWarn_Json.h"
 
 static char welcome_text [512];
@@ -42,13 +43,16 @@ extern struct selStruct * gPsel;
 extern struct formStruct * gPform_area;
 extern struct formStruct * gPform_equi;
 extern struct formStruct * gPform_pro;
+extern struct buttonObject select_obj[6];
+extern int select_obj_no;
+
 HWND hMainWnd;
 
 static const char* syskey = "";
 
 static int last_key = -1;
 static int last_key_count = 0;
-int window_no = 0;
+int window_no = WIN_NULL_NO;
 //int area_window_frame_cnt = 0;
 //int equipment_window_frame_cnt = 0;
 //int project_window_frame_cnt = 0;
@@ -279,6 +283,7 @@ const char * title_warn_106[] =
 {
 	"请实施介质安全关闭",
 	"请实施部分介质安全关闭",
+	"请选择单项介质安全关闭确认",
 };
 
 struct textStruct warn_message1 = {
@@ -764,7 +769,7 @@ void create_project_window(HDC hdc)
 	
 	gRow = 5;
 	gColumn = 2;
-	window_no = 3;
+	window_no = WIN_104_1_NO;
 	total_frame_cnt = 15;
 	window_frame_cnt = gRow * gColumn;
 	strcpy(warn_msg[1].name, gPform_equi[equipment_select_no].text1);
@@ -789,7 +794,7 @@ void create_equipment_window(HDC hdc)
 	
 	gRow = 4;
 	gColumn = 3;
-	window_no = 2;
+	window_no = WIN_103_NO;
 	total_frame_cnt = 14;
 	window_frame_cnt = gRow * gColumn;
 	strcpy(warn_msg[0].name, gPform_area[area_select_no].text1);
@@ -814,7 +819,7 @@ void create_area_window(HDC hdc)
 
 	gRow = 4;
 	gColumn = 3;
-	window_no = 1;
+	window_no = WIN_102_NO;
 	total_frame_cnt = 25;
 	window_frame_cnt = gRow * gColumn;
 	strcpy(warn_msg[0].name, select_msg[0]);
@@ -828,7 +833,7 @@ void create_area_window(HDC hdc)
 
 void create_select_window(HDC hdc, struct textStruct * text, struct textStruct *warn)
 {
-	window_no = 4;
+	window_no = WIN_101_NO;
 	jointwarn_create_select(hdc, text, warn);
 }
 
@@ -944,7 +949,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
-			if(window_no == 4){
+			if(window_no == WIN_101_NO){
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
 						printf("select_apply press\n");
@@ -955,6 +960,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if(select_canel.active == 1){
 					if((pre_x > select_canel.point_start.x && pre_x < select_canel.point_end.x) && (pre_y > select_canel.point_start.y && pre_y < select_canel.point_end.y)){
 						printf("select_canel press\n");
+						break;
 					}
 				}
 			}
@@ -962,43 +968,32 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if((pre_x > btn_back_1.point_start.x && pre_x < btn_back_1.point_end.x) && (pre_y > btn_back_1.point_start.y && pre_y < btn_back_1.point_end.y)){
 					printf("back pressed\n");
 					
-					if(2 == window_no){
+					if(WIN_103_NO == window_no){
 						JointWarn_free_area_buf();
 						create_area_window(hdc);
+						break;
 					}
-					if(3 == window_no){
+					if(WIN_104_1_NO == window_no){
 						JointWarn_free_equi_buf();
 						create_equipment_window(hdc);
+						break;
 					}
 					if(4 == window_no){
 						printf("back to 100-2\n");
+						break;
 					}
 					//EnableWindow(hWnd, FALSE);
 					//InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 				}
 			}
-			if((window_no >= 1 && window_no <=3) || window_no == 8){
+			//if((window_no >= 1 && window_no <=3) || window_no == 8){
+			if((WIN_102_NO == window_no) || (WIN_103_NO == window_no) || (WIN_104_1_NO == window_no) || (WIN_106_1_NO == window_no)){
 			if(btn_front_page_1.active == 1){
 				if((pre_x > btn_front_page_1.point_start.x && pre_x < btn_front_page_1.point_end.x) && (pre_y > btn_front_page_1.point_start.y && pre_y < btn_front_page_1.point_end.y)){
 					printf("front page pressed\n");
 					page_cnt1--;
 					cnt = window_frame_cnt * page_cnt1;
 					form_count = window_frame_cnt;
-					if(1 == window_no){
-						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
-						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
-					}
-					if(2 == window_no){
-						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
-					}
-					if(3 == window_no){
-						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
-					}
-					if(8 == window_no){
-						JointWarn_clear_sel(hdc);
-						count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
-						JointWarn_106_repaint_sel(hdc, gPsel, cnt, count);	
-					}
 					if(page_cnt1 > 0){
 						left_flag = 1;
 					}else{
@@ -1010,6 +1005,38 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						right_flag = 1;
 					}
 					jointwarn_paint_flag(hdc, left_flag, right_flag);
+					
+					if(WIN_102_NO == window_no){
+						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
+						break;
+					}
+					if(WIN_103_NO == window_no){
+						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
+						break;
+					}
+					if(WIN_104_1_NO == window_no){
+						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
+						break;
+					}
+					if(WIN_106_1_NO == window_no){
+						JointWarn_clear_sel(hdc);
+						count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
+						JointWarn_106_repaint_sel(hdc, gPsel, cnt, count);	
+					}
+	#if 0
+					if(page_cnt1 > 0){
+						left_flag = 1;
+					}else{
+						left_flag = 0;
+					}
+					if(page_cnt1 >= form_tot_cnt - 1){
+						right_flag = 0;
+					}else{
+						right_flag = 1;
+					}
+					jointwarn_paint_flag(hdc, left_flag, right_flag);
+	#endif
 				}
 			}
 			if(btn_next_page_1.active == 1){
@@ -1020,22 +1047,6 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					form_count = total_frame_cnt - cnt;
 					printf("form_count = %d\n", form_count); 
 					form_count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
-					if(1 == window_no){
-						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
-						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
-					}
-					if(2 == window_no){
-						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
-					}
-					if(3 == window_no){
-						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
-					}
-					if(8 == window_no){
-						JointWarn_clear_sel(hdc);
-						count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
-						printf("cnt = %d, count = %d\n", cnt, count);
-						JointWarn_106_repaint_sel(hdc, gPsel, cnt, count);	
-					}
 					page_cnt1++;
 					if(page_cnt1 > 0){
 						left_flag = 1;
@@ -1048,15 +1059,51 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						right_flag = 1;
 					}
 					jointwarn_paint_flag(hdc, left_flag, right_flag);
+
+					if(WIN_102_NO == window_no){
+						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
+						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
+						break;
+					}
+					if(WIN_103_NO == window_no){
+						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
+						break;
+					}
+					if(WIN_104_1_NO == window_no){
+						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
+						break;
+					}
+					if(WIN_106_1_NO == window_no){
+						JointWarn_clear_sel(hdc);
+						count = form_count > window_frame_cnt ? window_frame_cnt : form_count;
+						printf("cnt = %d, count = %d\n", cnt, count);
+						JointWarn_106_repaint_sel(hdc, gPsel, cnt, count);	
+						break;
+					}
+#if 0
+					page_cnt1++;
+					if(page_cnt1 > 0){
+						left_flag = 1;
+					}else{
+						left_flag = 0;
+					}
+					if(page_cnt1 >= form_tot_cnt - 1){
+						right_flag = 0;
+					}else{
+						right_flag = 1;
+					}
+					jointwarn_paint_flag(hdc, left_flag, right_flag);
+#endif
 				}
 			}
 			if(((pre_x > 5) && (pre_x < (MWINDOW_RX - 5))) && ((pre_y > 5) && (pre_y < (MWINDOW_BY - 5)))){
 				//printf("form_count = %d\n", form_count);
+				if((WIN_104_1_NO == window_no) || (WIN_103_NO == window_no) || (WIN_102_NO == window_no)){
 				for(i=0; i<form_count; i++){
 					if(pre_x >= x[i] && pre_x <= (x[i] + partWidth - 10) && pre_y >= y[i] && pre_y <= (y[i] + partHeight - 10)){
 
 						printf("window_no = %d\n", window_no);
-						if(3 == window_no){
+						if(WIN_104_1_NO == window_no){
 							project_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(pro_sel_no_str,"%d", project_select_no);
 							printf("frame %s project select \n", pro_sel_no_str);
@@ -1070,23 +1117,35 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							//JointWarn_create_105(hdc, 3);
 							JointWarn_create_106(hdc, 1);
 							//create_project_window(hdc);
+							break;
 						}
-						if(2 == window_no){
+						if(WIN_103_NO == window_no){
 							equipment_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(equi_sel_no_str,"%d", equipment_select_no);
 							printf("frame %s equipment select \n", equi_sel_no_str);
 							JointWarn_free_pro_buf();
 							create_project_window(hdc);
+							break;
 						}
-						if(1 == window_no){
+						if(WIN_102_NO == window_no){
 							area_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(area_sel_no_str,"%d", area_select_no);
 							printf("frame %s area select \n", area_sel_no_str);
 							JointWarn_free_equi_buf();
 							create_equipment_window(hdc);
+							break;
 						}
-						break;
 					}
+				}
+				}
+				if(WIN_106_1_NO == window_no){
+					for(i=0; i<6; i++){
+						if(((pre_x > select_obj[i].point_start.x) && (pre_x < select_obj[i].point_end.x)) && \
+							((pre_y > select_obj[i].point_start.y) && (pre_y < select_obj[i].point_end.y))){
+							select_obj_no = i + window_frame_cnt * page_cnt1;
+							printf("select %d sel\n", select_obj_no);										
+						}
+					}	
 				}
 			}
 

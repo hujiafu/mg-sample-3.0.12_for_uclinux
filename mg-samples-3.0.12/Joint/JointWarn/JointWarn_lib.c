@@ -22,6 +22,7 @@ POINT form_pos_start[2];
 POINT form_pos_end[2];
 struct buttonObject form_obj[2];
 struct buttonObject select_obj[6];
+int select_obj_no;
 int select_width, select_height;
 
 
