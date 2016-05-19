@@ -26,6 +26,41 @@ int select_obj_no;
 int select_width, select_height;
 
 
+void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
+{
+	int top_height = 20;
+	int mid_height = 20;
+	int bottom_height = 20;
+	int spare_height = 40;
+	int form_height, form_width;
+	int sel_height, sel_width;
+	int sel_area_height;
+	int sel_start_x, sel_start_y;
+	int len;
+	int i, j;
+
+	sel_area_height = (count-1) * mid_height;
+	for(i=0; i<count; i++){
+		sel_area_height += warn[i].textCnt * FONT20_HIGH_PIXEL;
+	}
+	//form_height = top_height + bottom_height + sel_height;
+	form_height = 240;
+	sel_start_y = (form_height - sel_area_height) >> 1;
+
+	form_width = 400;
+	for(i=0; i<count; i++){
+		for(j=0; j<warn[i].textCnt; j++){
+			len = strlen(warn[i].text[j]->name) * FONT20_PIXEL;
+			sel_width = sel_width > len ? sel_width : len;
+		}
+		sel_start_x = (form_width - sel_width) >> 1;
+		sel_height = FONT20_HIGH_PIXEL * warn[i].textCnt;
+		FillBox(hdc, sel_start_x, sel_start_y, sel_width, sel_height);
+		sel_start_y += mid_height + sel_height;	
+	}
+	
+}
+
 void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)
 {
 	int border_len;
