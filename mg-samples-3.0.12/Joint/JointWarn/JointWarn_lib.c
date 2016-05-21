@@ -38,7 +38,15 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
 	int sel_start_x, sel_start_y;
 	int len;
 	int i, j;
+	int offset_x;
+	unsigned char red, green, blue;
+	PLOGFONT s_font;
 
+	SetBkMode(hdc,BM_TRANSPARENT);
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                               FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, \
+			       FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 20, 0);
+        SelectFont(hdc, s_font);
 	sel_area_height = (count-1) * mid_height;
 	for(i=0; i<count; i++){
 		sel_area_height += warn[i].textCnt * FONT20_HIGH_PIXEL;
@@ -55,9 +63,25 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
 		}
 		sel_start_x = (form_width - sel_width) >> 1;
 		sel_height = FONT20_HIGH_PIXEL * warn[i].textCnt;
-		FillBox(hdc, sel_start_x, sel_start_y, sel_width, sel_height);
+		
+		red = (warn[i].formColor & 0xff000000) >> 24; 
+		green = (warn[i].formColor & 0x00ff0000) >> 16; 
+		blue = (warn[i].formColor & 0x0000ff00) >> 8; 
+		SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+		FillBox(hdc, sel_start_x, sel_start_y, sel_width + 10, sel_height);
+		
+		for(j=0; j<warn[i].textCnt; j++){
+			red = (warn[i].text[j]->color & 0xff000000) >> 24; 
+			green = (warn[i].text[j]->color & 0x00ff0000) >> 16; 
+			blue = (warn[i].text[j]->color & 0x0000ff00) >> 8;
+			SetTextColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+			len = strlen(warn[i].text[j]->name) * FONT20_PIXEL;
+			offset_x = (sel_width - len) >> 1;
+			TextOut(hdc, sel_start_x+offset_x+5, sel_start_y+j*FONT20_HIGH_PIXEL+3, warn[i].text[j]->name);
+		} 
 		sel_start_y += mid_height + sel_height;	
 	}
+	DestroyLogFont(s_font);
 	
 }
 

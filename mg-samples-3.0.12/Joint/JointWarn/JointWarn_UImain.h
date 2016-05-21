@@ -12,9 +12,9 @@
 //#define TOTAL_FRAME     12
 #define FONT35_PIXEL    19      //FORNT SIZE 35
 #define FONT30_PIXEL    16      //FORNT SIZE 30
-#define FONT20_PIXEL    10      //FORNT SIZE 20
+#define FONT20_PIXEL    10     //FORNT SIZE 20
 #define FONT30_HIGH_PIXEL       35
-#define FONT20_HIGH_PIXEL       20
+#define FONT20_HIGH_PIXEL       30
 #define WARN_FRAME_HIGH         20
 
 #define SEL_MAX_COUNT	6

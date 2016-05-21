@@ -940,6 +940,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//JointWarn_create_105(hdc, 3);
 			//JointWarn_create_106(hdc, 1);
 			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
 			EndPaint(hWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:

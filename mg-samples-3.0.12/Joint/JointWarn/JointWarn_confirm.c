@@ -12,6 +12,8 @@
 //#include <iconv.h>
 
 extern struct textStruct warn_canel;
+extern const char * test_msg_hz2[];
+extern const char * title_warn_106[];
 
 static HWND hMainWnd1 = HWND_INVALID;
 
@@ -19,6 +21,9 @@ static int warn_width;
 static int warn_height;
 static struct warnForm *gform;
 static int gformCount;
+
+struct warnForm top_warn[2];
+struct textStruct top_text[3];
 
 static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)   //第二及处理消息   
 {  
@@ -48,6 +53,7 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
 			break;   
 		case MSG_PAINT:
 			hdc = BeginPaint(hWnd);
+#if 0
 			//SetBkColor(hdc, RGBA2Pixel(hdc, 0x00, 0xB2, 0xEE, 0xFF));
 			SetBkMode(hdc,BM_TRANSPARENT);			
 
@@ -109,7 +115,25 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
 				}
 				DestroyLogFont(s_font);
 			}
-	
+#endif
+			strcpy(top_text[0].name, test_msg_hz2[0]);
+			strcpy(top_text[1].name, title_warn_106[0]);
+			strcpy(top_text[2].name, title_warn_106[2]);
+			top_text[0].filesize = 20;
+			top_text[1].filesize = 20;
+			top_text[2].filesize = 20;
+			top_text[0].color = 0xffffffff;
+			top_text[1].color = 0x191970ff;
+			top_text[2].color = 0x191970ff;
+			
+			top_warn[0].formColor = 0xff0000ff;
+			top_warn[1].formColor = 0xffff00ff;
+			top_warn[0].text[0] = &top_text[0];
+			top_warn[1].text[0] = &top_text[1];
+			top_warn[1].text[1] = &top_text[2];
+			top_warn[0].textCnt = 1;
+			top_warn[1].textCnt = 2;
+			JointWarn_create_top(hdc, top_warn, 2);	
 			EndPaint(hWnd,hdc);
 			break; 
  	case MSG_LBUTTONDOWN:
