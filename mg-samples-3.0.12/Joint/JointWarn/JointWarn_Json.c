@@ -94,7 +94,27 @@ Json format
 	} 
 	]
 	}
-
+显示悬浮窗口
+	{
+		"sn" : "abcd",
+		"action" : "update_top",
+		"titles" : [
+		{
+			"index" : "1",
+			"count" : "1",
+			"color" : "red",
+			"title1" : "具体内容",
+			"title2" : "具体内容"
+		},
+		{
+			"index" : "2",
+			"count" : "2",
+			"color" : "yellow",
+			"title1" : "具体内容",
+			"title2" : "具体内容"
+		}
+		]
+	}
 ==========================================================================
 设备发送请求
 ==========================================================================
@@ -124,6 +144,12 @@ Json format
 		"action" : "request_oper",
 		"pro_no" : "1"
 	}
+发送选择介质
+	{
+		"sn" : "abcd",
+		"action" : "request_sel",
+		"sel_no" : "1"
+	}
 **/
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,6 +178,8 @@ unsigned int select_cnt;
 unsigned char sn[20];
 unsigned char action[20];
 unsigned char gTxBuf[TX_MAX_LEN];
+struct warnForm top_warn[2];
+struct textStruct top_warn_text[4];
 
 int JointCreateAreaRequest(unsigned char * resultBuf)
 {
@@ -215,13 +243,14 @@ int JointCreateOperRequest(unsigned char * resultBuf)
 
 int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 
-	json_object *newObject, *tmpObject, *selArrayObject, *selObject;
+	json_object *newObject, *tmpObject, *selArrayObject, *selObject, *titleArrayObject, *titleObject;
 	int i;
 	int count, size;
 	unsigned char *tmp;
 	int tmpLen;
 	struct selStruct * psel;
 	struct formStruct * pform;
+	int index;
 	
 	newObject = json_tokener_parse(orignStr);
 	if(newObject == NULL){
@@ -345,8 +374,105 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			}
 		}	
 	}
+	if(0 == strcmp(action, "update_top")){
+		titleArrayObject = json_object_object_get(newObject, "titles");
+		count = json_object_array_length(titleArrayObject);
+		for(i=0; i < json_object_array_length(titleArrayObject); i++){
 
-	json_object_put(newObject);
+			titleObject = json_object_array_get_idx(titleArrayObject, i);
+			if(titleObject == NULL){
+				printf("titleObject NULL\n");
+				continue;
+			}else{
+				titleObject = json_tokener_parse(json_object_get_string(titleObject));
+			}
+			tmpObject = json_object_object_get(titleObject, "index");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				if(0 == strcmp(tmp, "1")){
+					index = 0;			
+				}
+				if(0 == strcmp(tmp, "2")){
+					index = 1;			
+				}
+				
+			}
+			
+			tmpObject = json_object_object_get(titleObject, "color");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				if(0 == strcmp(tmp, "green")){
+					top_warn[index].formColor = 0x548b54ff;
+				}
+				if(0 == strcmp(tmp, "red")){
+					top_warn[index].formColor = 0xff0000ff;
+				}
+				if(0 == strcmp(tmp, "yellow")){
+					top_warn[index].formColor = 0xffff00ff;
+				}
+			}
+	
+			tmpObject = json_object_object_get(titleObject, "count");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				if(0 == strcmp(tmp, "1")){
+					tmpObject = json_object_object_get(titleObject, "title1");
+					if(tmpObject != NULL){
+						if(index == 0){
+							strcpy(top_warn_text[0].name, tmpObject);
+							top_warn_text[0].color = 0xffffffff;
+							top_warn[index].text[0] = &top_warn_text[0];
+						}
+						if(index == 1){
+							strcpy(top_warn_text[2].name, tmpObject);
+							top_warn_text[2].color = 0x191970ff;
+							top_warn[index].text[0] = &top_warn_text[2];
+						}
+					}
+					top_warn[index].textCnt = 1;
+				}
+				if(0 == strcmp(tmp, "2")){
+					tmpObject = json_object_object_get(titleObject, "title1");
+					if(tmpObject != NULL){
+						if(index == 0){
+							strcpy(top_warn_text[0].name, tmpObject);
+							top_warn_text[0].color = 0xffffffff;
+							top_warn[index].text[0] = &top_warn_text[0];
+						}
+						if(index == 1){
+							strcpy(top_warn_text[2].name, tmpObject);
+							top_warn_text[2].color = 0x191970ff;
+							top_warn[index].text[0] = &top_warn_text[2];
+						}
+					}
+					tmpObject = json_object_object_get(titleObject, "title2");
+					if(tmpObject != NULL){
+						if(index == 0){
+							strcpy(top_warn_text[1].name, tmpObject);
+							top_warn_text[1].color = 0xffffffff;
+							top_warn[index].text[1] = &top_warn_text[1];
+						}
+						if(index == 1){
+							strcpy(top_warn_text[3].name, tmpObject);
+							top_warn_text[3].color = 0x191970ff;
+							top_warn[index].text[1] = &top_warn_text[3];
+						}
+					}
+					top_warn[index].textCnt = 2;
+				}
+			}
+
+		}
+
+	}
+	if(selObject != NULL)
+		json_object_put(selObject);
+
+	if(titleObject != NULL)
+		json_object_put(titleObject);
+		
+	if(newObject != NULL)
+		json_object_put(newObject);
 	return count;
 }
 

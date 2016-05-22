@@ -17,6 +17,10 @@ extern POINT s_point[2][3];
 extern struct buttonObject btn_front_page_1;
 extern struct buttonObject btn_next_page_1;
 extern int page_cnt1;
+extern const char * cancel_text[];
+extern const char * test_msg_hz2[];
+extern const char * title_warn_106[];
+
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -24,15 +28,42 @@ struct buttonObject form_obj[2];
 struct buttonObject select_obj[6];
 int select_obj_no;
 int select_width, select_height;
+int btn_cancel_width, btn_cancel_height;
+int form_width, form_height;
+int spare_height;
+int top_start_x, top_start_y;
+struct buttonObject btn_cancel;
+struct warnForm top_warn[2];
+struct textStruct top_text[3];
+int top_window;
 
+void jointwarn_paint_cancel(HDC hdc)
+{
+	PLOGFONT s_font;
 
-void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
+	btn_cancel_width = 100;
+        btn_cancel_height = 40;
+	btn_cancel.point_start.x = top_start_x + form_width - 160;
+        btn_cancel.point_start.y = top_start_y + form_height - spare_height + 10;
+        btn_cancel.point_end.x = btn_cancel.point_start.x + btn_cancel_width;
+        btn_cancel.point_end.y = btn_cancel.point_start.y + btn_cancel_height;
+        btn_cancel.active = 1;
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
+	FillBox(hdc, btn_cancel.point_start.x, btn_cancel.point_start.y, btn_cancel_width, btn_cancel_height);
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 20, 0);
+	SelectFont(hdc,s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
+        TextOut(hdc, btn_cancel.point_start.x + 10, btn_cancel.point_start.y + 10, cancel_text[0]);
+        DestroyLogFont(s_font);
+
+}
+
+void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, int height)
 {
 	int top_height = 20;
-	int mid_height = 20;
+	int mid_height = 30;
 	int bottom_height = 20;
-	int spare_height = 40;
-	int form_height, form_width;
 	int sel_height, sel_width;
 	int sel_area_height;
 	int sel_start_x, sel_start_y;
@@ -41,6 +72,10 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
 	int offset_x;
 	unsigned char red, green, blue;
 	PLOGFONT s_font;
+	
+	form_width = width;
+	form_height = height;
+	spare_height = 80;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
@@ -52,16 +87,15 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
 		sel_area_height += warn[i].textCnt * FONT20_HIGH_PIXEL;
 	}
 	//form_height = top_height + bottom_height + sel_height;
-	form_height = 240;
-	sel_start_y = (form_height - sel_area_height) >> 1;
+	//form_height -= spare_height;
+	sel_start_y = top_start_y + ((form_height - (spare_height + sel_area_height)) >> 1);
 
-	form_width = 400;
 	for(i=0; i<count; i++){
 		for(j=0; j<warn[i].textCnt; j++){
 			len = strlen(warn[i].text[j]->name) * FONT20_PIXEL;
 			sel_width = sel_width > len ? sel_width : len;
 		}
-		sel_start_x = (form_width - sel_width) >> 1;
+		sel_start_x = top_start_x + ((form_width - sel_width) >> 1);
 		sel_height = FONT20_HIGH_PIXEL * warn[i].textCnt;
 		
 		red = (warn[i].formColor & 0xff000000) >> 24; 
@@ -83,6 +117,41 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count)
 	}
 	DestroyLogFont(s_font);
 	
+	jointwarn_paint_cancel(hdc);
+}
+
+void JointWarn_create_top_back(HDC hdc, int width, int height)
+{
+	int count;
+
+	top_window = 1;
+	top_start_x = (MWINDOW_RX - width) >> 1;
+	top_start_y = (MWINDOW_BY - height) >> 1;
+
+		
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x10, 0x4e, 0x8b, 0xFF));
+	FillBox(hdc, top_start_x, top_start_y, width, height);
+
+	count = 2;
+	                strcpy(top_text[0].name, test_msg_hz2[0]);
+                        strcpy(top_text[1].name, title_warn_106[0]);
+                        strcpy(top_text[2].name, title_warn_106[2]);
+                        top_text[0].filesize = 20;
+                        top_text[1].filesize = 20;
+                        top_text[2].filesize = 20;
+                        top_text[0].color = 0xffffffff;
+                        top_text[1].color = 0x191970ff;
+                        top_text[2].color = 0x191970ff;
+
+                        top_warn[0].formColor = 0xff0000ff;
+                        top_warn[1].formColor = 0xffff00ff;
+                        top_warn[0].text[0] = &top_text[0];
+                        top_warn[1].text[0] = &top_text[1];
+                        top_warn[1].text[1] = &top_text[2];
+                        top_warn[0].textCnt = 1;
+                        top_warn[1].textCnt = 2;
+
+	JointWarn_create_top(hdc, top_warn, count, width, height);
 }
 
 void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)

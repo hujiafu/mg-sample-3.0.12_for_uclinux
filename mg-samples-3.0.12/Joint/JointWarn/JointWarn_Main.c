@@ -45,6 +45,8 @@ extern struct formStruct * gPform_equi;
 extern struct formStruct * gPform_pro;
 extern struct buttonObject select_obj[6];
 extern int select_obj_no;
+extern int top_window;
+extern struct buttonObject btn_cancel;
 
 HWND hMainWnd;
 
@@ -284,6 +286,11 @@ const char * title_warn_106[] =
 	"请实施介质安全关闭",
 	"请实施部分介质安全关闭",
 	"请选择单项介质安全关闭确认",
+};
+
+const char * cancel_text[] = 
+{
+	"立即取消",
 };
 
 struct textStruct warn_message1 = {
@@ -749,6 +756,11 @@ unsigned char test_106_1[] =
         {\"index\" : \"7\", \"color\" : \"green\", \"text1\" : \"测试7-1\", \"text2\" : \"测试7-2\"}\
         ]}";
 
+unsigned char test_108_1[] = 
+	"{\"sn\" : \"JonitCtrl1\", \"action\" : \"update_top\", \"titles\" : \
+	[{\"index\" : \"1\", \"count\" : \"1\", \"color\" : \"green\", \"title1\" : \"F1高压开关\"},\
+	 {\"index\" : \"2\", \"count\" : \"1\", \"color\" : \"yellow\", \"title1\" : \"介质未安全关闭，不能选择！\"} \
+	]}";
 
 
 void test_chinese(HDC hdc){
@@ -833,6 +845,7 @@ void create_area_window(HDC hdc)
 
 void create_select_window(HDC hdc, struct textStruct * text, struct textStruct *warn)
 {
+	printf("create_select_window\n");
 	window_no = WIN_101_NO;
 	jointwarn_create_select(hdc, text, warn);
 }
@@ -891,7 +904,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 		
   		case MSG_PAINT:
 			printf("MSG_PAINT begin1\n");
-			hdc = BeginPaint(hWnd);
+			//hdc = BeginPaint(hWnd);
+			hdc = BeginPaint(hMainWnd);
+			//hdc = GetDC(hMainWnd);
 			//FillBoxWithBitmap(hdc,0,0,800,360,&s_background);
 #if 0
 			for(i=0;i<4;i++)
@@ -940,8 +955,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//JointWarn_create_105(hdc, 3);
 			//JointWarn_create_106(hdc, 1);
 			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
-			InitConfirmWindow(hWnd, 400, 300, &warnform1, 1);
-			EndPaint(hWnd,hdc);
+			//JointWarn_create_top_back(hdc, 480, 280);
+			//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
+			//EndPaint(hWnd,hdc);
+			EndPaint(hMainWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:
 			printf("MSG_LBUTTONDOWN\n");
@@ -950,6 +967,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			pre_x = LOWORD(lParam);
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
+			if(top_window == 0){
 			if(window_no == WIN_101_NO){
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
@@ -978,6 +996,10 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						JointWarn_free_equi_buf();
 						create_equipment_window(hdc);
 						break;
+					}
+					if(WIN_106_1_NO == window_no){
+						JointWarn_free_pro_buf();
+						create_project_window(hdc);
 					}
 					if(4 == window_no){
 						printf("back to 100-2\n");
@@ -1118,7 +1140,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							//JointWarn_create_105(hdc, 3);
 							JointWarn_create_106(hdc, 1);
 							//create_project_window(hdc);
-							break;
+							goto WinProcEnd;
 						}
 						if(WIN_103_NO == window_no){
 							equipment_select_no = i + window_frame_cnt * page_cnt1;
@@ -1126,7 +1148,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							printf("frame %s equipment select \n", equi_sel_no_str);
 							JointWarn_free_pro_buf();
 							create_project_window(hdc);
-							break;
+							goto WinProcEnd;
 						}
 						if(WIN_102_NO == window_no){
 							area_select_no = i + window_frame_cnt * page_cnt1;
@@ -1134,7 +1156,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							printf("frame %s area select \n", area_sel_no_str);
 							JointWarn_free_equi_buf();
 							create_equipment_window(hdc);
-							break;
+							goto WinProcEnd;
 						}
 					}
 				}
@@ -1145,10 +1167,23 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							((pre_y > select_obj[i].point_start.y) && (pre_y < select_obj[i].point_end.y))){
 							select_obj_no = i + window_frame_cnt * page_cnt1;
 							printf("select %d sel\n", select_obj_no);										
+							JointWarn_create_top_back(hdc, 480, 280);
+							//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 						}
 					}	
 				}
 			}
+
+			}
+			}else{
+				//top window is active
+				if(((pre_x > btn_cancel.point_start.x) && (pre_x < btn_cancel.point_end.x)) \
+                        	&& ((pre_y > btn_cancel.point_start.y) && (pre_y < btn_cancel.point_end.y)) \
+                        	){
+					printf("cancel pressed\n");
+					top_window = 0;
+					JointWarn_create_106(hdc, 1);
+				}
 
 			}
 			//EndPaint(hWnd,hdc);
@@ -1262,6 +1297,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 		default:
 			return(DefaultMainWinProc(hWnd,message,wParam,lParam));
 	}
+WinProcEnd:
 	return(0);	
 }
 

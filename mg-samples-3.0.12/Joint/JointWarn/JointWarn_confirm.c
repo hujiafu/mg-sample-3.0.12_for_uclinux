@@ -14,16 +14,19 @@
 extern struct textStruct warn_canel;
 extern const char * test_msg_hz2[];
 extern const char * title_warn_106[];
+extern struct buttonObject btn_cancel;
 
+static HWND hMainWnd0 = HWND_INVALID;
 static HWND hMainWnd1 = HWND_INVALID;
 
 static int warn_width;
 static int warn_height;
 static struct warnForm *gform;
 static int gformCount;
+static int exit_top_win;
 
-struct warnForm top_warn[2];
-struct textStruct top_text[3];
+//struct warnForm top_warn[2];
+//struct textStruct top_text[3];
 
 static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)   //第二及处理消息   
 {  
@@ -115,7 +118,6 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
 				}
 				DestroyLogFont(s_font);
 			}
-#endif
 			strcpy(top_text[0].name, test_msg_hz2[0]);
 			strcpy(top_text[1].name, title_warn_106[0]);
 			strcpy(top_text[2].name, title_warn_106[2]);
@@ -133,14 +135,24 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
 			top_warn[1].text[1] = &top_text[2];
 			top_warn[0].textCnt = 1;
 			top_warn[1].textCnt = 2;
-			JointWarn_create_top(hdc, top_warn, 2);	
+			JointWarn_create_top(hdc, top_warn, 2, warn_width, warn_height);	
+#endif
 			EndPaint(hWnd,hdc);
 			break; 
  	case MSG_LBUTTONDOWN:
-                        printf("MSG_LBUTTONDOWN 1\n");
+                        printf("MSG_LBUTTONDOWN 1111111\n");
                         pre_x = LOWORD(lParam);
                         pre_y = HIWORD(lParam);
                         printf("x = %d, y = %d\n", pre_x, pre_y);
+			if(((pre_x > btn_cancel.point_start.x) && (pre_x < btn_cancel.point_end.x)) \
+			&& ((pre_y > btn_cancel.point_start.y) && (pre_y < btn_cancel.point_end.y)) \
+			){
+				printf("cancel pressed\n");
+				EnableWindow(hMainWnd0, TRUE);
+				DestroyMainWindow(hWnd);
+				//MainWindowCleanup(hWnd);
+				//DestroyMainWindowIndirect(hWnd);
+			}
 	break; 
     case MSG_COMMAND:  
 #if 0
@@ -170,9 +182,10 @@ static int InitOrderProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)  
       
 case MSG_DESTROY: 
 	printf("2 MSG_DESTROY:\n");
-           DestroyAllControls (hWnd);  
-           hMainWnd1 = HWND_INVALID;  
-return 0;    
+           DestroyAllControls(hWnd); 
+	MainWindowThreadCleanup(hWnd); 
+           hMainWnd1 = HWND_INVALID; 
+	return 0;    
   
 case MSG_CLOSE:  
 	printf("2 MSG_CLOSE:\n");
@@ -221,18 +234,19 @@ int InitConfirmWindow(HWND hWnd, int width, int height, struct warnForm *form, i
 	CreateInfo.rx = width + CreateInfo.lx;  
 	CreateInfo.by = height + CreateInfo.ty;  
 	hMainWnd1 = CreateMainWindow(&CreateInfo);//建立窗口     
-  
+  	hMainWnd0 = hWnd;
+	//EnableWindow(hWnd, FALSE);
 	if(hMainWnd1 != HWND_INVALID)   
 	{ 
 		printf("hMainWnd1\n");
 //		EnableWindow(hWnd, FALSE);
-		ShowWindow(hMainWnd1, SW_SHOWNORMAL); //显示窗口   
+	//	ShowWindow(hMainWnd1, SW_SHOWNORMAL); //显示窗口   
 		
-	//	while(GetMessage(&Msg,hMainWnd1))
-        //	{
-          //      	TranslateMessage(&Msg);
-          //      	DispatchMessage(&Msg);
-        //	}
+		//while(GetMessage(&Msg,hMainWnd1))
+        	//{
+                //	TranslateMessage(&Msg);
+               // 	DispatchMessage(&Msg);
+        	//}
 	//	printf("hMainWnd1 end\n");
 		return;  
 	} 
