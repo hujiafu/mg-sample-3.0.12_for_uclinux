@@ -395,6 +395,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				if(0 == strcmp(tmp, "2")){
 					index = 1;			
 				}
+				printf("json: index %s\n",tmp);
 				
 			}
 			
@@ -410,11 +411,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				if(0 == strcmp(tmp, "yellow")){
 					top_warn[index].formColor = 0xffff00ff;
 				}
+				printf("json: color %s\n",tmp);
 			}
 	
 			tmpObject = json_object_object_get(titleObject, "count");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
+				printf("json: count %s\n",tmp);
 				if(0 == strcmp(tmp, "1")){
 					tmpObject = json_object_object_get(titleObject, "title1");
 					if(tmpObject != NULL){

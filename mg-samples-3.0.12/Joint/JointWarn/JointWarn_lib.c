@@ -20,7 +20,7 @@ extern int page_cnt1;
 extern const char * cancel_text[];
 extern const char * test_msg_hz2[];
 extern const char * title_warn_106[];
-
+extern unsigned char test_108_1[];
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -123,6 +123,8 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 void JointWarn_create_top_back(HDC hdc, int width, int height)
 {
 	int count;
+	unsigned int ptr;
+	struct warnStruct * pwarn;
 
 	top_window = 1;
 	top_start_x = (MWINDOW_RX - width) >> 1;
@@ -132,6 +134,10 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x10, 0x4e, 0x8b, 0xFF));
 	FillBox(hdc, top_start_x, top_start_y, width, height);
 
+
+	count = JointAnalysisCmdLine(test_108_1, &ptr);
+	pwarn = (struct warnStruct *)ptr;
+#if 0
 	count = 2;
 	                strcpy(top_text[0].name, test_msg_hz2[0]);
                         strcpy(top_text[1].name, title_warn_106[0]);
@@ -150,8 +156,8 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
                         top_warn[1].text[1] = &top_text[2];
                         top_warn[0].textCnt = 1;
                         top_warn[1].textCnt = 2;
-
-	JointWarn_create_top(hdc, top_warn, count, width, height);
+#endif
+	JointWarn_create_top(hdc, pwarn, count, width, height);
 }
 
 void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)
