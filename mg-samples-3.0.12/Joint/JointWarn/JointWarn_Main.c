@@ -762,6 +762,8 @@ unsigned char test_108_1[] =
 	 {\"index\" : \"2\", \"count\" : \"1\", \"color\" : \"yellow\", \"title1\" : \"介质未安全关闭，不能选择！\"} \
 	]}";
 
+const unsigned char request_area[] = 
+	"{\"sn\":\"abc\", \"action\":\"request_area\"}";
 
 void test_chinese(HDC hdc){
 	TextOut(hdc,200,295,"测试1");
@@ -955,9 +957,11 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//JointWarn_create_105(hdc, 3);
 			//JointWarn_create_106(hdc, 1);
 			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			//JointWarn_udp_send("{\"sn\":\"abc\", \"action\":\"request_area\"}", 0);
 			//JointWarn_create_top_back(hdc, 480, 280);
 			//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 			//EndPaint(hWnd,hdc);
+
 			EndPaint(hMainWnd,hdc);
 			break;
 		case MSG_LBUTTONDOWN:

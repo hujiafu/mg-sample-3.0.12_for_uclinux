@@ -64,7 +64,7 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 	int top_height = 20;
 	int mid_height = 30;
 	int bottom_height = 20;
-	int sel_height, sel_width;
+	int sel_height = 0, sel_width = 0;
 	int sel_area_height;
 	int sel_start_x, sel_start_y;
 	int len;
@@ -92,6 +92,7 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 
 	for(i=0; i<count; i++){
 		for(j=0; j<warn[i].textCnt; j++){
+			printf("font count %d\n", strlen(warn[i].text[j]->name));
 			len = strlen(warn[i].text[j]->name) * FONT20_PIXEL;
 			sel_width = sel_width > len ? sel_width : len;
 		}
@@ -103,7 +104,8 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 		blue = (warn[i].formColor & 0x0000ff00) >> 8; 
 		SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
 		FillBox(hdc, sel_start_x, sel_start_y, sel_width + 10, sel_height);
-		
+		printf("sel_width = %d\n", sel_width);	
+	
 		for(j=0; j<warn[i].textCnt; j++){
 			red = (warn[i].text[j]->color & 0xff000000) >> 24; 
 			green = (warn[i].text[j]->color & 0x00ff0000) >> 16; 
@@ -124,7 +126,9 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
 {
 	int count;
 	unsigned int ptr;
-	struct warnStruct * pwarn;
+	struct warnForm * pwarn;
+
+	printf("JointWarn_create_top_back\n");
 
 	top_window = 1;
 	top_start_x = (MWINDOW_RX - width) >> 1;
@@ -133,10 +137,13 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
 		
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x10, 0x4e, 0x8b, 0xFF));
 	FillBox(hdc, top_start_x, top_start_y, width, height);
-
+	
+	printf("%s\n", test_108_1);
 
 	count = JointAnalysisCmdLine(test_108_1, &ptr);
-	pwarn = (struct warnStruct *)ptr;
+	pwarn = (struct warnForm *)ptr;
+	printf("count = %d\n", count);
+	printf("color = 0x%x\n", pwarn[0].formColor);
 #if 0
 	count = 2;
 	                strcpy(top_text[0].name, test_msg_hz2[0]);

@@ -9,6 +9,7 @@
 
 #include "JointWarn_UImain.h"
 #include "JointWarn_Json.h"
+#include "JointWarn_network.h"
 #include "helloworld_res_en.h"
 
 #define NUM_PRE_LINE	3
@@ -31,6 +32,8 @@ extern int form_count;
 extern unsigned char test_102[];
 extern unsigned char test_103[];
 extern unsigned char test_104[];
+extern unsigned char udp_buf[UDP_MAX_LEN];
+extern const unsigned char request_area[];
 
 int page_cnt1;
 int form_tot_cnt;
@@ -61,8 +64,8 @@ void jointwarn_test(HDC hdc)
 unsigned char * JointWarn_102_get_data(){
         //TODO: get data from server
 
-
-        return test_102; //only for test
+	JointWarn_udp_send(request_area, 0);
+        return udp_buf; //only for test
 
 }
 unsigned char * JointWarn_103_get_data(){

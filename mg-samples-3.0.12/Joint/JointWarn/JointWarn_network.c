@@ -15,8 +15,9 @@
 #include <netdb.h> 
 #include<fcntl.h> 
 
-#define PORT 7788
-#define UDP_MAX_LEN 2048
+#include "JointWarn_network.h"
+
+#define PORT 10008
 
 unsigned char udp_buf[UDP_MAX_LEN];
 int gCounter = 0;
@@ -32,7 +33,7 @@ void udp_listen_task(int *counter)
     
     addr_len = sizeof(struct sockaddr_in);  
     /*建立socket*/  
-    if((sockfd=socket(AF_INET,SOCK_DGRAM,0))<0){  
+    if((sockfd=socket(AF_INET,SOCK_STREAM,0))<0){  
         perror ("socket");  
         exit(1);  
     }  
@@ -41,7 +42,7 @@ void udp_listen_task(int *counter)
     addr.sin_family=AF_INET;  
     addr.sin_port=htons(PORT);  
     addr.sin_addr.s_addr=htonl(INADDR_ANY) ;  
-    if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr))<0){  
+    if (connect(sockfd, (struct sockaddr *)&addr, sizeof(addr))<0){  
         perror("connect");  
         exit(1);  
     }  
@@ -59,7 +60,35 @@ void udp_listen_task(int *counter)
 int JointWarn_udp_send(unsigned char *buf, int len)
 {
 
-        sendto(sockfd, buf, len, 0, (struct sockaddr *)&addr,addr_len);  
+    addr_len = sizeof(struct sockaddr_in);  
+    /*建立socket*/  
+    if((sockfd=socket(AF_INET,SOCK_STREAM,0))<0){  
+        perror ("socket");  
+        exit(1);  
+    }  
+    /*填写sockaddr_in 结构*/  
+    bzero ( &addr, sizeof(addr) );  
+    addr.sin_family=AF_INET;  
+    addr.sin_port=htons(PORT);  
+    addr.sin_addr.s_addr=inet_addr("112.124.115.184") ;  
+    if (connect(sockfd, (struct sockaddr *)&addr, sizeof(addr))<0){  
+        perror("connect");  
+        exit(1);  
+    }  
+    //while(1){ 
+	printf("connected\n"); 
+        bzero(udp_buf,sizeof(udp_buf)); 
+	send(sockfd, buf, strlen(buf), 0); 
+	printf("send %s\n", buf); 
+        len = recv(sockfd, udp_buf, sizeof(udp_buf), 0); 
+	printf("%s\n", udp_buf);	 
+        //len = recvfrom(sockfd, udp_buf, sizeof(udp_buf), 0 , (struct sockaddr *)&addr ,&addr_len);  
+        /*显示client端的网络地址*/  
+        //printf("receive from %s\n" , inet_ntoa( addr.sin_addr));  
+        /*将字串返回给client端*/  
+        //sendto(sockfd, udp_buf,len,0,(struct sockaddr *)&addr,addr_len);  
+    //}  
+        //sendto(sockfd, buf, len, 0, (struct sockaddr *)&addr,addr_len);  
 }
 
 void JointWarn_network_init()
