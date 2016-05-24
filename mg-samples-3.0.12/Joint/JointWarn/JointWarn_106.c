@@ -11,6 +11,7 @@
 #include "JointWarn_UImain.h"
 #include "JointWarn_Main.h"
 #include "JointWarn_Json.h"
+#include "JointWarn_network.h"
 
 extern int window_no;
 extern int form_tot_cnt;
@@ -21,14 +22,25 @@ extern const char * test_tmsg_hz1[];
 extern unsigned char test_106_1[];
 extern unsigned char select_project_str[50];
 extern const char * title_warn_106[];
+extern const unsigned char request_oper[];
+extern unsigned char udp_buf[UDP_MAX_LEN];
 
 struct selStruct * gPsel;
 
-unsigned char * JointWarn_106_get_data(){
+unsigned char * JointWarn_106_get_data(int sel_index){
 	//TODO: get data from server
+        
+	unsigned char pro_no_sel[4];
+        unsigned char request_pro_str[100];
+
+        sprintf(pro_no_sel, "%d", sel_index);
+        strcpy(request_pro_str, request_oper);
+        strcat(request_pro_str, pro_no_sel);
+        strcat(request_pro_str, "\"}");
+        JointWarn_udp_send(request_pro_str, 0);
 
 	
-	return test_106_1; //only for test
+	return udp_buf; //only for test
 
 }
 
@@ -107,7 +119,7 @@ void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn
 	}
 }
 
-void JointWarn_create_106(HDC hdc, int index)
+void JointWarn_create_106(HDC hdc, int index, int sel_index)
 {
 	unsigned int back_color;
 	unsigned int count;
@@ -175,7 +187,7 @@ void JointWarn_create_106(HDC hdc, int index)
 	warn[0].formColor = 0x3cb371ff;
 	JointWarn_create_select(hdc, warn);
 
-	origin_str = JointWarn_106_get_data();
+	origin_str = JointWarn_106_get_data(sel_index);
 	psel = JointWarn_106_parepar_data(origin_str);
 	gPsel = psel;
 	count = total_frame_cnt > SEL_MAX_COUNT ? SEL_MAX_COUNT : total_frame_cnt;

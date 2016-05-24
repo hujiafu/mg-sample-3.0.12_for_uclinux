@@ -765,6 +765,15 @@ unsigned char test_108_1[] =
 const unsigned char request_area[] = 
 	"{\"sn\":\"abc\", \"action\":\"request_area\"}";
 
+const unsigned char request_equi[] = 
+	"{\"sn\":\"abc\", \"action\":\"request_equi\", \"area_no\":\"";
+
+const unsigned char request_pro[] = 
+	"{\"sn\":\"abc\", \"action\":\"request_pro\", \"equi_no\":\"";
+
+const unsigned char request_oper[] = 
+	"{\"sn\":\"abc\", \"action\":\"request_oper\", \"pro_no\":\"";
+
 void test_chinese(HDC hdc){
 	TextOut(hdc,200,295,"≤‚ ‘1");
 
@@ -795,7 +804,7 @@ void create_project_window(HDC hdc)
 	project_str_len += len;
 
 
-	origin_str = JointWarn_104_get_data();
+	origin_str = JointWarn_104_get_data(equipment_select_no);
 	pform = JointWarn_102_4_parepar_data(origin_str, 2);
 	jointwarn_crate_mainui(hdc, pform, warn_msg, 3);
 }
@@ -821,7 +830,7 @@ void create_equipment_window(HDC hdc)
 	memcpy(select_project_str, warn_msg[0].name, len);
 	project_str_len += len;
 	
-	origin_str = JointWarn_103_get_data();
+	origin_str = JointWarn_103_get_data(area_select_no);
 	pform = JointWarn_102_4_parepar_data(origin_str, 1);
 	jointwarn_crate_mainui(hdc, pform, warn_msg, 2);
 }
@@ -1142,7 +1151,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							project_str_len += len;
 							
 							//JointWarn_create_105(hdc, 3);
-							JointWarn_create_106(hdc, 1);
+							JointWarn_create_106(hdc, 1, project_select_no);
 							//create_project_window(hdc);
 							goto WinProcEnd;
 						}

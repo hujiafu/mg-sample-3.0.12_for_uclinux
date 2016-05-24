@@ -34,6 +34,8 @@ extern unsigned char test_103[];
 extern unsigned char test_104[];
 extern unsigned char udp_buf[UDP_MAX_LEN];
 extern const unsigned char request_area[];
+extern const unsigned char request_equi[];
+extern const unsigned char request_pro[];
 
 int page_cnt1;
 int form_tot_cnt;
@@ -68,18 +70,30 @@ unsigned char * JointWarn_102_get_data(){
         return udp_buf; //only for test
 
 }
-unsigned char * JointWarn_103_get_data(){
+unsigned char * JointWarn_103_get_data(unsigned int sel_index){
         //TODO: get data from server
+	unsigned char area_no_sel[4];
+	unsigned char request_equi_str[100];
 
-
-        return test_103; //only for test
+	sprintf(area_no_sel, "%d", sel_index);
+	strcpy(request_equi_str, request_equi);
+	strcat(request_equi_str, area_no_sel);
+	strcat(request_equi_str, "\"}");
+	JointWarn_udp_send(request_equi_str, 0);
+        return udp_buf; //only for test
 
 }
-unsigned char * JointWarn_104_get_data(){
+unsigned char * JointWarn_104_get_data(unsigned int sel_index){
         //TODO: get data from server
+	unsigned char equi_no_sel[4];
+	unsigned char request_pro_str[100];
 
-
-        return test_104; //only for test
+	sprintf(equi_no_sel, "%d", sel_index);
+	strcpy(request_pro_str, request_pro);
+	strcat(request_pro_str, equi_no_sel);
+	strcat(request_pro_str, "\"}");
+	JointWarn_udp_send(request_pro_str, 0);
+        return udp_buf; //only for test
 
 }
 
