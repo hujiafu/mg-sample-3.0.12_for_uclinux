@@ -8,16 +8,49 @@
 #include <minigui/window.h>
 
 #include "JointWarn_UImain.h"
+#include "JointWarn_network.h"
 
 extern const char test_menu_hz1[];
 extern const char msg_hz1[];
 extern const char msg_hz2[];
 extern const char msg_hz3[];
 extern unsigned char select_project_str[100];
+extern const unsigned char request_oper[];
+extern unsigned char udp_buf[UDP_MAX_LEN];
 
 int index_105 = 0;
 
-void JointWarn_create_105(HDC hdc, int index)
+
+unsigned char * JointWarn_105_get_data(int pro_index){
+        //TODO: get data from server
+
+        unsigned char pro_no_sel[4];
+        unsigned char request_pro_str[100];
+
+        sprintf(pro_no_sel, "%d", pro_index);
+        strcpy(request_pro_str, request_oper);
+        strcat(request_pro_str, pro_no_sel);
+        strcat(request_pro_str, "\"}");
+        JointWarn_udp_send(request_pro_str, 0);
+
+
+        return udp_buf; //only for test
+
+}
+
+int JointWarn_105_parepar_data(unsigned char * originStr)
+{
+        int index;
+	unsigned int ptr;
+
+        index = JointAnalysisCmdLine(originStr, &ptr);
+
+        return index;
+}
+
+
+
+void JointWarn_create_105(HDC hdc, int pro_index)
 {
 	unsigned char msg_str[2][100];
 	struct warnForm warn[2];
@@ -25,6 +58,11 @@ void JointWarn_create_105(HDC hdc, int index)
 	unsigned int back_color;
 	int font_len, font_len1, font_len2;
 	int tmp;
+	int index;
+	unsigned char * origin_str;
+
+	origin_str = JointWarn_105_get_data(pro_index);
+	index = JointWarn_105_parepar_data(origin_str);
 	
 	//strcpy(text_msg[0].name, test_menu_hz1);
 	strcpy(text_msg[0].name, select_project_str);

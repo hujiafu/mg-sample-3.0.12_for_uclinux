@@ -148,7 +148,8 @@ Json format
 	{
 		"sn" : "abcd",
 		"action" : "request_sel",
-		"sel_no" : "1"
+		"sel_no" : "1",
+		"id" : "1"
 	}
 **/
 #include <stdio.h>
@@ -251,6 +252,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	struct selStruct * psel;
 	struct formStruct * pform;
 	int index;
+	unsigned char tbuf[10];
 
 	newObject = NULL;
 	selObject = NULL;
@@ -273,22 +275,29 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		return 0;
 	}
 	strcpy(action, json_object_get_string(tmpObject));
-
+	printf("action %s\n", action);
 	if(0 == strcmp(action, "display_105")){
 		tmpObject = json_object_object_get(newObject, "sub_no");
 		if(tmpObject == NULL){
 			printf("sub_no NULL\n");
 			return 0;
 		}
-		sprintf(index_105, "%s", json_object_get_string(tmpObject));
-		if(0 == strcmp(index_105, "1")){
+		strcpy(tbuf, json_object_get_string(tmpObject));
+		//sprintf(index_105, "%s", json_object_get_string(tmpObject));
+		if(0 == strcmp(tbuf, "1")){
 			final_cmd = CMD_CREATE_105_1;
+			printf("display_105 1\n");
+			return 1;
 		}	
-		if(0 == strcmp(index_105, "2")){
+		if(0 == strcmp(tbuf, "2")){
 			final_cmd = CMD_CREATE_105_2;
+			printf("display_105 2\n");
+			return 2;
 		}	
-		if(0 == strcmp(index_105, "3")){
+		if(0 == strcmp(tbuf, "3")){
 			final_cmd = CMD_CREATE_105_3;
+			printf("display_105 3\n");
+			return 3;
 		}	
 		
 	}

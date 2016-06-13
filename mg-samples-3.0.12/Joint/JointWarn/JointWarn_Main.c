@@ -1150,8 +1150,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							memcpy(select_project_str + project_str_len, warn_msg[2].name, len);
 							project_str_len += len;
 							
-							//JointWarn_create_105(hdc, 3);
-							JointWarn_create_106(hdc, 1, project_select_no);
+							JointWarn_create_105(hdc, project_select_no);
+							//JointWarn_create_106(hdc, 1, project_select_no);
 							//create_project_window(hdc);
 							goto WinProcEnd;
 						}
