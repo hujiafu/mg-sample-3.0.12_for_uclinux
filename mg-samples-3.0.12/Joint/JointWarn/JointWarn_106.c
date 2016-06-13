@@ -131,7 +131,12 @@ void JointWarn_create_106(HDC hdc, int index, int sel_index)
 	int len;
 
 	int i;
-
+	
+	origin_str = JointWarn_106_get_data(sel_index);
+	psel = JointWarn_106_parepar_data(origin_str);
+	
+	if(psel != NULL)
+	{
 	if(index == 1)
 		window_no = WIN_106_1_NO;
 	if(index == 2)
@@ -187,8 +192,6 @@ void JointWarn_create_106(HDC hdc, int index, int sel_index)
 	warn[0].formColor = 0x3cb371ff;
 	JointWarn_create_select(hdc, warn);
 
-	origin_str = JointWarn_106_get_data(sel_index);
-	psel = JointWarn_106_parepar_data(origin_str);
 	gPsel = psel;
 	count = total_frame_cnt > SEL_MAX_COUNT ? SEL_MAX_COUNT : total_frame_cnt;
 	form_tot_cnt = total_frame_cnt / SEL_MAX_COUNT + 1;
@@ -198,6 +201,10 @@ void JointWarn_create_106(HDC hdc, int index, int sel_index)
 	}
 
 	JointWarn_create_flag(hdc, total_frame_cnt, SEL_MAX_COUNT);
+	}
+	else{
+
+	}
 #if 0	
 	for(i=0; i<3; i++){
 		testText[0].color = 0xffffffff;

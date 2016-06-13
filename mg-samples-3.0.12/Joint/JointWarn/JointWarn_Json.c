@@ -94,6 +94,13 @@ Json format
 	} 
 	]
 	}
+// 106-3
+	{
+		"sn" : "abcd",
+		"action" : "diplay_106",
+		"sub_no" : "3"
+	}
+
 显示悬浮窗口
 	{
 		"sn" : "abcd",
@@ -300,6 +307,21 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			return 3;
 		}	
 		
+	}
+	if(0 == strcmp(action, "display_106")){
+		tmpObject = json_object_object_get(newObject, "sub_no");
+		if(tmpObject == NULL){
+			printf("sub_no NULL\n");
+			return 0;
+		}
+		strcpy(tbuf, json_object_get_string(tmpObject));
+		if(0 == strcmp(tbuf, "3")){
+			final_cmd = CMD_CREATE_106_3;
+			printf("display_106 3\n");
+			*ptr = NULL;
+			return 3;
+		}	
+
 	}
 	if(0 == strcmp(action, "update_sel")){
 		selArrayObject = json_object_object_get(newObject, "selects");
