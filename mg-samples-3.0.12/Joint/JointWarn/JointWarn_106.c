@@ -24,6 +24,7 @@ extern unsigned char select_project_str[50];
 extern const char * title_warn_106[];
 extern const unsigned char request_oper[];
 extern unsigned char udp_buf[UDP_MAX_LEN];
+extern int g_update_sel_index;
 
 struct selStruct * gPsel;
 
@@ -119,7 +120,7 @@ void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn
 	}
 }
 
-void JointWarn_create_106(HDC hdc, int index, int sel_index)
+void JointWarn_create_106(HDC hdc, int index, struct selStruct * psel)
 {
 	unsigned int back_color;
 	unsigned int count;
@@ -127,13 +128,10 @@ void JointWarn_create_106(HDC hdc, int index, int sel_index)
 	struct warnForm testWarn[3];
 	struct textStruct testText[3];
 	unsigned char * origin_str;
-	struct selStruct * psel;
 	int len;
 
 	int i;
 	
-	origin_str = JointWarn_106_get_data(sel_index);
-	psel = JointWarn_106_parepar_data(origin_str);
 	
 	if(psel != NULL)
 	{
@@ -229,4 +227,16 @@ void JointWarn_create_106(HDC hdc, int index, int sel_index)
 		JointWarn_repaint_select(hdc, testWarn, i, 2);
 	}
 #endif
+}
+
+void JointWarn_request_sel(HDC hdc, int pro_index)
+{
+	unsigned char * origin_str;
+	struct selStruct * psel;
+	
+	origin_str = JointWarn_106_get_data(pro_index);
+	psel = JointWarn_106_parepar_data(origin_str);
+
+	JointWarn_create_106(hdc, g_update_sel_index, psel);
+
 }

@@ -75,10 +75,11 @@ Json format
 	"sub_no" : "3",
 	}
 
-更新SEL选项 //例子 106-1, 106-2, 106-3
+更新SEL选项 //例子 106-1, 106-2, 107
 	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_sel",			更新选项
+	"sub_no" : "1",
 	"selects" : [ 
 	{
 		"index" : "1",
@@ -188,6 +189,8 @@ unsigned char action[20];
 unsigned char gTxBuf[TX_MAX_LEN];
 struct warnForm top_warn[2];
 struct textStruct top_warn_text[4];
+int g_update_sel_index;
+
 
 int JointCreateAreaRequest(unsigned char * resultBuf)
 {
@@ -324,6 +327,14 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 
 	}
 	if(0 == strcmp(action, "update_sel")){
+		g_update_sel_index = 0;
+		tmpObject = json_object_object_get(newObject, "sub_no");
+		if(tmpObject == NULL){
+			printf("sub_no NULL\n");
+			return 0;
+		}
+		g_update_sel_index = atoi(json_object_get_string(tmpObject));
+		
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
 		printf("json count = %d\n", count);
