@@ -10,6 +10,7 @@ Json format
 	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_area",		更新选项
+	"display_no" : "102",
 	"selects" : [ 
 	{
 		"index" : "1",
@@ -26,6 +27,7 @@ Json format
 	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_equi",		更新选项
+	"display_no" : "103",
 	"selects" : [ 
 	{
 		"index" : "1",
@@ -42,6 +44,7 @@ Json format
 	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_pro",		更新选项
+	"display_no" : "104-1",
 	"selects" : [ 
 	{
 		"index" : "1",
@@ -54,31 +57,32 @@ Json format
 	]
 	}
 
-显示 105-1
+显示FROM内容 //例子 105-1, 105-2, 105-3, 106-3
 	{
 	"sn" : "abcd",
-	"action" : "display_105",
-	"sub_no" : "1",
-	}
-
-显示 105-2
-	{
-	"sn" : "abcd",
-	"action" : "display_105",
-	"sub_no" : "2",
-	}
-
-显示 105-3
-	{
-	"sn" : "abcd",
-	"action" : "display_105",
-	"sub_no" : "3",
+	"action" : "display_form",
+	"display_no" : "105-1",
+	"selects" : [
+		{
+			"index" : "1",
+			"color" : "red",
+			"textcolor" : "white",
+			"text1" : "具体内容"	
+		},
+		{
+			"index" : "2",
+			"color" : "red",
+			"textcolor" : "white",
+			"text1" : "具体内容"	
+		}
+	]
 	}
 
 更新SEL选项 //例子 106-1, 106-2, 107
 	{
 	"sn" : "abcd", 				设备号
 	"action" : "update_sel",			更新选项
+	"display_no" : "106-1",
 	"sub_no" : "1",
 	"selects" : [ 
 	{
@@ -94,12 +98,6 @@ Json format
 		"text2"  : "提示内容"           提示内容		
 	} 
 	]
-	}
-// 106-3
-	{
-		"sn" : "abcd",
-		"action" : "diplay_106",
-		"sub_no" : "3"
 	}
 
 显示悬浮窗口
