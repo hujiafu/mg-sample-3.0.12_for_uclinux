@@ -47,7 +47,7 @@ extern struct buttonObject select_obj[6];
 extern int select_obj_no;
 extern int top_window;
 extern struct buttonObject btn_cancel;
-
+extern int g_form_count;
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -1348,11 +1348,48 @@ int InitMainWindow(void)
 	else return(1);
 }
 
+void JointRunCmdLine(HDC hdc)
+{
+	switch(final_cmd)
+	{
+		case CMD_NULL:
+			printf("CMD_NULL\n");
+			break;
+		case CMD_CREATE_102:
+			printf("CMD_CREATE_102\n");
+			//create_area_window(hdc);
+			gRow = 4;
+			gColumn = 3;
+			window_no = WIN_102_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			final_cmd = CMD_NULL;
+			break;
+		default:
+			break;
+		
+
+	}
+
+}
+
 unsigned long gCounter;
 
 void check_task(int *counter)
 {
 	printf("check_task\n");
+	while(1){
+		switch(final_cmd)
+		{
+			case CMD_CREATE_102:
+				printf("CMD_CREATE_102\n");
+				//create_area_window(hdc);
+				final_cmd = CMD_NULL;
+				break;
+		}
+
+	}
+
 	return;
 }
 

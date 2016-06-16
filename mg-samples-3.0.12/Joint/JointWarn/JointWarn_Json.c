@@ -184,11 +184,43 @@ extern int final_cmd;
 unsigned int select_cnt;
 unsigned char sn[20];
 unsigned char action[20];
+unsigned char display_no[20];
 unsigned char gTxBuf[TX_MAX_LEN];
 struct warnForm top_warn[2];
 struct textStruct top_warn_text[4];
 int g_update_sel_index;
+struct formStruct * g_pform;
+struct selStruct * g_psel;
+int g_form_count;
+int g_sel_count;
 
+#if 0
+int check_cmd_and_run()
+{
+	printf("check_cmd_and_run\n");
+}
+
+int check_cmd_init(){
+
+        int res = 0;
+        struct itimerval tick;
+
+        signal(SIGALRM, check_cmd_and_run);
+        memset(&tick, 0, sizeof(tick));
+
+        //Timeout to run first time
+        tick.it_value.tv_sec = 1;
+        tick.it_value.tv_usec = 0;
+
+        //After first, the Interval time for clock
+        tick.it_interval.tv_sec = 1;
+        tick.it_interval.tv_usec = 0;
+
+        if(setitimer(ITIMER_REAL, &tick, NULL) < 0)
+            printf("Set timer failed!\n");
+
+}
+#endif
 
 int JointCreateAreaRequest(unsigned char * resultBuf)
 {
@@ -257,8 +289,6 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	int count, size;
 	unsigned char *tmp;
 	int tmpLen;
-	struct selStruct * psel;
-	struct formStruct * pform;
 	int index;
 	unsigned char tbuf[10];
 
@@ -283,6 +313,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		return 0;
 	}
 	strcpy(action, json_object_get_string(tmpObject));
+	strcpy(sn, json_object_get_string(tmpObject));
+	tmpObject = json_object_object_get(newObject, "display_no");
+	if(tmpObject == NULL){
+		printf("action NULL\n");
+		return 0;
+	}
+	strcpy(display_no, json_object_get_string(tmpObject));
 	printf("action %s\n", action);
 	if(0 == strcmp(action, "display_105")){
 		tmpObject = json_object_object_get(newObject, "sub_no");
@@ -335,15 +372,16 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
+		g_sel_count = count;
 		printf("json count = %d\n", count);
 		size = count * sizeof(struct selStruct);
-		psel = malloc(size);
-		if(psel == NULL){
+		g_psel = malloc(size);
+		if(g_psel == NULL){
 			printf("malloc failed\n");
 			return 0;
 		}
-		memset(psel, 0, size);
-		*ptr = psel;
+		memset(g_psel, 0, size);
+		*ptr = g_psel;
 		for(i=0; i < json_object_array_length(selArrayObject); i++){
 
 			selObject = json_object_array_get_idx(selArrayObject, i);
@@ -358,25 +396,25 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
-				memcpy(psel[i].index, tmp, tmpLen);	
+				memcpy(g_psel[i].index, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "color");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
-				memcpy(psel[i].color, tmp, tmpLen);	
+				memcpy(g_psel[i].color, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(psel[i].text1, tmp, tmpLen);	
+				memcpy(g_psel[i].text1, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text2");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(psel[i].text2, tmp, tmpLen);	
+				memcpy(g_psel[i].text2, tmp, tmpLen);	
 			}
 			json_object_put(tmpObject);
 		}
@@ -384,15 +422,16 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	if((0 == strcmp(action, "update_area")) || (0 == strcmp(action, "update_equi")) || (0 == strcmp(action, "update_pro"))){
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
+		g_form_count = count;
 		printf("json count = %d\n", count);
 		size = count * sizeof(struct formStruct);
-		pform = malloc(size);
-		if(pform == NULL){
+		g_pform = malloc(size);
+		if(g_pform == NULL){
 			printf("malloc failed\n");
 			return 0;
 		}
-		memset(pform, 0, size);
-		*ptr = pform;
+		memset(g_pform, 0, size);
+		*ptr = g_pform;
 		for(i=0; i < json_object_array_length(selArrayObject); i++){
 			selObject = json_object_array_get_idx(selArrayObject, i);
 			if(selObject == NULL){
@@ -406,17 +445,30 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
-				memcpy(pform[i].index, tmp, tmpLen);	
+				memcpy(g_pform[i].index, tmp, tmpLen);	
 			}
 			
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(pform[i].text1, tmp, tmpLen);
-				printf("%s\n", pform[i].text1);	
+				memcpy(g_pform[i].text1, tmp, tmpLen);
+				printf("%s\n", g_pform[i].text1);	
 			}
+		}
+		if(0 == strcmp(display_no, "102")){
+			final_cmd = CMD_CREATE_102;
 		}	
+		if(0 == strcmp(display_no, "103")){
+			final_cmd = CMD_CREATE_103;
+		}	
+		if(0 == strcmp(display_no, "104-1")){
+			final_cmd = CMD_CREATE_104_1;
+		}	
+		if(0 == strcmp(display_no, "104-2")){
+			final_cmd = CMD_CREATE_104_2;
+		}
+		return count;	
 	}
 	if(0 == strcmp(action, "update_top")){
 		printf("Json: update_top\n");
