@@ -47,7 +47,11 @@ extern struct buttonObject select_obj[6];
 extern int select_obj_no;
 extern int top_window;
 extern struct buttonObject btn_cancel;
+
+extern struct formStruct * g_pform;
+extern struct selStruct * g_psel;
 extern int g_form_count;
+extern int g_sel_count;
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -875,6 +879,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	int count;
 	int len;
 	HDC hdc;
+	unsigned char * origin_str;	
+	unsigned int ptr;
+
 	
 	switch(message)
 	{
@@ -985,7 +992,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
 						printf("select_apply press\n");
-						create_area_window(hdc);
+						origin_str = JointWarn_102_get_data();
+						printf("=======================================\n");
+						JointAnalysisCmdLine(origin_str, &ptr);
+						printf("=======================================\n");
+						JointRunCmdLine(hdc);
+						printf("=======================================\n");
+						//create_area_window(hdc);
 						break;
 					}
 				}
@@ -1002,7 +1015,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					
 					if(WIN_103_NO == window_no){
 						JointWarn_free_area_buf();
-						create_area_window(hdc);
+						origin_str = JointWarn_102_get_data();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						//create_area_window(hdc);
 						break;
 					}
 					if(WIN_104_1_NO == window_no){
@@ -1358,18 +1373,24 @@ void JointRunCmdLine(HDC hdc)
 		case CMD_CREATE_102:
 			printf("CMD_CREATE_102\n");
 			//create_area_window(hdc);
+			gPform_area = g_pform;
+
 			gRow = 4;
 			gColumn = 3;
 			window_no = WIN_102_NO;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
 			final_cmd = CMD_NULL;
+			strcpy(warn_msg[0].name, select_msg[0]);
+			jointwarn_crate_mainui(hdc, g_pform, warn_msg, 1);
 			break;
 		default:
 			break;
 		
 
 	}
+
+	return;
 
 }
 
