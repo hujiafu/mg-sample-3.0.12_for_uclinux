@@ -52,6 +52,7 @@ extern struct formStruct * g_pform;
 extern struct selStruct * g_psel;
 extern int g_form_count;
 extern int g_sel_count;
+extern struct formStruct g_form[MAX_FORM_NUM];
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -74,6 +75,9 @@ unsigned char equi_sel_no_str[4];
 unsigned char pro_sel_no_str[4];
 unsigned char final_cmd = 0;
 unsigned char select_project_str[50];
+unsigned char area_sel_str[20];
+unsigned char equi_sel_str[20];
+unsigned char prj_sel_str[20];
 int project_str_len;
 
 static void make_welcome_text (void)
@@ -1174,16 +1178,31 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							equipment_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(equi_sel_no_str,"%d", equipment_select_no);
 							printf("frame %s equipment select \n", equi_sel_no_str);
-							JointWarn_free_pro_buf();
-							create_project_window(hdc);
+							memset(equi_sel_str, 0, 20);	
+							strcpy(equi_sel_str, g_form[equipment_select_no].text1);
+							origin_str = JointWarn_104_get_data(equipment_select_no);
+							printf("=======================================\n");
+							JointAnalysisCmdLine(origin_str, &ptr);
+							printf("=======================================\n");
+							JointRunCmdLine(hdc);
+							printf("=======================================\n");
 							goto WinProcEnd;
 						}
 						if(WIN_102_NO == window_no){
 							area_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(area_sel_no_str,"%d", area_select_no);
 							printf("frame %s area select \n", area_sel_no_str);
-							JointWarn_free_equi_buf();
-							create_equipment_window(hdc);
+							
+							memset(area_sel_str, 0, 20);	
+							strcpy(area_sel_str, g_form[area_select_no].text1);
+							//JointWarn_free_equi_buf();
+							origin_str = JointWarn_103_get_data(area_select_no);
+							printf("=======================================\n");
+							JointAnalysisCmdLine(origin_str, &ptr);
+							printf("=======================================\n");
+							JointRunCmdLine(hdc);
+							printf("=======================================\n");
+							//create_equipment_window(hdc);
 							goto WinProcEnd;
 						}
 					}
@@ -1365,6 +1384,8 @@ int InitMainWindow(void)
 
 void JointRunCmdLine(HDC hdc)
 {
+	int len;
+
 	switch(final_cmd)
 	{
 		case CMD_NULL:
@@ -1373,16 +1394,57 @@ void JointRunCmdLine(HDC hdc)
 		case CMD_CREATE_102:
 			printf("CMD_CREATE_102\n");
 			//create_area_window(hdc);
-			gPform_area = g_pform;
+			//gPform_area = g_pform;
 
 			gRow = 4;
 			gColumn = 3;
 			window_no = WIN_102_NO;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			final_cmd = CMD_NULL;
 			strcpy(warn_msg[0].name, select_msg[0]);
-			jointwarn_crate_mainui(hdc, g_pform, warn_msg, 1);
+			//jointwarn_crate_mainui(hdc, g_pform, warn_msg, 1);
+			jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_103:
+			printf("CMD_CREATE_103\n");
+			//create_equipment_window(hdc);
+			gRow = 4;
+			gColumn = 3;
+			window_no = WIN_103_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			strcpy(warn_msg[0].name, area_sel_str);
+			strcpy(warn_msg[1].name, select_msg[1]);
+	
+			project_str_len = 0;
+			memset(select_project_str, 0, 50);
+			len = strlen(warn_msg[0].name);
+			len = len > 50 ? 50 : len;
+			memcpy(select_project_str, warn_msg[0].name, len);
+			project_str_len += len;
+	
+			jointwarn_crate_mainui(hdc, g_form, warn_msg, 2);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_104_1:
+			printf("CMD_CREATE_104\n");
+			
+			gRow = 5;
+			gColumn = 2;
+			window_no = WIN_104_1_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			strcpy(warn_msg[1].name, equi_sel_str);
+			strcpy(warn_msg[2].name, select_msg[2]);
+
+			len = strlen(warn_msg[1].name);
+			len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
+			memcpy(select_project_str + project_str_len, warn_msg[1].name, len);
+			project_str_len += len;
+
+			jointwarn_crate_mainui(hdc, g_form, warn_msg, 3);
+			final_cmd = CMD_NULL;
 			break;
 		default:
 			break;

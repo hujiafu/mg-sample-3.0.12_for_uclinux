@@ -3,6 +3,8 @@
 
 #define TX_MAX_LEN	1024
 
+#define MAX_FORM_NUM	50
+
 struct selStruct{
         unsigned char index[4];
         unsigned char color[10];

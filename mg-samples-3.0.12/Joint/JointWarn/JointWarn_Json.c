@@ -127,7 +127,9 @@ Json format
 设备发送区域请求
 	{
 		"sn" : "abcd",
-		"action" : "request_area"
+		"display_no" : "101"
+		"select_no" : "0"
+		"back_pressed" : "Ture"
 	}
 
 设备发送设备请求
@@ -194,6 +196,7 @@ struct selStruct * g_psel;
 int g_form_count;
 int g_sel_count;
 
+struct formStruct g_form[MAX_FORM_NUM];
 #if 0
 int check_cmd_and_run()
 {
@@ -281,6 +284,22 @@ int JointCreateOperRequest(unsigned char * resultBuf)
 	return;
 }
 
+int JointWarnCreateRequest(unsigned char * resultBuf, unsigned char * display_no, unsigned char * select_no, unsigned char * back_pressed, unsigned char * cannel)
+{
+	json_object *postObject;
+
+	postObject = json_object_new_object();
+	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
+	json_object_object_add(postObject, "display_no", json_object_new_string(display_no));
+	json_object_object_add(postObject, "select_no", json_object_new_string(select_no));
+	json_object_object_add(postObject, "back_pressed", json_object_new_string(back_pressed));
+	json_object_object_add(postObject, "cannel", json_object_new_string(cannel));
+
+	strcpy(resultBuf, json_object_get_string(postObject));
+	json_object_put(postObject);
+
+	return;
+}
 
 int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 
@@ -290,6 +309,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	unsigned char *tmp;
 	int tmpLen;
 	int index;
+	int len;
 	unsigned char tbuf[10];
 
 	newObject = NULL;
@@ -424,15 +444,17 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		count = json_object_array_length(selArrayObject);
 		g_form_count = count;
 		printf("json count = %d\n", count);
-		size = count * sizeof(struct formStruct);
-		g_pform = malloc(size);
-		if(g_pform == NULL){
-			printf("malloc failed\n");
-			return 0;
-		}
-		memset(g_pform, 0, size);
-		*ptr = g_pform;
-		for(i=0; i < json_object_array_length(selArrayObject); i++){
+		//size = count * sizeof(struct formStruct);
+		//g_pform = malloc(size);
+		//if(g_pform == NULL){
+		//	printf("malloc failed\n");
+		//	return 0;
+		//}
+		//memset(g_pform, 0, size);
+		//*ptr = g_pform;
+		len = json_object_array_length(selArrayObject) > MAX_FORM_NUM ? MAX_FORM_NUM : json_object_array_length(selArrayObject);
+		//for(i=0; i < json_object_array_length(selArrayObject); i++){
+		for(i=0; i < len; i++){
 			selObject = json_object_array_get_idx(selArrayObject, i);
 			if(selObject == NULL){
 				printf("selObject NULL\n");
@@ -445,15 +467,17 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
-				memcpy(g_pform[i].index, tmp, tmpLen);	
+				//memcpy(g_pform[i].index, tmp, tmpLen);	
+				memcpy(g_form[i].index, tmp, tmpLen);	
 			}
 			
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(g_pform[i].text1, tmp, tmpLen);
-				printf("%s\n", g_pform[i].text1);	
+				//memcpy(g_pform[i].text1, tmp, tmpLen);
+				memcpy(g_form[i].text1, tmp, tmpLen);
+				printf("%s\n", g_form[i].text1);	
 			}
 		}
 		if(0 == strcmp(display_no, "102")){
