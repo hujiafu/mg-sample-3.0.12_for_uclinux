@@ -284,7 +284,7 @@ int JointCreateOperRequest(unsigned char * resultBuf)
 	return;
 }
 
-int JointWarnCreateRequest(unsigned char * resultBuf, unsigned char * display_no, unsigned char * select_no, unsigned char * back_pressed, unsigned char * cannel)
+int JointWarnCreateRequest(unsigned char * resultBuf, unsigned char * display_no, unsigned char * select_no, unsigned char * back, unsigned char * cannel, unsigned char *id)
 {
 	json_object *postObject;
 
@@ -292,8 +292,9 @@ int JointWarnCreateRequest(unsigned char * resultBuf, unsigned char * display_no
 	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
 	json_object_object_add(postObject, "display_no", json_object_new_string(display_no));
 	json_object_object_add(postObject, "select_no", json_object_new_string(select_no));
-	json_object_object_add(postObject, "back_pressed", json_object_new_string(back_pressed));
-	json_object_object_add(postObject, "cannel", json_object_new_string(cannel));
+	json_object_object_add(postObject, "id", json_object_new_string(id));
+	json_object_object_add(postObject, "back_btn", json_object_new_string(back));
+	json_object_object_add(postObject, "cannel_btn", json_object_new_string(cannel));
 
 	strcpy(resultBuf, json_object_get_string(postObject));
 	json_object_put(postObject);

@@ -36,6 +36,7 @@ extern unsigned char udp_buf[UDP_MAX_LEN];
 extern const unsigned char request_area[];
 extern const unsigned char request_equi[];
 extern const unsigned char request_pro[];
+extern unsigned char display_no_str[10];
 
 int page_cnt1;
 int form_tot_cnt;
@@ -92,6 +93,9 @@ unsigned char * JointWarn_104_get_data(unsigned int sel_index){
 	strcpy(request_pro_str, request_pro);
 	strcat(request_pro_str, equi_no_sel);
 	strcat(request_pro_str, "\"}");
+
+	JointWarnCreateRequest(request_pro_str, display_no_str, equi_no_sel, "false", "false", "null");
+
 	JointWarn_udp_send(request_pro_str, 0);
         return udp_buf; //only for test
 

@@ -78,6 +78,7 @@ unsigned char select_project_str[50];
 unsigned char area_sel_str[20];
 unsigned char equi_sel_str[20];
 unsigned char prj_sel_str[20];
+unsigned char display_no_str[10];
 int project_str_len;
 
 static void make_welcome_text (void)
@@ -1018,15 +1019,19 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					printf("back pressed\n");
 					
 					if(WIN_103_NO == window_no){
-						JointWarn_free_area_buf();
+						//JointWarn_free_area_buf();
 						origin_str = JointWarn_102_get_data();
 						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
 						//create_area_window(hdc);
 						break;
 					}
 					if(WIN_104_1_NO == window_no){
-						JointWarn_free_equi_buf();
-						create_equipment_window(hdc);
+						//JointWarn_free_equi_buf();
+						//create_equipment_window(hdc);
+						origin_str = JointWarn_103_get_data(area_select_no);
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
 						break;
 					}
 					if(WIN_106_1_NO == window_no){
@@ -1063,15 +1068,15 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					
 					if(WIN_102_NO == window_no){
 						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
-						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
+						jointwarn_paint_frame(hdc, &g_form[cnt], form_count, 1);
 						break;
 					}
 					if(WIN_103_NO == window_no){
-						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
+						jointwarn_paint_frame(hdc, &g_form[cnt], form_count, 2);
 						break;
 					}
 					if(WIN_104_1_NO == window_no){
-						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
+						jointwarn_paint_frame(hdc, &g_form[cnt], form_count, 3);
 						break;
 					}
 					if(WIN_106_1_NO == window_no){
@@ -1117,15 +1122,15 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 
 					if(WIN_102_NO == window_no){
 						//jointwarn_paint_frame(hdc, &menu_hiz[cnt], form_count);
-						jointwarn_paint_frame(hdc, &gPform_area[cnt], form_count, 1);
+						jointwarn_paint_frame(hdc, &g_form[cnt], form_count, 1);
 						break;
 					}
 					if(WIN_103_NO == window_no){
-						jointwarn_paint_frame(hdc, &gPform_equi[cnt], form_count, 2);
+						jointwarn_paint_frame(hdc, &g_form[cnt], form_count, 2);
 						break;
 					}
 					if(WIN_104_1_NO == window_no){
-						jointwarn_paint_frame(hdc, &gPform_pro[cnt], form_count, 3);
+						jointwarn_paint_frame(hdc, &g_form[cnt], form_count, 3);
 						break;
 					}
 					if(WIN_106_1_NO == window_no){
@@ -1391,10 +1396,18 @@ void JointRunCmdLine(HDC hdc)
 		case CMD_NULL:
 			printf("CMD_NULL\n");
 			break;
+		case CMD_CREATE_101:
+			window_no = WIN_101_NO;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "101");
+			jointwarn_create_select(hdc, &menu_hz1[0], &menu_hz1_warn);
+			break;
 		case CMD_CREATE_102:
 			printf("CMD_CREATE_102\n");
 			//create_area_window(hdc);
 			//gPform_area = g_pform;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "102");
 
 			gRow = 4;
 			gColumn = 3;
@@ -1408,6 +1421,8 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_103:
 			printf("CMD_CREATE_103\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "103");
 			//create_equipment_window(hdc);
 			gRow = 4;
 			gColumn = 3;
@@ -1428,7 +1443,9 @@ void JointRunCmdLine(HDC hdc)
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_1:
-			printf("CMD_CREATE_104\n");
+			printf("CMD_CREATE_104_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "104-1");
 			
 			gRow = 5;
 			gColumn = 2;
