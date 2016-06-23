@@ -25,7 +25,7 @@ static char welcome_text [512];
 static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
 static RECT msg_rc = {10, 100, 600, 400};
-unsigned char jointwarn_sn[4] = "001";
+unsigned char jointwarn_sn[4] = "abcd";
 
 extern struct buttonObject btn_back_1;
 extern struct buttonObject btn_front_page_1;
@@ -977,11 +977,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//create_area_window(hdc);
 			//JointWarn_create_105(hdc, 3);
 			//JointWarn_create_106(hdc, 1);
-			create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
+			//create_select_window(hdc, &menu_hz1[0], &menu_hz1_warn);
 			//JointWarn_udp_send("{\"sn\":\"abc\", \"action\":\"request_area\"}", 0);
 			//JointWarn_create_top_back(hdc, 480, 280);
 			//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 			//EndPaint(hWnd,hdc);
+
+			final_cmd = CMD_CREATE_101; 
+			JointRunCmdLine(hdc);
 
 			EndPaint(hMainWnd,hdc);
 			break;
@@ -997,7 +1000,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
 						printf("select_apply press\n");
-						origin_str = JointWarn_102_get_data();
+						origin_str = JointWarn_102_get_data(0);
 						printf("=======================================\n");
 						JointAnalysisCmdLine(origin_str, &ptr);
 						printf("=======================================\n");
@@ -1020,7 +1023,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					
 					if(WIN_103_NO == window_no){
 						//JointWarn_free_area_buf();
-						origin_str = JointWarn_102_get_data();
+						origin_str = JointWarn_102_get_data(0);
 						JointAnalysisCmdLine(origin_str, &ptr);
 						JointRunCmdLine(hdc);
 						//create_area_window(hdc);
@@ -1401,6 +1404,7 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "101");
 			jointwarn_create_select(hdc, &menu_hz1[0], &menu_hz1_warn);
+			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_102:
 			printf("CMD_CREATE_102\n");
