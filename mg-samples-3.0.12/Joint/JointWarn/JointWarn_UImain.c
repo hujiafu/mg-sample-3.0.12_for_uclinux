@@ -64,27 +64,27 @@ void jointwarn_test(HDC hdc)
 	FillBox(hdc, 5, 5, 200, 300);
 }
 
+unsigned char * JointWarn_
+
 unsigned char * JointWarn_102_get_data(unsigned int sel_index){
         //TODO: get data from server
 	unsigned char request_str[500];
 	unsigned char sel[4];
 
 	sprintf(sel, "%d", sel_index);
-	JointWarnCreateRequest(request_str, display_no_str, sel, "false", "false", "null");
-	JointWarn_udp_send(request_area, 0);
+	JointWarnCreateRequest(request_str, "normal", display_no_str, sel, "false", "false", "null");
+	JointWarn_udp_send(request_str, 0);
         return udp_buf; //only for test
 
 }
 unsigned char * JointWarn_103_get_data(unsigned int sel_index){
         //TODO: get data from server
-	unsigned char area_no_sel[4];
-	unsigned char request_equi_str[100];
+	unsigned char sel[4];
+	unsigned char request_str[500];
 
-	sprintf(area_no_sel, "%d", sel_index);
-	strcpy(request_equi_str, request_equi);
-	strcat(request_equi_str, area_no_sel);
-	strcat(request_equi_str, "\"}");
-	JointWarn_udp_send(request_equi_str, 0);
+	sprintf(sel, "%d", sel_index);
+	JointWarnCreateRequest(request_str, "normal", display_no_str, sel, "false", "false", "null");
+	JointWarn_udp_send(request_str, 0);
         return udp_buf; //only for test
 
 }

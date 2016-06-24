@@ -284,12 +284,13 @@ int JointCreateOperRequest(unsigned char * resultBuf)
 	return;
 }
 
-int JointWarnCreateRequest(unsigned char * resultBuf, unsigned char * display_no, unsigned char * select_no, unsigned char * back, unsigned char * cannel, unsigned char *id)
+int JointWarnCreateRequest(unsigned char * resultBuf, unsigned char * action, unsigned char * display_no, unsigned char * select_no, unsigned char * back, unsigned char * cannel, unsigned char *id)
 {
 	json_object *postObject;
 
 	postObject = json_object_new_object();
 	json_object_object_add(postObject, "sn", json_object_new_string(jointwarn_sn));
+	json_object_object_add(postObject, "action", json_object_new_string(action));
 	json_object_object_add(postObject, "display_no", json_object_new_string(display_no));
 	json_object_object_add(postObject, "select_no", json_object_new_string(select_no));
 	json_object_object_add(postObject, "id", json_object_new_string(id));

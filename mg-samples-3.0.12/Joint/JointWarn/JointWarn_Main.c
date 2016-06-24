@@ -25,7 +25,7 @@ static char welcome_text [512];
 static char msg_text [256];
 static RECT welcome_rc = {10, 100, 600, 400};
 static RECT msg_rc = {10, 100, 600, 400};
-unsigned char jointwarn_sn[4] = "abcd";
+unsigned char jointwarn_sn[10] = "abcd";
 
 extern struct buttonObject btn_back_1;
 extern struct buttonObject btn_front_page_1;
