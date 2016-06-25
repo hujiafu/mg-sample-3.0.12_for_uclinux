@@ -383,6 +383,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}	
 
 	}
+	if(0 == strcmp(action, "display_form")){
+		if(0 == strcmp(display_no, "105-1")){
+			final_cmd = CMD_CREATE_105_1;
+		}	
+		selArrayObject = json_object_object_get(newObject, "selects");
+
+	}
 	if(0 == strcmp(action, "update_sel")){
 		g_update_sel_index = 0;
 		tmpObject = json_object_object_get(newObject, "sub_no");

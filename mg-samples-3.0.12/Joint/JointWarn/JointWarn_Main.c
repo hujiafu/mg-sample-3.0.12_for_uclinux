@@ -81,6 +81,11 @@ unsigned char prj_sel_str[20];
 unsigned char display_no_str[10];
 int project_str_len;
 
+const char *msg_104_2[]=
+{
+	"请选择作业项目！",
+};
+
 static void make_welcome_text (void)
 {
     	const char* sys_charset = GetSysCharset (TRUE);
@@ -1023,16 +1028,18 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 					
 					if(WIN_103_NO == window_no){
 						//JointWarn_free_area_buf();
-						origin_str = JointWarn_102_get_data(0);
+						//origin_str = JointWarn_102_get_data(0);
+						origin_str = JointWarn_back_request();
 						JointAnalysisCmdLine(origin_str, &ptr);
 						JointRunCmdLine(hdc);
 						//create_area_window(hdc);
 						break;
 					}
-					if(WIN_104_1_NO == window_no){
+					if(WIN_104_1_NO == window_no || WIN_104_2_NO == window_no){
 						//JointWarn_free_equi_buf();
 						//create_equipment_window(hdc);
-						origin_str = JointWarn_103_get_data(area_select_no);
+						//origin_str = JointWarn_103_get_data(area_select_no);
+						origin_str = JointWarn_back_request();
 						JointAnalysisCmdLine(origin_str, &ptr);
 						JointRunCmdLine(hdc);
 						break;
@@ -1177,7 +1184,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							memcpy(select_project_str + project_str_len, warn_msg[2].name, len);
 							project_str_len += len;
 							
-							JointWarn_create_105(hdc, project_select_no);
+							origin_str = JointWarn_sel_request(project_select_no);
+							printf("=======================================\n");
+							JointAnalysisCmdLine(origin_str, &ptr);
+							printf("=======================================\n");
+							JointRunCmdLine(hdc);
+							printf("=======================================\n");
+							//JointWarn_create_105(hdc, project_select_no);
 							//JointWarn_create_106(hdc, 1, project_select_no);
 							//create_project_window(hdc);
 							goto WinProcEnd;
@@ -1466,6 +1479,24 @@ void JointRunCmdLine(HDC hdc)
 
 			jointwarn_crate_mainui(hdc, g_form, warn_msg, 3);
 			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_104_2:
+			printf("CMD_CREATE_104_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "104-2");
+			gRow = 5;
+			gColumn = 2;
+			window_no = WIN_104_1_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			strcpy(warn_msg[0].name, msg_104_2[0]);
+			jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_105_1:
+			printf("CMD_CREATE_105\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "105-1");
 			break;
 		default:
 			break;

@@ -64,7 +64,24 @@ void jointwarn_test(HDC hdc)
 	FillBox(hdc, 5, 5, 200, 300);
 }
 
-unsigned char * JointWarn_
+unsigned char * JointWarn_back_request(){
+	unsigned char request_str[500];
+	JointWarnCreateRequest(request_str, "normal", display_no_str, "null", "true", "false", "null");
+	JointWarn_udp_send(request_str, 0);
+        return udp_buf; //only for test
+}
+
+unsigned char * JointWarn_sel_request(unsigned int sel_index){
+
+	unsigned char request_str[500];
+	unsigned char sel[4];
+
+	sprintf(sel, "%d", sel_index);
+	JointWarnCreateRequest(request_str, "normal", display_no_str, sel, "false", "false", "null");
+	JointWarn_udp_send(request_str, 0);
+        return udp_buf; //only for test
+
+}
 
 unsigned char * JointWarn_102_get_data(unsigned int sel_index){
         //TODO: get data from server
@@ -90,17 +107,14 @@ unsigned char * JointWarn_103_get_data(unsigned int sel_index){
 }
 unsigned char * JointWarn_104_get_data(unsigned int sel_index){
         //TODO: get data from server
-	unsigned char equi_no_sel[4];
-	unsigned char request_pro_str[100];
+	unsigned char sel[4];
+	unsigned char request_str[500];
 
-	sprintf(equi_no_sel, "%d", sel_index);
-	strcpy(request_pro_str, request_pro);
-	strcat(request_pro_str, equi_no_sel);
-	strcat(request_pro_str, "\"}");
+	sprintf(sel, "%d", sel_index);
 
-	JointWarnCreateRequest(request_pro_str, display_no_str, equi_no_sel, "false", "false", "null");
+	JointWarnCreateRequest(request_str, "normal", display_no_str, sel, "false", "false", "null");
 
-	JointWarn_udp_send(request_pro_str, 0);
+	JointWarn_udp_send(request_str, 0);
         return udp_buf; //only for test
 
 }
