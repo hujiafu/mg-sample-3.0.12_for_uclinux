@@ -4,6 +4,7 @@
 #define TX_MAX_LEN	1024
 
 #define MAX_FORM_NUM	50
+#define MAX_MSGFORM_NUM 4
 
 struct selStruct{
         unsigned char index[4];
@@ -17,6 +18,12 @@ struct formStruct{
 	unsigned char text1[22];
 };
 
+struct msgformStruct{
+	unsigned char index[4];
+	unsigned char color[10];
+	unsigned char textcolor[10];
+	unsigned char text1[22];
+};
 
 
 #endif 

@@ -235,6 +235,36 @@ void jointwarn_paint_flag(HDC hdc, int left, int right)
 
 }
 
+void jointwarn_prompt(HDC hdc, struct textStruct * warn_text, int msg_cnt)
+{
+	int offset_x;
+	int msgHeight;
+	int start_x, start_y;
+	int font_len, font_cnt;
+	int i;
+	PLOGFONT s_font;
+	
+	SetBkMode(hdc,BM_TRANSPARENT);        
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x69, 0x69, 0x69, 0xFF));
+
+	msgHeight = FONT30_HIGH_PIXEL * msg_cnt;
+	start_x = 0;
+	start_y = MWINDOW_BY - msgHeight;
+	FillBox(hdc, start_x, start_y, MWINDOW_RX, msgHeight);
+	SetTextColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+	FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn_text[0].filesize, 0);
+	SelectFont(hdc,s_font);
+	
+	for(i=0; i<msg_cnt; i++){
+		font_cnt = strlen(warn_text[i].name);
+		font_len = font_cnt * FONT30_PIXEL;
+		offset_x = (MWINDOW_RX - font_len) >> 1;
+		TextOut(hdc, offset_x + warn_text[i].offsetx, start_y + warn_text[i].offsety + FONT30_HIGH_PIXEL * i, warn_text[i].name);
+	}
+	DestroyLogFont(s_font);
+}
+
 void jointwarn_paint_warning(HDC hdc, struct textStruct * warn_text, int msg_linecnt)
 {
 	int offsety;
@@ -278,10 +308,10 @@ void jointwarn_paint_back(HDC hdc)
 {
 	PLOGFONT s_font;
 	
-	back_width = 120;
-	back_height = 50;
+	back_width = 80;
+	back_height = 40;
 	btn_back_1.point_start.x = BACK_XOFFSET;
-	btn_back_1.point_start.y = SPARE_Y + 35;
+	btn_back_1.point_start.y = SPARE_Y + 5;
 	btn_back_1.point_end.x = btn_back_1.point_start.x + back_width;
 	btn_back_1.point_end.y = btn_back_1.point_start.y + back_height;
 	btn_back_1.active = 1;
@@ -332,7 +362,7 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 		xx += partWidth;
 	}
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
-	FillBox(hdc, 0, 0, width, SPARE_Y);	
+	FillBox(hdc, 0, 0, width, height);	
 	
 	for(i=0; i<gRow; i++){
 		//DrawHDotLine(hdc, hx[i], hy[i], width);
@@ -340,7 +370,8 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 	}
 	for(i=0; i<gColumn; i++){
 		//DrawVDotLine(hdc, vx[i], vy[i], height);	
-		LineEx(hdc, vx[i], vy[i], vx[i], height - partHeight);
+		//LineEx(hdc, vx[i], vy[i], vx[i], height - partHeight);
+		LineEx(hdc, vx[i], vy[i], vx[i], SPARE_Y);
 	}
 
 	form_tot_cnt = total_frame_cnt / window_frame_cnt;
@@ -353,8 +384,8 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 	
 	printf("partWidth = %d, form_count = %d\n", partWidth, form_count);
 	//Rectangle(hdc, partWidth, yy - partHeight + 20, width - (2 * partWidth), height - 20);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
-	FillBox(hdc, 0, SPARE_Y, width, height - SPARE_Y);	
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+	//FillBox(hdc, 0, SPARE_Y, width, height - SPARE_Y);	
 
 
 
@@ -388,22 +419,23 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 	}
 	DestroyLogFont(s_font);
 #endif	
-	jointwarn_paint_warning(hdc, warn_text, msg_linecnt);
+	//jointwarn_paint_warning(hdc, warn_text, msg_linecnt);
+	jointwarn_prompt(hdc, warn_text, 1);
 
 
 
 
 
 
-	btn_front_page_1.point_start.x = 10;
+	btn_front_page_1.point_start.x = 300;
 	btn_front_page_1.point_start.y = yy - partHeight + 10;
-	btn_front_page_1.point_end.x = 50;
-	btn_front_page_1.point_end.y = yy - partHeight + 50;
+	btn_front_page_1.point_end.x = 340;
+	btn_front_page_1.point_end.y = yy - partHeight + 40;
 	btn_front_page_1.active = 0;
-	btn_next_page_1.point_start.x = width - 10;
+	btn_next_page_1.point_start.x = width - 300;
 	btn_next_page_1.point_start.y = yy - partHeight + 10;
-	btn_next_page_1.point_end.x = width - 50;
-	btn_next_page_1.point_end.y = yy - partHeight + 50;
+	btn_next_page_1.point_end.x = width - 340;
+	btn_next_page_1.point_end.y = yy - partHeight + 40;
 	btn_next_page_1.active = 0;
 	printf("%d, %d, %d, %d\n", btn_next_page_1.point_start.x, btn_next_page_1.point_end.x, btn_next_page_1.point_start.y, btn_next_page_1.point_end.y);
 	s_point[0][0].x = btn_front_page_1.point_start.x;
@@ -425,7 +457,7 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 		right = 1;
 	}	
 	jointwarn_paint_flag(hdc, left, right);
-
+#if 0
 	back_width = 120;
 	back_height = 50;
 	btn_back_1.point_start.x = BACK_XOFFSET;
@@ -441,7 +473,8 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 	SetTextColor(hdc, COLOR_lightwhite);
 	TextOut(hdc, btn_back_1.point_start.x + back.offsetx, btn_back_1.point_start.y + back.offsety, back.name);	
 	DestroyLogFont(s_font);
-	
+#endif	
+	jointwarn_paint_back(hdc);
 	//EndPaint(hWnd,hdc);	
 
 }
@@ -456,7 +489,7 @@ void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruc
 	
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
-	FillBox(hdc, 0, 0, MWINDOW_RX, SPARE_Y);	
+	FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);	
 	
 	SetTextColor(hdc, COLOR_lightwhite);
 
@@ -495,9 +528,10 @@ void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruc
 		DestroyLogFont(s_font);
 	}
 
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
-	FillBox(hdc, 0, SPARE_Y, MWINDOW_RX, MWINDOW_BY - SPARE_Y);	
-	jointwarn_paint_warning(hdc, warn, 1);
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+	//FillBox(hdc, 0, SPARE_Y, MWINDOW_RX, MWINDOW_BY - SPARE_Y);	
+	//jointwarn_paint_warning(hdc, warn, 1);
+	jointwarn_prompt(hdc, warn, 1);
 	jointwarn_paint_back(hdc);
 	//start_x = (MWINDOW_RX - frame_width) >> 1;
 	//start_y = (SPARE_Y >> 1);

@@ -9,6 +9,7 @@
 
 #include "JointWarn_UImain.h"
 #include "JointWarn_network.h"
+#include "JointWarn_Json.h"
 
 extern const char test_menu_hz1[];
 extern const char msg_hz1[];
@@ -17,7 +18,8 @@ extern const char msg_hz3[];
 extern unsigned char select_project_str[100];
 extern const unsigned char request_oper[];
 extern unsigned char udp_buf[UDP_MAX_LEN];
-
+extern unsigned char display_no_str[10];
+extern int g_msgform_count;
 int index_105 = 0;
 
 
@@ -48,7 +50,54 @@ int JointWarn_105_parepar_data(unsigned char * originStr)
         return index;
 }
 
+void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg)
+{					      
+	unsigned int back_color;
+	int i, tmp, font_len = 0;
+	struct warnForm warn[3];
+	struct textStruct text_msg[3];
 
+	for(i=0; i<g_msgform_count; i++){
+		font_len = font_len > JointWarn_calc_msglen(msg[i].text1) ? font_len : JointWarn_calc_msglen(msg[i].text1);	
+	}
+	for(i=0; i<g_msgform_count; i++){
+		tmp = (font_len - JointWarn_calc_msglen(msg[i].text1)) >> 1;	
+		if(0 == strcmp("white", msg[i].textcolor)){
+			text_msg[i].color = 0xffffffff;
+		}
+		if(0 == strcmp("blue", msg[i].textcolor)){
+			text_msg[i].color = 0x00008bff;
+		}
+		if(0 == strcmp("red", msg[i].textcolor)){
+			text_msg[i].color = 0xff0000ff;
+		}
+		text_msg[i].offsetx = FONT30_PIXEL + tmp;
+		text_msg[i].offsety = 18;
+		text_msg[i].filesize = 30;
+		strcpy(text_msg[i].name, msg[i].text1);
+		warn[i].messageCount = 1;
+		if(0 == strcmp("red", msg[i].color)){
+			warn[i].formColor = 0xff0000ff;
+		}
+		if(0 == strcmp("green", msg[i].color)){
+			warn[i].formColor = 0x00ff00ff;
+		}
+		if(0 == strcmp("yellow", msg[i].color)){
+			warn[i].formColor = 0xffff00ff;
+		}
+		warn[i].width = font_len;
+		warn[i].height = FONT30_HIGH_PIXEL * 2;
+		warn[i].text[0] = &text_msg[i];
+
+	}
+	back_color = 0x473c8bff;
+	JointWarn_paint_back(hdc, back_color);
+	if(0 == strcmp("105-1", display_no_str)){
+		JointWarn_create_spare(hdc);
+	}
+	JointWarn_create_msg(hdc, warn, 2);
+
+}
 
 void JointWarn_create_105(HDC hdc, int pro_index)
 {

@@ -194,9 +194,11 @@ int g_update_sel_index;
 struct formStruct * g_pform;
 struct selStruct * g_psel;
 int g_form_count;
+int g_msgform_count;
 int g_sel_count;
 
 struct formStruct g_form[MAX_FORM_NUM];
+struct msgformStruct g_msgform[MAX_MSGFORM_NUM];
 #if 0
 int check_cmd_and_run()
 {
@@ -387,7 +389,55 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "105-1")){
 			final_cmd = CMD_CREATE_105_1;
 		}	
+		if(0 == strcmp(display_no, "105-2")){
+			final_cmd = CMD_CREATE_105_2;
+		}	
+		if(0 == strcmp(display_no, "105-3")){
+			final_cmd = CMD_CREATE_105_3;
+		}	
 		selArrayObject = json_object_object_get(newObject, "selects");
+		count = json_object_array_length(selArrayObject);
+		g_msgform_count = count;
+		printf("msgform count = %d\n", count);
+		len = json_object_array_length(selArrayObject) > MAX_MSGFORM_NUM ? MAX_MSGFORM_NUM : json_object_array_length(selArrayObject);
+		for(i=0; i < len; i++){
+			selObject = json_object_array_get_idx(selArrayObject, i);
+			if(selObject == NULL){
+				printf("selObject NULL\n");
+				continue;
+			}else{
+				selObject = json_tokener_parse(json_object_get_string(selObject));
+			}
+			
+			tmpObject = json_object_object_get(selObject, "index");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+				memcpy(g_msgform[i].index, tmp, tmpLen);	
+			}
+			tmpObject = json_object_object_get(selObject, "color");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memcpy(g_msgform[i].color, tmp, tmpLen);
+				printf("color %s\n", tmp);
+			}
+			tmpObject = json_object_object_get(selObject, "textcolor");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memcpy(g_msgform[i].textcolor, tmp, tmpLen);
+				printf("textcolor %s\n", tmp);
+			}
+			tmpObject = json_object_object_get(selObject, "text1");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				memcpy(g_msgform[i].text1, tmp, tmpLen);
+			}
+
+		}
+		return count;
 
 	}
 	if(0 == strcmp(action, "update_sel")){

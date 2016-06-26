@@ -53,6 +53,7 @@ extern struct selStruct * g_psel;
 extern int g_form_count;
 extern int g_sel_count;
 extern struct formStruct g_form[MAX_FORM_NUM];
+extern struct msgformStruct g_msgform[MAX_MSGFORM_NUM];
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -224,7 +225,7 @@ struct textStruct menu_hz1_warn = {
 	.name = "请选择操作项目",
 	.filesize = 30,
 	.offsetx = 10,
-	.offsety = 5,
+	.offsety = 2,
 	.color = 0x00008BFF,
 };
 
@@ -233,7 +234,7 @@ struct textStruct warn_msg[] = {
 		.name = "请选择作业区域！",
 		.filesize = 30,
 		.offsetx = 10,
-		.offsety = 5,
+		.offsety = 2,
 		.color = 0x00008BFF,
 	},
 	{
@@ -248,6 +249,26 @@ struct textStruct warn_msg[] = {
 		.filesize = 30,
 		.offsetx = 10,
 		.offsety = 5,
+		.color = 0x00008BFF,
+	},
+};
+
+struct textStruct area_msg[] = {
+	{
+		.name = "请选择作业区域！",
+		.filesize = 30,
+		.offsetx = 10,
+		.offsety = 2,
+		.color = 0x00008BFF,
+	},
+};
+
+struct textStruct equi_msg[] = {
+	{
+		.name = "请选择作业区域！",
+		.filesize = 30,
+		.offsetx = 10,
+		.offsety = 2,
 		.color = 0x00008BFF,
 	},
 };
@@ -351,8 +372,8 @@ struct textStruct warn_canel = {
 
 struct textStruct back ={
 	.name = "返回",
-	.filesize = 40,
-	.offsetx = 20,
+	.filesize = 30,
+	.offsetx = 10,
 	.offsety = 5,
 };
 
@@ -1044,6 +1065,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						JointRunCmdLine(hdc);
 						break;
 					}
+					if(WIN_105_1_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					
+					}
 					if(WIN_106_1_NO == window_no){
 						JointWarn_free_pro_buf();
 						create_project_window(hdc);
@@ -1178,11 +1206,11 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							sprintf(pro_sel_no_str,"%d", project_select_no);
 							printf("frame %s project select \n", pro_sel_no_str);
 							
-							strcpy(warn_msg[2].name, gPform_pro[project_select_no].text1);
-							len = strlen(warn_msg[2].name);
-							len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
-							memcpy(select_project_str + project_str_len, warn_msg[2].name, len);
-							project_str_len += len;
+							//strcpy(warn_msg[2].name, gPform_pro[project_select_no].text1);
+							//len = strlen(warn_msg[2].name);
+							//len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
+							//memcpy(select_project_str + project_str_len, warn_msg[2].name, len);
+							//project_str_len += len;
 							
 							origin_str = JointWarn_sel_request(project_select_no);
 							printf("=======================================\n");
@@ -1446,7 +1474,10 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_103_NO;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			strcpy(warn_msg[0].name, area_sel_str);
+			strcpy(area_msg[0].name, area_sel_str);
+			strcat(area_msg[0].name, "，");
+			strcat(area_msg[0].name, select_msg[1]);
+			#if 0
 			strcpy(warn_msg[1].name, select_msg[1]);
 	
 			project_str_len = 0;
@@ -1455,8 +1486,8 @@ void JointRunCmdLine(HDC hdc)
 			len = len > 50 ? 50 : len;
 			memcpy(select_project_str, warn_msg[0].name, len);
 			project_str_len += len;
-	
-			jointwarn_crate_mainui(hdc, g_form, warn_msg, 2);
+	#endif
+			jointwarn_crate_mainui(hdc, g_form, area_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_1:
@@ -1469,6 +1500,11 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_104_1_NO;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
+			strcpy(equi_msg[0].name, area_sel_str);
+			strcat(equi_msg[0].name, equi_sel_str);
+			strcat(equi_msg[0].name, "，");
+			strcat(equi_msg[0].name, select_msg[2]);
+		#if 0
 			strcpy(warn_msg[1].name, equi_sel_str);
 			strcpy(warn_msg[2].name, select_msg[2]);
 
@@ -1476,8 +1512,8 @@ void JointRunCmdLine(HDC hdc)
 			len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
 			memcpy(select_project_str + project_str_len, warn_msg[1].name, len);
 			project_str_len += len;
-
-			jointwarn_crate_mainui(hdc, g_form, warn_msg, 3);
+		#endif
+			jointwarn_crate_mainui(hdc, g_form, equi_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_2:
@@ -1494,9 +1530,25 @@ void JointRunCmdLine(HDC hdc)
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_1:
-			printf("CMD_CREATE_105\n");
+			printf("CMD_CREATE_105_1\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-1");
+			JointWarn_create_msgform(hdc, g_msgform);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_105_2:
+			printf("CMD_CREATE_105_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "105-2");
+			JointWarn_create_msgform(hdc, g_msgform);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_105_3:
+			printf("CMD_CREATE_105_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "105-3");
+			JointWarn_create_msgform(hdc, g_msgform);
+			final_cmd = CMD_NULL;
 			break;
 		default:
 			break;

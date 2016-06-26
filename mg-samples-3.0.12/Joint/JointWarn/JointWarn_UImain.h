@@ -5,7 +5,7 @@
 #define MWINDOW_TY   0
 #define MWINDOW_RX   800
 #define MWINDOW_BY   480
-#define BACK_XOFFSET	600
+#define BACK_XOFFSET	700
 #define SPARE_Y         360
 
 #define TOTAL_NUM       25
