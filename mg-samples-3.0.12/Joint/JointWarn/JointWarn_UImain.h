@@ -17,7 +17,7 @@
 #define FONT20_HIGH_PIXEL       30
 #define WARN_FRAME_HIGH         20
 
-#define SEL_MAX_COUNT	6
+#define SEL_MAX_COUNT	8
 
 struct textStruct{
 	char name[100];

@@ -21,11 +21,13 @@ extern const char * cancel_text[];
 extern const char * test_msg_hz2[];
 extern const char * title_warn_106[];
 extern unsigned char test_108_1[];
+extern unsigned char sel_title[50];
+extern unsigned char sel_title_color[10];
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
 struct buttonObject form_obj[2];
-struct buttonObject select_obj[6];
+struct buttonObject select_obj[SEL_MAX_COUNT];
 int select_obj_no;
 int select_width, select_height;
 int btn_cancel_width, btn_cancel_height;
@@ -200,7 +202,7 @@ void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)
 	
 }
 
-void JointWarn_create_select(HDC hdc, struct warnForm *warn)
+void JointWarn_create_select(HDC hdc, struct warnForm *warn, int row)
 {
 	int border_len;
 	unsigned char red, green, blue;
@@ -210,15 +212,15 @@ void JointWarn_create_select(HDC hdc, struct warnForm *warn)
 	
 	border_len = 5;
 	select_width = (form_obj[0].point_end.x - form_obj[0].point_start.x) - 2 * border_len;
-	select_height = ((form_obj[0].point_end.y - form_obj[0].point_start.y) - 4 * border_len) / 3;
+	select_height = ((form_obj[0].point_end.y - form_obj[0].point_start.y) - (row+1) * border_len) / row;
 	
 	red = (warn[0].formColor & 0xff000000) >> 24; 
 	green = (warn[0].formColor & 0x00ff0000) >> 16; 
 	blue = (warn[0].formColor & 0x0000ff00) >> 8; 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
 
-	for(i=0; i<6; i++){
-		if(i<3){
+	for(i=0; i<SEL_MAX_COUNT; i++){
+		if(i<row){
 			select_obj[i].point_start.x = form_obj[0].point_start.x + border_len;
 			select_obj[i].point_start.y = form_obj[0].point_start.y + (select_height + border_len) * i + border_len;
 			select_obj[i].point_end.x = select_obj[i].point_start.x + select_width;			
@@ -226,7 +228,7 @@ void JointWarn_create_select(HDC hdc, struct warnForm *warn)
 			FillBox(hdc, select_obj[i].point_start.x, select_obj[i].point_start.y, select_width, select_height);
 		}else{
 			select_obj[i].point_start.x = form_obj[1].point_start.x + border_len;
-			select_obj[i].point_start.y = form_obj[1].point_start.y + (select_height + border_len) * (i - 3) + border_len;
+			select_obj[i].point_start.y = form_obj[1].point_start.y + (select_height + border_len) * (i - row) + border_len;
 			select_obj[i].point_end.x = select_obj[i].point_start.x + select_width;			
 			select_obj[i].point_end.y = select_obj[i].point_start.y + select_height;			
 			FillBox(hdc, select_obj[i].point_start.x, select_obj[i].point_start.y, select_width, select_height);
@@ -234,7 +236,7 @@ void JointWarn_create_select(HDC hdc, struct warnForm *warn)
 	}
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
-	for(i=0; i<6; i++){
+	for(i=0; i<SEL_MAX_COUNT; i++){
 		FillBox(hdc, select_obj[i].point_start.x + (select_width >> 1), select_obj[i].point_start.y, (select_width >> 1), select_height);
 	}
 }
@@ -316,6 +318,37 @@ void JointWarn_create_title(HDC hdc, struct warnForm *warn, unsigned char border
 	TextOut(hdc, start_x + warn[0].text[0]->offsetx, start_y + warn[0].text[0]->offsety, warn[0].text[0]->name);
 	
 	DestroyLogFont(s_font);
+}
+
+void jointwarn_crate_top_title(HDC hdc)
+{
+	struct warnForm warn[1];
+	struct textStruct testText[3];
+	int len;
+
+	warn[0].startx = 0;
+	warn[0].starty = 10;
+	warn[0].width = MWINDOW_RX;
+	warn[0].height = 50;
+	if(0 == strcmp("green", sel_title_color)){
+		warn[0].formColor = 0x00cd00ff;
+	}else{
+		warn[0].formColor = 0xff0000ff;
+	}
+	//warn[0].formColor = 0x3cb371ff;
+	warn[0].borderColor = 0xffff00ff;
+	testText[0].color = 0xffffffff;
+	testText[0].filesize = 30;
+	testText[0].offsety = 8;
+	len = strlen(sel_title) > 48 ? 48 : strlen(sel_title);
+	memset(testText[0].name, 0, 50);
+	memcpy(testText[0].name, sel_title, len);
+	warn[0].text[0] = &testText[0];
+	testText[0].offsetx = (MWINDOW_RX - (FONT30_PIXEL * len)) >> 1;
+	JointWarn_create_title(hdc, warn, 1);
+
+
+
 }
 
 void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)

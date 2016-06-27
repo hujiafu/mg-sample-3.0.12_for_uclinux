@@ -25,6 +25,7 @@ extern const char * title_warn_106[];
 extern const unsigned char request_oper[];
 extern unsigned char udp_buf[UDP_MAX_LEN];
 extern int g_update_sel_index;
+extern int g_sel_count;
 
 struct selStruct * gPsel;
 
@@ -118,6 +119,35 @@ void JointWarn_repaint_106(HDC hdc, struct warnForm *warn, struct warnForm *warn
 		JointWarn_repaint_select(hdc, warn[i], i, 1);
 		JointWarn_repaint_select(hdc, warn1[i], i, 2);
 	}
+}
+
+void jointwarn_create_sel_win(HDC hdc, struct selStruct * psel, struct textStruct *msg, int msg_cnt)
+{
+	unsigned int back_color;
+	unsigned int count;
+	int row;
+	struct warnForm warn[1];
+	back_color = 0x473c8bff;
+        JointWarn_paint_back(hdc, back_color);
+	
+	count = 2;
+	warn[0].formColor = 0x1e90ffff;
+	warn[0].starty = 70;
+	warn[0].height = 290;
+	JointWarn_create_form(hdc, warn, count);
+
+	warn[0].formColor = 0x3cb371ff;
+	row = 4;
+	JointWarn_create_select(hdc, warn, row);
+	
+	count = g_sel_count > SEL_MAX_COUNT ? SEL_MAX_COUNT : g_sel_count;
+	form_tot_cnt = g_sel_count / SEL_MAX_COUNT + 1;
+	JointWarn_106_repaint_sel(hdc, psel, 0, count);
+	jointwarn_prompt(hdc, msg, msg_cnt);
+
+	jointwarn_create_flag(hdc);
+	jointwarn_paint_back(hdc);
+	jointwarn_crate_top_title(hdc);
 }
 
 void JointWarn_create_106(HDC hdc, int index, struct selStruct * psel)

@@ -54,6 +54,7 @@ extern int g_form_count;
 extern int g_sel_count;
 extern struct formStruct g_form[MAX_FORM_NUM];
 extern struct msgformStruct g_msgform[MAX_MSGFORM_NUM];
+extern struct selStruct g_sel[MAX_SEL_NUM];
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -219,6 +220,23 @@ const char * select_msg[]=
 	"请选择作业区域！",
 	"请选择作业设备！",
 	"请选择作业项目！",
+};
+
+struct textStruct sel_prompt_msg[2] = {
+	{
+	.name = "",
+	.filesize = 30,
+	.offsetx = 10,
+	.offsety = 2,
+	.color = 0x00008BFF,
+	},
+	{
+	.name = "",
+	.filesize = 30,
+	.offsetx = 10,
+	.offsety = 2,
+	.color = 0x00008BFF,
+	},
 };
 
 struct textStruct menu_hz1_warn = {
@@ -1548,6 +1566,17 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-3");
 			JointWarn_create_msgform(hdc, g_msgform);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_106_1:
+			printf("CMD_CREATE_106_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "106-1");
+			strcpy(sel_prompt_msg[0].name, "请实施介质安全关闭");	
+			//strcpy(sel_prompt_msg[1].name, "测试测试");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		default:

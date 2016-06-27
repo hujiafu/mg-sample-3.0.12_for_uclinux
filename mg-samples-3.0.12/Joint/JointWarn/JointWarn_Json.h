@@ -4,6 +4,7 @@
 #define TX_MAX_LEN	1024
 
 #define MAX_FORM_NUM	50
+#define MAX_SEL_NUM	50
 #define MAX_MSGFORM_NUM 4
 
 struct selStruct{

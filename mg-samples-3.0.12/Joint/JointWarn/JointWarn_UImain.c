@@ -234,6 +234,42 @@ void jointwarn_paint_flag(HDC hdc, int left, int right)
 	}
 
 }
+void jointwarn_create_flag(HDC hdc)
+{
+	int left, right;
+
+	btn_front_page_1.point_start.x = 300;
+	btn_front_page_1.point_start.y = SPARE_Y + 10;
+	btn_front_page_1.point_end.x = 340;
+	btn_front_page_1.point_end.y = SPARE_Y + 40;
+	btn_front_page_1.active = 0;
+	btn_next_page_1.point_start.x = MWINDOW_RX - 300;
+	btn_next_page_1.point_start.y = SPARE_Y + 10;
+	btn_next_page_1.point_end.x = MWINDOW_RX - 340;
+	btn_next_page_1.point_end.y = SPARE_Y + 40;
+	btn_next_page_1.active = 0;
+	printf("%d, %d, %d, %d\n", btn_next_page_1.point_start.x, btn_next_page_1.point_end.x, btn_next_page_1.point_start.y, btn_next_page_1.point_end.y);
+	s_point[0][0].x = btn_front_page_1.point_start.x;
+	s_point[0][0].y = (btn_front_page_1.point_start.y + btn_front_page_1.point_end.y) >> 1;
+	s_point[0][1].x = btn_front_page_1.point_end.x;
+	s_point[0][1].y = btn_front_page_1.point_start.y;
+	s_point[0][2].x = btn_front_page_1.point_end.x;
+	s_point[0][2].y = btn_front_page_1.point_end.y;
+	s_point[1][0].x = btn_next_page_1.point_start.x;
+	s_point[1][0].y = (btn_next_page_1.point_start.y + btn_next_page_1.point_end.y) >> 1;
+	s_point[1][1].x = btn_next_page_1.point_end.x;
+	s_point[1][1].y = btn_next_page_1.point_start.y;
+	s_point[1][2].x = btn_next_page_1.point_end.x;
+	s_point[1][2].y = btn_next_page_1.point_end.y;
+	
+	left = 0;
+	right = 0;
+	if(total_frame_cnt > window_frame_cnt){
+		right = 1;
+	}	
+	jointwarn_paint_flag(hdc, left, right);
+
+}
 
 void jointwarn_prompt(HDC hdc, struct textStruct * warn_text, int msg_cnt)
 {
@@ -426,7 +462,7 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 
 
 
-
+#if 0
 	btn_front_page_1.point_start.x = 300;
 	btn_front_page_1.point_start.y = yy - partHeight + 10;
 	btn_front_page_1.point_end.x = 340;
@@ -457,6 +493,9 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 		right = 1;
 	}	
 	jointwarn_paint_flag(hdc, left, right);
+#endif
+	jointwarn_create_flag(hdc);
+
 #if 0
 	back_width = 120;
 	back_height = 50;

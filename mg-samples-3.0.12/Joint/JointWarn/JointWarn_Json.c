@@ -180,6 +180,7 @@ extern unsigned char jointwarn_sn[4];
 extern unsigned char area_sel_no_str[4];
 extern unsigned char equi_sel_no_str[4];
 extern unsigned char pro_sel_no_str[4];
+extern struct textStruct sel_prompt_msg;
 extern int index_105;
 extern int final_cmd;
 
@@ -198,7 +199,10 @@ int g_msgform_count;
 int g_sel_count;
 
 struct formStruct g_form[MAX_FORM_NUM];
+struct selStruct g_sel[MAX_SEL_NUM];
 struct msgformStruct g_msgform[MAX_MSGFORM_NUM];
+unsigned char sel_title[50];
+unsigned char sel_title_color[10];
 #if 0
 int check_cmd_and_run()
 {
@@ -441,18 +445,29 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 
 	}
 	if(0 == strcmp(action, "update_sel")){
-		g_update_sel_index = 0;
-		tmpObject = json_object_object_get(newObject, "sub_no");
-		if(tmpObject == NULL){
-			printf("sub_no NULL\n");
-			return 0;
+		if(0 == strcmp(display_no, "106-1")){
+			final_cmd = CMD_CREATE_106_1;
+		}	
+		//g_update_sel_index = 0;
+		tmpObject = json_object_object_get(newObject, "titlecolor");
+		if(tmpObject != NULL){
+			tmp = json_object_get_string(tmpObject);
+			tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+			memcpy(sel_title_color, tmp, tmpLen);	
 		}
-		g_update_sel_index = atoi(json_object_get_string(tmpObject));
+		tmpObject = json_object_object_get(newObject, "title");
+		if(tmpObject != NULL){
+			tmp = json_object_get_string(tmpObject);
+			tmpLen = 48 > strlen(tmp) ? strlen(tmp) : 48;
+			memcpy(sel_title, tmp, tmpLen);	
+		}
+		//g_update_sel_index = atoi(json_object_get_string(tmpObject));
 		
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
 		g_sel_count = count;
 		printf("json count = %d\n", count);
+#if 0
 		size = count * sizeof(struct selStruct);
 		g_psel = malloc(size);
 		if(g_psel == NULL){
@@ -461,7 +476,10 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}
 		memset(g_psel, 0, size);
 		*ptr = g_psel;
-		for(i=0; i < json_object_array_length(selArrayObject); i++){
+#endif
+		*ptr = g_sel;
+		len = json_object_array_length(selArrayObject) > MAX_SEL_NUM ? MAX_SEL_NUM : json_object_array_length(selArrayObject);
+		for(i=0; i < len; i++){
 
 			selObject = json_object_array_get_idx(selArrayObject, i);
 			if(selObject == NULL){
@@ -475,25 +493,25 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
-				memcpy(g_psel[i].index, tmp, tmpLen);	
+				memcpy(g_sel[i].index, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "color");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
-				memcpy(g_psel[i].color, tmp, tmpLen);	
+				memcpy(g_sel[i].color, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(g_psel[i].text1, tmp, tmpLen);	
+				memcpy(g_sel[i].text1, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text2");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
-				memcpy(g_psel[i].text2, tmp, tmpLen);	
+				memcpy(g_sel[i].text2, tmp, tmpLen);	
 			}
 			json_object_put(tmpObject);
 		}
