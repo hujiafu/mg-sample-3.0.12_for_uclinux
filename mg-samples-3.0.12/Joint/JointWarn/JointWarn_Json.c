@@ -197,6 +197,7 @@ struct selStruct * g_psel;
 int g_form_count;
 int g_msgform_count;
 int g_sel_count;
+int g_top_count;
 
 struct formStruct g_form[MAX_FORM_NUM];
 struct selStruct g_sel[MAX_SEL_NUM];
@@ -573,8 +574,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 	}
 	if(0 == strcmp(action, "update_top")){
 		printf("Json: update_top\n");
+		if(0 == strcmp(display_no, "108-1")){
+			final_cmd = CMD_CREATE_108_1;
+		}
+	
 		titleArrayObject = json_object_object_get(newObject, "titles");
 		count = json_object_array_length(titleArrayObject);
+		g_top_count = count;
 		for(i=0; i < json_object_array_length(titleArrayObject); i++){
 
 			titleObject = json_object_array_get_idx(titleArrayObject, i);
@@ -611,7 +617,29 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				}
 				printf("json: color %s\n",tmp);
 			}
-	
+			
+			tmpObject = json_object_object_get(titleObject, "textcolor");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				if(index == 0){
+					if(0 == strcmp(tmp, "white")){
+						top_warn_text[0].color = 0xffffffff;
+					}
+					if(0 == strcmp(tmp, "blue")){
+						top_warn_text[0].color = 0x0000ffff;
+					}
+				}
+				if(index == 1){
+					if(0 == strcmp(tmp, "white")){
+						top_warn_text[2].color = 0xffffffff;
+					}
+					if(0 == strcmp(tmp, "blue")){
+						top_warn_text[2].color = 0x0000ffff;
+					}
+				}
+			
+			}
+
 			tmpObject = json_object_object_get(titleObject, "count");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);

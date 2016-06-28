@@ -142,10 +142,13 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
 	
 	printf("%s\n", test_108_1);
 
+#if 0
 	count = JointAnalysisCmdLine(test_108_1, &ptr);
 	pwarn = (struct warnForm *)ptr;
 	printf("count = %d\n", count);
 	printf("color = 0x%x\n", pwarn[0].formColor);
+#endif
+
 #if 0
 	count = 2;
 	                strcpy(top_text[0].name, test_msg_hz2[0]);
@@ -166,7 +169,8 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
                         top_warn[0].textCnt = 1;
                         top_warn[1].textCnt = 2;
 #endif
-	JointWarn_create_top(hdc, pwarn, count, width, height);
+	//JointWarn_create_top(hdc, pwarn, count, width, height);
+	JointWarn_create_top(hdc, top_warn, g_top_count, width, height);
 }
 
 void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)

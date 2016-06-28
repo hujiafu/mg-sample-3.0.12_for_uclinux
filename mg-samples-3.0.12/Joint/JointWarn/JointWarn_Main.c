@@ -1579,6 +1579,13 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_108_1:
+			printf("CMD_CREATE_108_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "108-1");
+
+			final_cmd = CMD_NULL;
+			break;
 		default:
 			break;
 		
