@@ -23,6 +23,8 @@ extern const char * title_warn_106[];
 extern unsigned char test_108_1[];
 extern unsigned char sel_title[50];
 extern unsigned char sel_title_color[10];
+extern struct warnForm top_warn[2];
+extern int g_top_count;
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -35,18 +37,18 @@ int form_width, form_height;
 int spare_height;
 int top_start_x, top_start_y;
 struct buttonObject btn_cancel;
-struct warnForm top_warn[2];
-struct textStruct top_text[3];
+//struct warnForm top_warn[2];
+//struct textStruct top_text[3];
 int top_window;
 
 void jointwarn_paint_cancel(HDC hdc)
 {
 	PLOGFONT s_font;
 
-	btn_cancel_width = 100;
-        btn_cancel_height = 40;
-	btn_cancel.point_start.x = top_start_x + form_width - 160;
-        btn_cancel.point_start.y = top_start_y + form_height - spare_height + 10;
+	btn_cancel_width = 60;
+        btn_cancel_height = 30;
+	btn_cancel.point_start.x = top_start_x + form_width - 80;
+        btn_cancel.point_start.y = top_start_y + form_height - spare_height + 30;
         btn_cancel.point_end.x = btn_cancel.point_start.x + btn_cancel_width;
         btn_cancel.point_end.y = btn_cancel.point_start.y + btn_cancel_height;
         btn_cancel.active = 1;
@@ -56,12 +58,12 @@ void jointwarn_paint_cancel(HDC hdc)
                 FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 20, 0);
 	SelectFont(hdc,s_font);
         SetTextColor(hdc, COLOR_lightwhite);
-        TextOut(hdc, btn_cancel.point_start.x + 10, btn_cancel.point_start.y + 10, cancel_text[0]);
+        TextOut(hdc, btn_cancel.point_start.x + 10, btn_cancel.point_start.y + 4, cancel_text[0]);
         DestroyLogFont(s_font);
 
 }
 
-void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, int height)
+void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, int height, int has_canel)
 {
 	int top_height = 20;
 	int mid_height = 30;
@@ -120,11 +122,14 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 		sel_start_y += mid_height + sel_height;	
 	}
 	DestroyLogFont(s_font);
-	
-	jointwarn_paint_cancel(hdc);
+	if(1 == has_canel){
+		jointwarn_paint_cancel(hdc);
+	}else{
+		//auto canel after 3s
+	}
 }
 
-void JointWarn_create_top_back(HDC hdc, int width, int height)
+void JointWarn_create_top_back(HDC hdc, int width, int height, int has_canel)
 {
 	int count;
 	unsigned int ptr;
@@ -140,7 +145,7 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x10, 0x4e, 0x8b, 0xFF));
 	FillBox(hdc, top_start_x, top_start_y, width, height);
 	
-	printf("%s\n", test_108_1);
+	//printf("%s\n", test_108_1);
 
 #if 0
 	count = JointAnalysisCmdLine(test_108_1, &ptr);
@@ -170,7 +175,7 @@ void JointWarn_create_top_back(HDC hdc, int width, int height)
                         top_warn[1].textCnt = 2;
 #endif
 	//JointWarn_create_top(hdc, pwarn, count, width, height);
-	JointWarn_create_top(hdc, top_warn, g_top_count, width, height);
+	JointWarn_create_top(hdc, top_warn, g_top_count, width, height, has_canel);
 }
 
 void JointWarn_create_form(HDC hdc, struct warnForm *warn, int count)

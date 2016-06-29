@@ -82,6 +82,7 @@ unsigned char equi_sel_str[20];
 unsigned char prj_sel_str[20];
 unsigned char display_no_str[10];
 int project_str_len;
+int top_has_canel;
 
 const char *msg_104_2[]=
 {
@@ -343,7 +344,7 @@ const char * title_warn_106[] =
 
 const char * cancel_text[] = 
 {
-	"立即取消",
+	"取消",
 };
 
 struct textStruct warn_message1 = {
@@ -1583,7 +1584,8 @@ void JointRunCmdLine(HDC hdc)
 			printf("CMD_CREATE_108_1\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "108-1");
-
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, 500, 300, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		default:
