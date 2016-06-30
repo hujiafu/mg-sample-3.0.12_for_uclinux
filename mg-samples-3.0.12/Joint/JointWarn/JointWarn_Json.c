@@ -437,7 +437,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
-				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				tmpLen = 98 > strlen(tmp) ? strlen(tmp) : 98;
 				memcpy(g_msgform[i].text1, tmp, tmpLen);
 			}
 
@@ -577,6 +577,57 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "108-1")){
 			final_cmd = CMD_CREATE_108_1;
 		}
+		if(0 == strcmp(display_no, "108-2")){
+			final_cmd = CMD_CREATE_108_2;
+		}
+		if(0 == strcmp(display_no, "108-3")){
+			final_cmd = CMD_CREATE_108_3;
+		}
+		if(0 == strcmp(display_no, "108-4")){
+			final_cmd = CMD_CREATE_108_4;
+		}
+		if(0 == strcmp(display_no, "109-1")){
+			final_cmd = CMD_CREATE_109_1;
+		}
+		if(0 == strcmp(display_no, "109-2")){
+			final_cmd = CMD_CREATE_109_2;
+		}
+		if(0 == strcmp(display_no, "109-3")){
+			final_cmd = CMD_CREATE_109_3;
+		}
+		if(0 == strcmp(display_no, "111-2")){
+			final_cmd = CMD_CREATE_111_2;
+		}
+		if(0 == strcmp(display_no, "111-3")){
+			final_cmd = CMD_CREATE_111_3;
+		}
+		if(0 == strcmp(display_no, "116-1")){
+			final_cmd = CMD_CREATE_116_1;
+		}
+		if(0 == strcmp(display_no, "116-2")){
+			final_cmd = CMD_CREATE_116_2;
+		}
+		if(0 == strcmp(display_no, "116-3")){
+			final_cmd = CMD_CREATE_116_3;
+		}
+		if(0 == strcmp(display_no, "116-4")){
+			final_cmd = CMD_CREATE_116_4;
+		}
+		if(0 == strcmp(display_no, "117-1")){
+			final_cmd = CMD_CREATE_117_1;
+		}
+		if(0 == strcmp(display_no, "117-2")){
+			final_cmd = CMD_CREATE_117_2;
+		}
+		if(0 == strcmp(display_no, "117-3")){
+			final_cmd = CMD_CREATE_117_3;
+		}
+		if(0 == strcmp(display_no, "119-2")){
+			final_cmd = CMD_CREATE_119_2;
+		}
+		if(0 == strcmp(display_no, "119-3")){
+			final_cmd = CMD_CREATE_119_3;
+		}
 	
 		titleArrayObject = json_object_object_get(newObject, "titles");
 		count = json_object_array_length(titleArrayObject);
@@ -607,13 +658,16 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				if(0 == strcmp(tmp, "green")){
-					top_warn[index].formColor = 0x548b54ff;
+					top_warn[index].formColor = 0x228b22ff;
 				}
 				if(0 == strcmp(tmp, "red")){
 					top_warn[index].formColor = 0xff0000ff;
 				}
 				if(0 == strcmp(tmp, "yellow")){
 					top_warn[index].formColor = 0xffff00ff;
+				}
+				if(0 == strcmp(tmp, "white")){
+					top_warn[index].formColor = 0xffffffff;
 				}
 				printf("json: color %s\n",tmp);
 			}
@@ -628,6 +682,9 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 					if(0 == strcmp(tmp, "blue")){
 						top_warn_text[0].color = 0x0000ffff;
 					}
+					if(0 == strcmp(tmp, "red")){
+						top_warn_text[0].color = 0xff0000ff;
+					}
 				}
 				if(index == 1){
 					if(0 == strcmp(tmp, "white")){
@@ -635,6 +692,9 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 					}
 					if(0 == strcmp(tmp, "blue")){
 						top_warn_text[2].color = 0x0000ffff;
+					}
+					if(0 == strcmp(tmp, "red")){
+						top_warn_text[2].color = 0xff0000ff;
 					}
 				}
 			
@@ -651,13 +711,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 						if(index == 0){
 							memset(top_warn_text[0].name, 0, 100);
 							strcpy(top_warn_text[0].name, tmp);
-							top_warn_text[0].color = 0xffffffff;
+							//top_warn_text[0].color = 0xffffffff;
 							top_warn[index].text[0] = &top_warn_text[0];
 						}
 						if(index == 1){
 							memset(top_warn_text[2].name, 0, 100);
 							strcpy(top_warn_text[2].name, tmp);
-							top_warn_text[2].color = 0x191970ff;
+							//top_warn_text[2].color = 0x191970ff;
 							top_warn[index].text[0] = &top_warn_text[2];
 						}
 					}
@@ -670,13 +730,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 						if(index == 0){
 							memset(top_warn_text[0].name, 0, 100);
 							strcpy(top_warn_text[0].name, tmp);
-							top_warn_text[0].color = 0xffffffff;
+							//top_warn_text[0].color = 0xffffffff;
 							top_warn[index].text[0] = &top_warn_text[0];
 						}
 						if(index == 1){
 							memset(top_warn_text[2].name, 0, 100);
 							strcpy(top_warn_text[2].name, tmp);
-							top_warn_text[2].color = 0x191970ff;
+							//top_warn_text[2].color = 0x191970ff;
 							top_warn[index].text[0] = &top_warn_text[2];
 						}
 					}
@@ -686,13 +746,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 						if(index == 0){
 							memset(top_warn_text[1].name, 0, 100);
 							strcpy(top_warn_text[1].name, tmp);
-							top_warn_text[1].color = 0xffffffff;
+							//top_warn_text[1].color = 0xffffffff;
 							top_warn[index].text[1] = &top_warn_text[1];
 						}
 						if(index == 1){
 							memset(top_warn_text[3].name, 0, 100);
 							strcpy(top_warn_text[3].name, tmp);
-							top_warn_text[3].color = 0x191970ff;
+							//top_warn_text[3].color = 0x191970ff;
 							top_warn[index].text[1] = &top_warn_text[3];
 						}
 					}

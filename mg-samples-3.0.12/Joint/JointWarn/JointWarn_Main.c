@@ -20,6 +20,7 @@
 #include "JointWarn_UImain.h"
 #include "JointWarn_Main.h"
 #include "JointWarn_Json.h"
+#include "JointWarn_lib.h"
 
 static char welcome_text [512];
 static char msg_text [256];
@@ -1585,7 +1586,143 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "108-1");
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, 500, 300, top_has_canel);
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_108_2:
+			printf("CMD_CREATE_108_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "108-2");
+			top_has_canel = 1;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_108_3:
+			printf("CMD_CREATE_108_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "108-3");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_108_4:
+			printf("CMD_CREATE_108_4\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "108-4");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_109_1:
+			printf("CMD_CREATE_109_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "109-1");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_109_2:
+			printf("CMD_CREATE_109_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "109-2");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_109_3:
+			printf("CMD_CREATE_109_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "109-3");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_111_2:
+			printf("CMD_CREATE_111_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "111-2");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_111_3:
+			printf("CMD_CREATE_111_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "111-3");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_116_1:
+			printf("CMD_CREATE_116_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "116-1");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_116_2:
+			printf("CMD_CREATE_116_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "116-2");
+			top_has_canel = 1;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_116_3:
+			printf("CMD_CREATE_116_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "116-3");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_116_4:
+			printf("CMD_CREATE_116_4\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "116-4");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_117_1:
+			printf("CMD_CREATE_117_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "117-1");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_117_2:
+			printf("CMD_CREATE_117_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "117-2");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_117_3:
+			printf("CMD_CREATE_117_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "117-3");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_119_2:
+			printf("CMD_CREATE_119_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "119-2");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_119_3:
+			printf("CMD_CREATE_119_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "119-3");
+			top_has_canel = 0;
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		default:

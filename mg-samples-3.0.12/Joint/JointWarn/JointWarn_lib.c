@@ -48,7 +48,7 @@ void jointwarn_paint_cancel(HDC hdc)
 	btn_cancel_width = 60;
         btn_cancel_height = 30;
 	btn_cancel.point_start.x = top_start_x + form_width - 80;
-        btn_cancel.point_start.y = top_start_y + form_height - spare_height + 30;
+        btn_cancel.point_start.y = top_start_y + form_height - spare_height - 30;
         btn_cancel.point_end.x = btn_cancel.point_start.x + btn_cancel_width;
         btn_cancel.point_end.y = btn_cancel.point_start.y + btn_cancel_height;
         btn_cancel.active = 1;
@@ -79,7 +79,7 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 	
 	form_width = width;
 	form_height = height;
-	spare_height = 80;
+	spare_height = 20;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
@@ -144,6 +144,13 @@ void JointWarn_create_top_back(HDC hdc, int width, int height, int has_canel)
 		
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x10, 0x4e, 0x8b, 0xFF));
 	FillBox(hdc, top_start_x, top_start_y, width, height);
+		
+	SetPenColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0x0, 0xFF));
+	SetPenWidth(hdc, 1);
+	LineEx(hdc, top_start_x, top_start_y, top_start_x + width, top_start_y); 
+	LineEx(hdc, top_start_x + width, top_start_y, top_start_x + width, top_start_y + height); 
+	LineEx(hdc, top_start_x + width, top_start_y + height, top_start_x, top_start_y + height); 
+	LineEx(hdc, top_start_x, top_start_y + height, top_start_x, top_start_y); 
 	
 	//printf("%s\n", test_108_1);
 
@@ -366,24 +373,30 @@ void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)
 	int start_x, start_y;
 	int width = 0;
 	int height = 0;
+	int last_msg_h = 20;
 	int i;
 	unsigned char red, green, blue;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 
-	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
-                               FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn[0].text[0]->filesize, 0);
-        SelectFont(hdc, s_font);
+	//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+        //                       FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn[0].text[0]->filesize, 0);
+        //SelectFont(hdc, s_font);
 	
 	for(i=0; i<cnt; i++){
 		width = warn[i].width > width ? warn[i].width : width; 
 		height += warn[i].height;
 	}
+	//height += last_msg_h; //for last msg
 
 	start_x = (MWINDOW_RX - width) >> 1;
-	start_y = (SPARE_Y - height) >> 1;
+	//start_y = (SPARE_Y - height) >> 1;
+	start_y = (MWINDOW_BY - height) >> 1;
 
-	for(i=0; i<cnt; i++){
+	for(i=0; i<cnt ; i++){
+		s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                               FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn[i].text[0]->filesize, 0);
+        	SelectFont(hdc, s_font);
 		red = (warn[i].formColor & 0xff000000) >> 24; 
 		green = (warn[i].formColor & 0x00ff0000) >> 16; 
 		blue = (warn[i].formColor & 0x0000ff00) >> 8; 
@@ -392,24 +405,46 @@ void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)
 		}
 		SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
 		FillBox(hdc, start_x, start_y, width, warn[i].height);
-
+	
 		red = (warn[i].text[0]->color & 0xff000000) >> 24;
                 green = (warn[i].text[0]->color & 0x00ff0000) >> 16;
                 blue = (warn[i].text[0]->color & 0x0000ff00) >> 8;
 		SetTextColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
 		TextOut(hdc, start_x + warn[i].text[0]->offsetx, start_y + warn[i].text[0]->offsety, warn[i].text[0]->name);
+		
+		DestroyLogFont(s_font);
 	}
 
+	//DestroyLogFont(s_font);
+		
+#if 0
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                               FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 40, 0);
+        SelectFont(hdc, s_font);
+	red = (warn[i].formColor & 0xff000000) >> 24; 
+	green = (warn[i].formColor & 0x00ff0000) >> 16; 
+	blue = (warn[i].formColor & 0x0000ff00) >> 8; 
+	if(i > 0){
+		start_y += warn[i-1].height;
+	}
+	SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+	FillBox(hdc, start_x, start_y, width, warn[i].height + last_msg_h);
+		red = (warn[i].text[0]->color & 0xff000000) >> 24;
+                green = (warn[i].text[0]->color & 0x00ff0000) >> 16;
+                blue = (warn[i].text[0]->color & 0x0000ff00) >> 8;
+		SetTextColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+		TextOut(hdc, start_x + warn[i].text[0]->offsetx, start_y + warn[i].text[0]->offsety, warn[i].text[0]->name);
 	DestroyLogFont(s_font);
+#endif
 }
 
-int JointWarn_calc_msglen(unsigned char * msg)
+int JointWarn_calc_msglen(unsigned char * msg, int len)
 {
 	int font_len, font_cnt;
 
 	font_cnt = strlen(msg) + 2;
 	printf("font_cnt = %d\n", font_cnt);
-	font_len = FONT30_PIXEL * font_cnt;
+	font_len = len * font_cnt;
 	return font_len;
 }
 

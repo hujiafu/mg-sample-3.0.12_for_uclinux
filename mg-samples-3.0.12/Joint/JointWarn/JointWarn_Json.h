@@ -23,7 +23,7 @@ struct msgformStruct{
 	unsigned char index[4];
 	unsigned char color[10];
 	unsigned char textcolor[10];
-	unsigned char text1[22];
+	unsigned char text1[100];
 };
 
 
