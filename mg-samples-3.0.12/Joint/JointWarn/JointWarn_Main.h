@@ -17,7 +17,7 @@
 #define CMD_CREATE_106_2	0x0C
 #define CMD_CREATE_106_3	0x0D
 #define CMD_CREATE_106_4	0x84 //
-#define CMD_CREATE_107		0x0E
+#define CMD_CREATE_107		0x8a //
 #define CMD_CREATE_108_1	0x0E
 #define CMD_CREATE_108_2	0x0F
 #define CMD_CREATE_108_3	0x10
@@ -25,6 +25,7 @@
 #define CMD_CREATE_109_1	0x12
 #define CMD_CREATE_109_2	0x13
 #define CMD_CREATE_109_3	0x80 //
+#define CMD_CREATE_110		0x8b //
 #define CMD_CREATE_110_1	0x14
 #define CMD_CREATE_110_2	0x15
 #define CMD_CREATE_110_3	0x16
@@ -50,6 +51,7 @@
 #define CMD_CREATE_117_1	0x25
 #define CMD_CREATE_117_2	0x26
 #define CMD_CREATE_117_3	0x82 //
+#define CMD_CREATE_118		0x8c //
 #define CMD_CREATE_118_1	0x27
 #define CMD_CREATE_118_2	0x28
 #define CMD_CREATE_118_3	0x29
@@ -63,6 +65,25 @@
 #define CMD_CREATE_123		0x89 //
 #define CMD_CREATE_123_1	0x30
 #define CMD_CREATE_123_2	0x31
+#define CMD_CREATE_124		0x32
+#define CMD_CREATE_125		0x33
+#define CMD_CREATE_126		0x34
+#define CMD_CREATE_127		0x35
+#define CMD_CREATE_128		0x36
+#define CMD_CREATE_129		0x37
+#define CMD_CREATE_130		0x38
+#define CMD_CREATE_131		0x39
+#define CMD_CREATE_132_1	0x3a
+#define CMD_CREATE_132_2	0x3b
+#define CMD_CREATE_133		0x3c
+#define CMD_CREATE_134_1	0x3d
+#define CMD_CREATE_134_2	0x3e
+#define CMD_CREATE_135_1	0x3f
+#define CMD_CREATE_135_2	0x40
+#define CMD_CREATE_135_3	0x41
+#define CMD_CREATE_136		0x42
+#define CMD_CREATE_137		0x43
+#define CMD_CREATE_138		0x44
 
 
 #define WIN_NULL_NO		0x00

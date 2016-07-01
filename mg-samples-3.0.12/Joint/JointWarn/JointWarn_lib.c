@@ -25,6 +25,23 @@ extern unsigned char sel_title[50];
 extern unsigned char sel_title_color[10];
 extern struct warnForm top_warn[2];
 extern int g_top_count;
+extern struct textStruct system_main;
+extern struct buttonObject btn_sys_logger;
+extern struct buttonObject btn_sys_area;
+extern struct buttonObject btn_sys_work;
+extern struct buttonObject btn_sys_error;
+extern struct buttonObject btn_sys_volume;
+extern struct buttonObject btn_sys_light;
+extern struct buttonObject btn_sys_reset;
+extern struct buttonObject btn_sys_back;
+extern struct textStruct system_logger_txt;
+extern struct textStruct system_area_txt;
+extern struct textStruct system_work_txt;
+extern struct textStruct system_error_txt;
+extern struct textStruct system_volume_txt;
+extern struct textStruct system_light_txt;
+extern struct textStruct system_reset_txt;
+extern struct textStruct system_back_txt;
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -558,3 +575,183 @@ void JointWarn_create_flag(HDC hdc, int total_cnt, int win_cnt)
 
 
 }
+
+
+int sys_border_width, sys_border_height;
+int sys_border_start_x, sys_border_start_y;
+int sys_btn_len, sys_btn_height;
+
+void jointwarn_system_log(HDC hdc)
+{
+	PLOGFONT s_font;
+	int start_x, start_y;
+	int width, height;
+	
+	width = MWINDOW_RX;
+	height = 80;
+	start_x = 0;
+	start_y = 160;
+ 
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0x00, 0x00, 0xFF));
+        FillBox(hdc, start_x, start_y, width, height);
+        s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_main.filesize, 0);
+        SelectFont(hdc,s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
+        TextOut(hdc, 0 + system_main.offsetx, start_y + system_main.offsety, system_main.name);
+        DestroyLogFont(s_font);
+
+}
+
+void jointwarn_system_main_btn(HDC hdc, struct buttonObject *btn, int btn_len, int index, struct textStruct *text)
+{
+	PLOGFONT s_font;
+	int border = 5;
+	int btn_height;
+	int btn_width;
+
+	btn_width = btn_len - 2;
+	btn_height = sys_border_height - 2 * border;
+	sys_btn_height = btn_height;
+        btn->point_start.x = sys_border_start_x + border + 2 + (index - 1) * btn_len;
+        btn->point_start.y = sys_border_start_y + border;
+        btn->point_end.x = btn->point_start.x + btn_len;
+        btn->point_end.y = btn->point_start.y + btn_height;
+        btn->active = 1;
+
+	SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	SetPenWidth(hdc, 2);
+	LineEx(hdc, btn->point_start.x, btn->point_start.y, btn->point_start.x + btn_len, btn->point_start.y); 
+	LineEx(hdc, btn->point_start.x + btn_len, btn->point_start.y, btn->point_start.x + btn_len, btn->point_start.y + btn_height); 
+	LineEx(hdc, btn->point_start.x + btn_len, btn->point_start.y + btn_height, btn->point_start.x, btn->point_start.y + btn_height); 
+	LineEx(hdc, btn->point_start.x, btn->point_start.y + btn_height, btn->point_start.x, btn->point_start.y); 
+	
+        s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text->filesize, 0);
+        SelectFont(hdc, s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
+        TextOut(hdc, btn->point_start.x + text->offsetx, btn->point_start.y + text->offsety, text->name);
+        DestroyLogFont(s_font);
+}	
+
+void jointwarn_system_create_bottom(HDC hdc)
+{
+	int start_x, start_y;
+	int width, height;
+	int border_len;
+	int btn_len;
+
+	width = MWINDOW_RX;
+	height = 80;
+	start_x = 0;
+	start_y = 400;
+
+	border_len = 10;
+	sys_border_start_x = border_len;
+	sys_border_start_y = start_y + border_len;
+	sys_border_width = width - (2 * border_len);
+	sys_border_height = height - (2 * border_len);
+
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x80, 0x80, 0x80, 0xFF));
+        FillBox(hdc, start_x, start_y, width, height);
+	
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x14, 0x41, 0x85, 0xFF));
+        FillBox(hdc, sys_border_start_x, sys_border_start_y, sys_border_width, sys_border_height);
+		
+	SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	SetPenWidth(hdc, 1);
+	LineEx(hdc, sys_border_start_x, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y); 
+	LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height); 
+	LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y + sys_border_height); 
+	LineEx(hdc, sys_border_start_x, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y); 
+
+
+	sys_btn_len = (sys_border_width - 10)/ 8;
+	jointwarn_system_main_btn(hdc, &btn_sys_logger, sys_btn_len, 1, &system_logger_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_area, sys_btn_len, 2, &system_area_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_work, sys_btn_len, 3, &system_work_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_error, sys_btn_len, 4, &system_error_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_volume, sys_btn_len, 5, &system_volume_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_light, sys_btn_len, 6, &system_light_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_reset, sys_btn_len, 7, &system_reset_txt);
+	jointwarn_system_main_btn(hdc, &btn_sys_back, sys_btn_len, 8, &system_back_txt);
+
+
+}
+
+void jointwarn_system_create_voluem(HDC hdc)
+{
+	PLOGFONT s_font;
+	
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
+        FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
+        FillBox(hdc, btn_sys_volume.point_start.x + 1, btn_sys_volume.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
+        
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_volume_txt.filesize, 0);
+        SelectFont(hdc, s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
+        TextOut(hdc, btn_sys_volume.point_start.x + system_volume_txt.offsetx, btn_sys_volume.point_start.y + system_volume_txt.offsety, system_volume_txt.name);
+        DestroyLogFont(s_font);
+}
+
+void jointwarn_system_create_light(HDC hdc)
+{
+	PLOGFONT s_font;
+	
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
+        FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
+        FillBox(hdc, btn_sys_light.point_start.x + 1, btn_sys_light.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
+        
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_light_txt.filesize, 0);
+        SelectFont(hdc, s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
+        TextOut(hdc, btn_sys_light.point_start.x + system_light_txt.offsetx, btn_sys_light.point_start.y + system_light_txt.offsety, system_light_txt.name);
+        DestroyLogFont(s_font);
+}
+
+void jointwarn_system_create_reset(HDC hdc)
+{
+	PLOGFONT s_font;
+	
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
+        FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
+        FillBox(hdc, btn_sys_reset.point_start.x + 1, btn_sys_reset.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
+        
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_reset_txt.filesize, 0);
+        SelectFont(hdc, s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
+        TextOut(hdc, btn_sys_reset.point_start.x + system_reset_txt.offsetx, btn_sys_reset.point_start.y + system_reset_txt.offsety, system_reset_txt.name);
+        DestroyLogFont(s_font);
+}
+
+void jointwarn_system_create_main(HDC hdc)
+{
+	unsigned int back_color;
+	back_color = 0x2292ddff;
+
+	JointWarn_paint_back(hdc, back_color);
+	jointwarn_system_log(hdc);
+	jointwarn_system_create_bottom(hdc);
+
+	//jointwarn_system_create_voluem(hdc);
+	//jointwarn_system_create_light(hdc);
+	jointwarn_system_create_reset(hdc);
+
+}
+
+
+

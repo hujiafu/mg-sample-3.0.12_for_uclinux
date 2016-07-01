@@ -500,6 +500,27 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "106-1")){
 			final_cmd = CMD_CREATE_106_1;
 		}	
+		if(0 == strcmp(display_no, "106-2")){
+			final_cmd = CMD_CREATE_106_2;
+		}	
+		if(0 == strcmp(display_no, "107")){
+			final_cmd = CMD_CREATE_107;
+		}	
+		if(0 == strcmp(display_no, "110")){
+			final_cmd = CMD_CREATE_110;
+		}	
+		if(0 == strcmp(display_no, "114-1")){
+			final_cmd = CMD_CREATE_114_1;
+		}	
+		if(0 == strcmp(display_no, "114-2")){
+			final_cmd = CMD_CREATE_114_2;
+		}	
+		if(0 == strcmp(display_no, "115")){
+			final_cmd = CMD_CREATE_115;
+		}	
+		if(0 == strcmp(display_no, "118")){
+			final_cmd = CMD_CREATE_118;
+		}	
 		//g_update_sel_index = 0;
 		tmpObject = json_object_object_get(newObject, "titlecolor");
 		if(tmpObject != NULL){
@@ -622,6 +643,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			final_cmd = CMD_CREATE_104_2;
 		}
 		return count;	
+	}
+	if(0 == strcmp(action, "system")){
+		
+		if(0 == strcmp(display_no, "124")){
+			final_cmd = CMD_CREATE_124;
+		}
+		return 0;
 	}
 	if(0 == strcmp(action, "update_top")){
 		printf("Json: update_top\n");

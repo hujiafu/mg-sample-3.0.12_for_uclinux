@@ -397,6 +397,61 @@ struct textStruct back ={
 	.offsety = 5,
 };
 
+struct textStruct system_main ={
+	.name = "系统管理",
+	.filesize = 45,
+	.offsetx = 310,
+	.offsety = 15,
+};
+struct textStruct system_logger_txt ={
+	.name = "终端登记器",
+	.filesize = 18,
+	.offsetx = 3,
+	.offsety = 15,
+};
+struct textStruct system_area_txt ={
+	.name = "区域设备",
+	.filesize = 18,
+	.offsetx = 12,
+	.offsety = 15,
+};
+struct textStruct system_work_txt ={
+	.name = "工种作业",
+	.filesize = 18,
+	.offsetx = 12,
+	.offsety = 15,
+};
+struct textStruct system_error_txt ={
+	.name = "异常复位",
+	.filesize = 18,
+	.offsetx = 12,
+	.offsety = 15,
+};
+struct textStruct system_volume_txt ={
+	.name = "音量调节",
+	.filesize = 18,
+	.offsetx = 12,
+	.offsety = 15,
+};
+struct textStruct system_light_txt ={
+	.name = "亮度调节",
+	.filesize = 18,
+	.offsetx = 12,
+	.offsety = 15,
+};
+struct textStruct system_reset_txt ={
+	.name = "设备重启",
+	.filesize = 18,
+	.offsetx = 12,
+	.offsety = 15,
+};
+struct textStruct system_back_txt ={
+	.name = "返回",
+	.filesize = 18,
+	.offsetx = 30,
+	.offsety = 15,
+};
+
 struct textStruct menu_project[]=
 {
 	{
@@ -1029,7 +1084,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 			//EndPaint(hWnd,hdc);
 
-			final_cmd = CMD_CREATE_101; 
+			//final_cmd = CMD_CREATE_101; 
+			final_cmd = CMD_CREATE_124; 
 			JointRunCmdLine(hdc);
 
 			EndPaint(hMainWnd,hdc);
@@ -1574,8 +1630,17 @@ void JointRunCmdLine(HDC hdc)
 			printf("CMD_CREATE_106_1\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-1");
-			strcpy(sel_prompt_msg[0].name, "请实施介质安全关闭");	
-			//strcpy(sel_prompt_msg[1].name, "测试测试");	
+			strcpy(sel_prompt_msg[0].name, "请实施介质安全关闭!");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_106_2:
+			printf("CMD_CREATE_106_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "106-2");
+			strcpy(sel_prompt_msg[0].name, "请实施部分介质安全关闭!");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
@@ -1593,6 +1658,16 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-4");
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_107:
+			printf("CMD_CREATE_107\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "107");
+			strcpy(sel_prompt_msg[0].name, "请选择单项介质安全关闭状态确认！");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_1:
@@ -1651,6 +1726,16 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_110:
+			printf("CMD_CREATE_110\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "110");
+			strcpy(sel_prompt_msg[0].name, "请岗位操作人员打卡确认作业项目启动！");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
 		case CMD_CREATE_111_1:
 			printf("CMD_CREATE_111_1\n");
 			memset(display_no_str, 0, 10);
@@ -1702,6 +1787,26 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_114_1:
+			printf("CMD_CREATE_114_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "114-1");
+			strcpy(sel_prompt_msg[0].name, "请实施介质安全复位！");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_114_2:
+			printf("CMD_CREATE_114_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "114-2");
+			strcpy(sel_prompt_msg[0].name, "请实施部分介质复位！");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
 		case CMD_CREATE_114_3:
 			printf("CMD_CREATE_114_3\n");
 			memset(display_no_str, 0, 10);
@@ -1728,6 +1833,16 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-6");
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_115:
+			printf("CMD_CREATE_115\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "115");
+			strcpy(sel_prompt_msg[0].name, "请选择单项介质复位状态确认！");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_1:
@@ -1786,6 +1901,16 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_118:
+			printf("CMD_CREATE_118\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "118");
+			strcpy(sel_prompt_msg[0].name, "请岗位操作人员打卡确认完成！");	
+			window_frame_cnt = SEL_MAX_COUNT;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
 		case CMD_CREATE_119_1:
 			printf("CMD_CREATE_119_1\n");
 			memset(display_no_str, 0, 10);
@@ -1842,6 +1967,13 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "123");
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_124:
+			printf("CMD_CREATE_124\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "124");
+			jointwarn_system_create_main(hdc);
 			final_cmd = CMD_NULL;
 			break;
 		default:
