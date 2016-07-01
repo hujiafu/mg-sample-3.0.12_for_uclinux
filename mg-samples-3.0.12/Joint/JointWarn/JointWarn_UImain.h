@@ -5,12 +5,12 @@
 #define MWINDOW_TY   0
 #define MWINDOW_RX   800
 #define MWINDOW_BY   480
-#define BACK_XOFFSET	700
+#define BACK_XOFFSET	670
 #define SPARE_Y         360
 
 #define TOTAL_NUM       25
 //#define TOTAL_FRAME     12
-#define FONT40_PIXEL    25      //FORNT SIZE 40
+#define FONT40_PIXEL    22      //FORNT SIZE 40
 #define FONT35_PIXEL    19      //FORNT SIZE 35
 #define FONT30_PIXEL    16      //FORNT SIZE 30
 #define FONT20_PIXEL    10     //FORNT SIZE 20

@@ -229,14 +229,14 @@ struct textStruct sel_prompt_msg[2] = {
 	.name = "",
 	.filesize = 30,
 	.offsetx = 10,
-	.offsety = 2,
+	.offsety = 6,
 	.color = 0x00008BFF,
 	},
 	{
 	.name = "",
 	.filesize = 30,
 	.offsetx = 10,
-	.offsety = 2,
+	.offsety = 6,
 	.color = 0x00008BFF,
 	},
 };
@@ -245,7 +245,7 @@ struct textStruct menu_hz1_warn = {
 	.name = "请选择操作项目",
 	.filesize = 30,
 	.offsetx = 10,
-	.offsety = 2,
+	.offsety = 6,
 	.color = 0x00008BFF,
 };
 
@@ -1553,21 +1553,21 @@ void JointRunCmdLine(HDC hdc)
 			printf("CMD_CREATE_105_1\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-1");
-			JointWarn_create_msgform(hdc, g_msgform);
+			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_2:
 			printf("CMD_CREATE_105_2\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-2");
-			JointWarn_create_msgform(hdc, g_msgform);
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_3:
 			printf("CMD_CREATE_105_3\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-3");
-			JointWarn_create_msgform(hdc, g_msgform);
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_106_1:
@@ -1579,6 +1579,20 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_106_3:
+			printf("CMD_CREATE_106_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "106-3");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_106_4:
+			printf("CMD_CREATE_106_4\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "106-4");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_1:
@@ -1637,6 +1651,13 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_111_1:
+			printf("CMD_CREATE_111_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "111-1");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
 		case CMD_CREATE_111_2:
 			printf("CMD_CREATE_111_2\n");
 			memset(display_no_str, 0, 10);
@@ -1651,6 +1672,62 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "111-3");
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_113_1:
+			printf("CMD_CREATE_113_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "113-1");
+			JointWarn_create_msgform(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_113_2:
+			printf("CMD_CREATE_113_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "113-2");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_113_3:
+			printf("CMD_CREATE_113_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "113-3");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_113_4:
+			printf("CMD_CREATE_113_4\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "113-4");
+			JointWarn_create_msgform(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_114_3:
+			printf("CMD_CREATE_114_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "114-3");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_114_4:
+			printf("CMD_CREATE_114_4\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "114-4");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_114_5:
+			printf("CMD_CREATE_114_5\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "114-5");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_114_6:
+			printf("CMD_CREATE_114_6\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "114-6");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_1:
@@ -1709,6 +1786,13 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_119_1:
+			printf("CMD_CREATE_119_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "119-1");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
 		case CMD_CREATE_119_2:
 			printf("CMD_CREATE_119_2\n");
 			memset(display_no_str, 0, 10);
@@ -1723,6 +1807,41 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "119-3");
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_120:
+			printf("CMD_CREATE_120\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "120");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_121_1:
+			printf("CMD_CREATE_121_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "121-1");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_121_2:
+			printf("CMD_CREATE_121_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "121-2");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_122:
+			printf("CMD_CREATE_122\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "122");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_123:
+			printf("CMD_CREATE_123\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "123");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		default:

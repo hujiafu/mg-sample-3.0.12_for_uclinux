@@ -127,11 +127,13 @@ void jointwarn_create_sel_win(HDC hdc, struct selStruct * psel, struct textStruc
 	unsigned int count;
 	int row;
 	struct warnForm warn[1];
-	back_color = 0x473c8bff;
+	//back_color = 0x473c8bff;
+	back_color = 0x0883d6ff;
         JointWarn_paint_back(hdc, back_color);
 	
 	count = 2;
-	warn[0].formColor = 0x1e90ffff;
+	//warn[0].formColor = 0x1e90ffff;
+	warn[0].formColor = 0x055b94ff;
 	warn[0].starty = 70;
 	warn[0].height = 290;
 	JointWarn_create_form(hdc, warn, count);

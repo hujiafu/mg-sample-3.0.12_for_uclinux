@@ -347,7 +347,7 @@ void jointwarn_crate_top_title(HDC hdc)
 	warn[0].width = MWINDOW_RX;
 	warn[0].height = 50;
 	if(0 == strcmp("green", sel_title_color)){
-		warn[0].formColor = 0x00cd00ff;
+		warn[0].formColor = 0x228822ff;
 	}else{
 		warn[0].formColor = 0xff0000ff;
 	}
@@ -355,7 +355,7 @@ void jointwarn_crate_top_title(HDC hdc)
 	warn[0].borderColor = 0xffff00ff;
 	testText[0].color = 0xffffffff;
 	testText[0].filesize = 30;
-	testText[0].offsety = 8;
+	testText[0].offsety = 10;
 	len = strlen(sel_title) > 48 ? 48 : strlen(sel_title);
 	memset(testText[0].name, 0, 50);
 	memcpy(testText[0].name, sel_title, len);
@@ -453,8 +453,8 @@ void JointWarn_create_backbtn(HDC hdc){
 	PLOGFONT s_font;
 	SetBkMode(hdc,BM_TRANSPARENT);
 
-        back_width = 120;
-        back_height = 50;
+        back_width = 80;
+        back_height = 40;
         btn_back_1.point_start.x = BACK_XOFFSET;
         btn_back_1.point_start.y = SPARE_Y + 35;
         btn_back_1.point_end.x = btn_back_1.point_start.x + back_width;

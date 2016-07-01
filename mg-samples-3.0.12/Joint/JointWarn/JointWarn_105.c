@@ -81,7 +81,7 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		}
 		if(i == (g_msgform_count - 1)){
 			text_msg[i].offsetx = 2*FONT40_PIXEL + tmp;
-			text_msg[i].offsety = 18;
+			text_msg[i].offsety = 24;
 			text_msg[i].filesize = 40;
 		}else{
 			text_msg[i].offsetx = 2*FONT30_PIXEL + tmp;
@@ -98,6 +98,9 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		}
 		if(0 == strcmp("yellow", msg[i].color)){
 			warn[i].formColor = 0xffff00ff;
+		}
+		if(0 == strcmp("white", msg[i].color)){
+			warn[i].formColor = 0xffffffff;
 		}
 		if(i == (g_msgform_count - 1)){
 			warn[i].width = font_len;
@@ -117,7 +120,7 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 	if(1 == has_back){
 		JointWarn_create_backbtn(hdc);
 	}
-	JointWarn_create_msg(hdc, warn, 2);
+	JointWarn_create_msg(hdc, warn, g_msgform_count);
 
 }
 

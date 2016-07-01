@@ -239,14 +239,14 @@ void jointwarn_create_flag(HDC hdc)
 	int left, right;
 
 	btn_front_page_1.point_start.x = 300;
-	btn_front_page_1.point_start.y = SPARE_Y + 10;
+	btn_front_page_1.point_start.y = SPARE_Y + 20;
 	btn_front_page_1.point_end.x = 340;
-	btn_front_page_1.point_end.y = SPARE_Y + 40;
+	btn_front_page_1.point_end.y = SPARE_Y + 50;
 	btn_front_page_1.active = 0;
 	btn_next_page_1.point_start.x = MWINDOW_RX - 300;
-	btn_next_page_1.point_start.y = SPARE_Y + 10;
+	btn_next_page_1.point_start.y = SPARE_Y + 20;
 	btn_next_page_1.point_end.x = MWINDOW_RX - 340;
-	btn_next_page_1.point_end.y = SPARE_Y + 40;
+	btn_next_page_1.point_end.y = SPARE_Y + 50;
 	btn_next_page_1.active = 0;
 	printf("%d, %d, %d, %d\n", btn_next_page_1.point_start.x, btn_next_page_1.point_end.x, btn_next_page_1.point_start.y, btn_next_page_1.point_end.y);
 	s_point[0][0].x = btn_front_page_1.point_start.x;
@@ -281,13 +281,15 @@ void jointwarn_prompt(HDC hdc, struct textStruct * warn_text, int msg_cnt)
 	PLOGFONT s_font;
 	
 	SetBkMode(hdc,BM_TRANSPARENT);        
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x69, 0x69, 0x69, 0xFF));
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x69, 0x69, 0x69, 0xFF));
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xD7, 0x00, 0xFF));
 
-	msgHeight = FONT30_HIGH_PIXEL * msg_cnt;
+	msgHeight = FONT40_HIGH_PIXEL * msg_cnt;
 	start_x = 0;
 	start_y = MWINDOW_BY - msgHeight;
 	FillBox(hdc, start_x, start_y, MWINDOW_RX, msgHeight);
-	SetTextColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	//SetTextColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	SetTextColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0x0, 0xFF));
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
 	FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn_text[0].filesize, 0);
 	SelectFont(hdc,s_font);
@@ -347,11 +349,12 @@ void jointwarn_paint_back(HDC hdc)
 	back_width = 80;
 	back_height = 40;
 	btn_back_1.point_start.x = BACK_XOFFSET;
-	btn_back_1.point_start.y = SPARE_Y + 5;
+	btn_back_1.point_start.y = SPARE_Y + 20;
 	btn_back_1.point_end.x = btn_back_1.point_start.x + back_width;
 	btn_back_1.point_end.y = btn_back_1.point_start.y + back_height;
 	btn_back_1.active = 1;
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x18, 0x74, 0xCD, 0xFF));
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x17, 0x30, 0x93, 0xFF));
 	FillBox(hdc, btn_back_1.point_start.x, btn_back_1.point_start.y, back_width, back_height);	
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
 		FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, back.filesize, 0);

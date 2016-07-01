@@ -400,6 +400,57 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "105-3")){
 			final_cmd = CMD_CREATE_105_3;
 		}	
+		if(0 == strcmp(display_no, "106-3")){
+			final_cmd = CMD_CREATE_106_3;
+		}	
+		if(0 == strcmp(display_no, "106-4")){
+			final_cmd = CMD_CREATE_106_4;
+		}	
+		if(0 == strcmp(display_no, "111-1")){
+			final_cmd = CMD_CREATE_111_1;
+		}	
+		if(0 == strcmp(display_no, "113-1")){
+			final_cmd = CMD_CREATE_113_1;
+		}	
+		if(0 == strcmp(display_no, "113-2")){
+			final_cmd = CMD_CREATE_113_2;
+		}	
+		if(0 == strcmp(display_no, "113-3")){
+			final_cmd = CMD_CREATE_113_3;
+		}	
+		if(0 == strcmp(display_no, "113-4")){
+			final_cmd = CMD_CREATE_113_4;
+		}	
+		if(0 == strcmp(display_no, "114-3")){
+			final_cmd = CMD_CREATE_114_3;
+		}	
+		if(0 == strcmp(display_no, "114-4")){
+			final_cmd = CMD_CREATE_114_4;
+		}	
+		if(0 == strcmp(display_no, "114-5")){
+			final_cmd = CMD_CREATE_114_5;
+		}	
+		if(0 == strcmp(display_no, "114-6")){
+			final_cmd = CMD_CREATE_114_6;
+		}	
+		if(0 == strcmp(display_no, "119-1")){
+			final_cmd = CMD_CREATE_119_1;
+		}	
+		if(0 == strcmp(display_no, "120")){
+			final_cmd = CMD_CREATE_120;
+		}	
+		if(0 == strcmp(display_no, "121-1")){
+			final_cmd = CMD_CREATE_121_1;
+		}	
+		if(0 == strcmp(display_no, "121-2")){
+			final_cmd = CMD_CREATE_121_2;
+		}	
+		if(0 == strcmp(display_no, "122")){
+			final_cmd = CMD_CREATE_122;
+		}	
+		if(0 == strcmp(display_no, "123")){
+			final_cmd = CMD_CREATE_123;
+		}	
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
 		g_msgform_count = count;

@@ -16,6 +16,7 @@
 #define CMD_CREATE_106_1	0x0B
 #define CMD_CREATE_106_2	0x0C
 #define CMD_CREATE_106_3	0x0D
+#define CMD_CREATE_106_4	0x84 //
 #define CMD_CREATE_107		0x0E
 #define CMD_CREATE_108_1	0x0E
 #define CMD_CREATE_108_2	0x0F
@@ -34,9 +35,13 @@
 #define CMD_CREATE_113_1	0x1A
 #define CMD_CREATE_113_2	0x1B
 #define CMD_CREATE_113_3	0x1C
+#define CMD_CREATE_113_4	0x85 //
 #define CMD_CREATE_114_1	0x1D
 #define CMD_CREATE_114_2	0x1E
 #define CMD_CREATE_114_3	0x1F
+#define CMD_CREATE_114_4	0x86 //
+#define CMD_CREATE_114_5	0x87 //
+#define CMD_CREATE_114_6	0x88 //
 #define CMD_CREATE_115		0x20
 #define CMD_CREATE_116_1	0x21
 #define CMD_CREATE_116_2	0x22
@@ -55,6 +60,7 @@
 #define CMD_CREATE_121_1	0x2D
 #define CMD_CREATE_121_2	0x2E
 #define CMD_CREATE_122		0x2F
+#define CMD_CREATE_123		0x89 //
 #define CMD_CREATE_123_1	0x30
 #define CMD_CREATE_123_2	0x31
 
