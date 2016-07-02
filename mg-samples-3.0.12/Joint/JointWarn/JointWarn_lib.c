@@ -384,7 +384,7 @@ void jointwarn_crate_top_title(HDC hdc)
 
 }
 
-void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)
+void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt, int border)
 {
 	PLOGFONT s_font;
 	int start_x, start_y;
@@ -422,6 +422,16 @@ void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt)
 		}
 		SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
 		FillBox(hdc, start_x, start_y, width, warn[i].height);
+		if(1 == border){
+			red = (warn[i].borderColor & 0xff000000) >> 24; 
+			green = (warn[i].borderColor & 0x00ff0000) >> 16; 
+			blue = (warn[i].borderColor & 0x0000ff00) >> 8; 
+			SetPenColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+			SetPenWidth(hdc, 1);
+			LineEx(hdc, start_x, start_y, start_x + width, start_y); 
+			LineEx(hdc, start_x, start_y + warn[i].height, start_x + width, start_y + warn[i].height); 
+		
+		}
 	
 		red = (warn[i].text[0]->color & 0xff000000) >> 24;
                 green = (warn[i].text[0]->color & 0x00ff0000) >> 16;
@@ -576,7 +586,7 @@ void JointWarn_create_flag(HDC hdc, int total_cnt, int win_cnt)
 
 }
 
-
+static BITMAP s_bmp[10];
 int sys_border_width, sys_border_height;
 int sys_border_start_x, sys_border_start_y;
 int sys_btn_len, sys_btn_height;
@@ -722,10 +732,15 @@ void jointwarn_system_create_light(HDC hdc)
 void jointwarn_system_create_reset(HDC hdc)
 {
 	PLOGFONT s_font;
+
+	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/usr/local/minigui/local/share/minigui/res/bmp/reset1.png");
 	
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
         FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+
+	FillBoxWithBitmap(hdc, 100, 100, 43, 42, &s_bmp[0]);
+
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
         FillBox(hdc, btn_sys_reset.point_start.x + 1, btn_sys_reset.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
@@ -753,5 +768,51 @@ void jointwarn_system_create_main(HDC hdc)
 
 }
 
+#define LOGGER_ROW	4
+#define LOGGER_COL	4
+
+int logger_total_cnt;
+int logger_perwin_cnt;
+int logger_hx[LOGGER_ROW + 1], logger_hy[LOGGER_ROW + 1], logger_vx[LOGGER_COL + 1], logger_vy[LOGGER_COL + 1];
+void jointwarn_paint_logerlist(HDC hdc)
+{
+	int logger_row_cnt = LOGGER_ROW;
+	int logger_col_cnt = LOGGER_COL;
+	int logger_win_width = 600;
+	int logger_win_height = 300; 
+	int stat_x, start_y;
+
+	start_x = (MWINDOW_RX - logger_win_width) >> 1; 
+	start_y = (MWINDOW_BY - logger_win_height) >> 1; 
+
+	logger_perwin_cnt = logger_col_cnt * logger_row_cnt;
+		
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x88, 0x22, 0xFF));
+        FillBox(hdc, start_x, start_y, logger_win_width, logger_win_height);
+	
+	SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	SetPenWidth(hdc, 3);
+	for(i=0; i<(LOGGER_ROW + 1); i++){
+		logger_hx[i] = start_x;
+		logger_hy[i] = start_y + row_step * i;
+		LineEx(hdc, logger_hx[i], logger_hy[i], logger_hx[i] + logger_win_width, logger_hy[i]); 
+
+	}
+	for(j=0; j<(LOGGER_COL + 1); j++){
+		logger_vx[i] = start_x + col_step * i;
+		logger_vy[i] = start_y;
+		LineEx(hdc, logger_hx[i], logger_hy[i], logger_hx[i] + logger_win_width, logger_hy[i]); 
+	}
+
+}
+
+void jointwarn_create_logerlist(HDC hdc)
+{
+	unsigned int back_color;
+	back_color = 0x2292ddff;
+
+	JointWarn_paint_back(hdc, back_color);
 
 
+}

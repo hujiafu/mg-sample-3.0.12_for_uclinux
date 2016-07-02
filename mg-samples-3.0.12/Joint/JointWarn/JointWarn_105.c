@@ -53,16 +53,18 @@ int JointWarn_105_parepar_data(unsigned char * originStr)
 void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 {					      
 	unsigned int back_color;
+	int max_count;
 	int i, tmp, font_len = 0;
 	struct warnForm warn[3];
 	struct textStruct text_msg[3];
 
-	for(i=0; i<(g_msgform_count - 1); i++){
+	max_count = g_msgform_count > 3 ? 3 : g_msgform_count;
+	for(i=0; i<(max_count - 1); i++){
 		font_len = font_len > JointWarn_calc_msglen(msg[i].text1, FONT30_PIXEL) ? font_len : JointWarn_calc_msglen(msg[i].text1, FONT30_PIXEL);	
 	}
-	font_len = font_len > JointWarn_calc_msglen(msg[g_msgform_count-1].text1, FONT40_PIXEL) ? font_len : JointWarn_calc_msglen(msg[g_msgform_count-1].text1, FONT40_PIXEL);	
-	for(i=0; i<(g_msgform_count); i++){
-		if(i == (g_msgform_count - 1)){
+	font_len = font_len > JointWarn_calc_msglen(msg[max_count-1].text1, FONT40_PIXEL) ? font_len : JointWarn_calc_msglen(msg[max_count-1].text1, FONT40_PIXEL);	
+	for(i=0; i<(max_count); i++){
+		if(i == (max_count - 1)){
 			tmp = (font_len - JointWarn_calc_msglen(msg[i].text1, FONT40_PIXEL)) >> 1;	
 		}else{
 			tmp = (font_len - JointWarn_calc_msglen(msg[i].text1, FONT30_PIXEL)) >> 1;	
@@ -79,7 +81,7 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		if(0 == strcmp("black", msg[i].textcolor)){
 			text_msg[i].color = 0x000000ff;
 		}
-		if(i == (g_msgform_count - 1)){
+		if(i == (max_count - 1)){
 			text_msg[i].offsetx = 2*FONT40_PIXEL + tmp;
 			text_msg[i].offsety = 24;
 			text_msg[i].filesize = 40;
@@ -102,7 +104,7 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		if(0 == strcmp("white", msg[i].color)){
 			warn[i].formColor = 0xffffffff;
 		}
-		if(i == (g_msgform_count - 1)){
+		if(i == (max_count - 1)){
 			warn[i].width = font_len;
 			warn[i].height = FONT40_HIGH_PIXEL * 2;
 			warn[i].text[0] = &text_msg[i];
@@ -120,7 +122,64 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 	if(1 == has_back){
 		JointWarn_create_backbtn(hdc);
 	}
-	JointWarn_create_msg(hdc, warn, g_msgform_count);
+	JointWarn_create_msg(hdc, warn, max_count, 0);
+
+}
+
+
+void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int has_back)
+{
+	unsigned int back_color;
+	int max_count;
+	int i, tmp, font_len = 0;
+	struct warnForm warn[10];
+	struct textStruct text_msg[10];
+
+	max_count = g_msgform_count > 10 ? 10 : g_msgform_count;
+	for(i=0; i<max_count; i++){
+		font_len = font_len > JointWarn_calc_msglen(msg[i].text1, FONT30_PIXEL) ? font_len : JointWarn_calc_msglen(msg[i].text1, FONT30_PIXEL);	
+	}
+	for(i=0; i<max_count; i++){
+		if(0 == strcmp("white", msg[i].textcolor)){
+			text_msg[i].color = 0xffffffff;
+		}
+		if(0 == strcmp("blue", msg[i].textcolor)){
+			text_msg[i].color = 0x00008bff;
+		}
+		if(0 == strcmp("red", msg[i].textcolor)){
+			text_msg[i].color = 0xff0000ff;
+		}
+		if(0 == strcmp("black", msg[i].textcolor)){
+			text_msg[i].color = 0x000000ff;
+		}
+		text_msg[i].offsetx = 2*FONT30_PIXEL;
+		text_msg[i].offsety = 18;
+		text_msg[i].filesize = 30;
+		strcpy(text_msg[i].name, msg[i].text1);
+		warn[i].messageCount = 1;
+		if(0 == strcmp("red", msg[i].color)){
+			warn[i].formColor = 0xff0000ff;
+		}
+		if(0 == strcmp("green", msg[i].color)){
+			warn[i].formColor = 0x228b22ff;
+		}
+		if(0 == strcmp("yellow", msg[i].color)){
+			warn[i].formColor = 0xffff00ff;
+		}
+		if(0 == strcmp("white", msg[i].color)){
+			warn[i].formColor = 0xffffffff;
+		}
+		warn[i].width = font_len;
+		warn[i].height = FONT30_HIGH_PIXEL * 2;
+		warn[i].text[0] = &text_msg[i];
+		warn[i].borderColor = 0xffff00ff;
+	}
+	back_color = 0x473c8bff;
+	JointWarn_paint_back(hdc, back_color);
+	if(1 == has_back){
+		JointWarn_create_backbtn(hdc);
+	}
+	JointWarn_create_msg(hdc, warn, max_count, 1);
 
 }
 
@@ -188,7 +247,7 @@ void JointWarn_create_105(HDC hdc, int pro_index)
 	back_color = 0x473c8bff;
 	JointWarn_paint_back(hdc, back_color);
 	JointWarn_create_spare(hdc);
-	JointWarn_create_msg(hdc, warn, 2);
+	JointWarn_create_msg(hdc, warn, 2, 0);
 
 }
 
