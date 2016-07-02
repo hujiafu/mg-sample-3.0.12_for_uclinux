@@ -1086,6 +1086,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 
 			//final_cmd = CMD_CREATE_101; 
 			final_cmd = CMD_CREATE_124; 
+			//final_cmd = CMD_CREATE_125; 
 			JointRunCmdLine(hdc);
 
 			EndPaint(hMainWnd,hdc);
@@ -1974,6 +1975,13 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "124");
 			jointwarn_system_create_main(hdc);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_125:
+			printf("CMD_CREATE_125\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "125");
+			jointwarn_create_logerlist(hdc);
 			final_cmd = CMD_NULL;
 			break;
 		default:

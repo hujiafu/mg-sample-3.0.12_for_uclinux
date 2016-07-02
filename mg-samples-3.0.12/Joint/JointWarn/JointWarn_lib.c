@@ -694,10 +694,29 @@ void jointwarn_system_create_bottom(HDC hdc)
 void jointwarn_system_create_voluem(HDC hdc)
 {
 	PLOGFONT s_font;
-	
+	int start_x, start_y;
+	int png_width = 126;
+	int png_height = 102;	
+	LoadBitmap(HDC_SCREEN,&s_bmp[1],"/usr/local/minigui/local/share/minigui/res/bmp/volume_logo.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[2],"/usr/local/minigui/local/share/minigui/res/bmp/up.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[3],"/usr/local/minigui/local/share/minigui/res/bmp/down.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[4],"/usr/local/minigui/local/share/minigui/res/bmp/process0.png");
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
         FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+	
+	start_x = (MWINDOW_RX - png_width) >> 1;
+	start_y = 100;
+
+	FillBoxWithBitmap(hdc, start_x, start_y, png_width, png_height, &s_bmp[1]);
+	start_x = 150;
+	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 40, 40, 40, &s_bmp[3]);
+	start_x += 40;
+	start_x += 15;
+	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 42, 393, 33, &s_bmp[4]);
+	start_x += 393;
+	start_x += 15;
+	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 40, 40, 40, &s_bmp[2]);
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
         FillBox(hdc, btn_sys_volume.point_start.x + 1, btn_sys_volume.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
@@ -713,10 +732,31 @@ void jointwarn_system_create_voluem(HDC hdc)
 void jointwarn_system_create_light(HDC hdc)
 {
 	PLOGFONT s_font;
+	int start_x, start_y;
+	int png_width = 178;
+	int png_height = 178;	
+	
+	LoadBitmap(HDC_SCREEN,&s_bmp[5],"/usr/local/minigui/local/share/minigui/res/bmp/light_logo.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[6],"/usr/local/minigui/local/share/minigui/res/bmp/up.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[7],"/usr/local/minigui/local/share/minigui/res/bmp/down.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[8],"/usr/local/minigui/local/share/minigui/res/bmp/process0.png");
 	
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
         FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+	
+	start_x = (MWINDOW_RX - png_width) >> 1;
+	start_y = 80;
+
+	FillBoxWithBitmap(hdc, start_x, start_y, png_width, png_height, &s_bmp[5]);
+	start_x = 150;
+	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 40, 40, 40, &s_bmp[7]);
+	start_x += 40;
+	start_x += 15;
+	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 42, 393, 33, &s_bmp[8]);
+	start_x += 393;
+	start_x += 15;
+	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 40, 40, 40, &s_bmp[6]);
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
         FillBox(hdc, btn_sys_light.point_start.x + 1, btn_sys_light.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
@@ -732,14 +772,20 @@ void jointwarn_system_create_light(HDC hdc)
 void jointwarn_system_create_reset(HDC hdc)
 {
 	PLOGFONT s_font;
+	int png_width = 180;
+	int png_height = 180;
+	int start_x, start_y;
 
-	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/usr/local/minigui/local/share/minigui/res/bmp/reset1.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/usr/local/minigui/local/share/minigui/res/bmp/reset.png");
 	
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
         FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
 
-	FillBoxWithBitmap(hdc, 100, 100, 43, 42, &s_bmp[0]);
+	start_x = (MWINDOW_RX - png_width) >> 1;
+	start_y = 100;
+
+	FillBoxWithBitmap(hdc, start_x, start_y, png_width, png_height, &s_bmp[0]);
 
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
@@ -763,8 +809,8 @@ void jointwarn_system_create_main(HDC hdc)
 	jointwarn_system_create_bottom(hdc);
 
 	//jointwarn_system_create_voluem(hdc);
-	//jointwarn_system_create_light(hdc);
-	jointwarn_system_create_reset(hdc);
+	jointwarn_system_create_light(hdc);
+	//jointwarn_system_create_reset(hdc);
 
 }
 
@@ -780,15 +826,21 @@ void jointwarn_paint_logerlist(HDC hdc)
 	int logger_col_cnt = LOGGER_COL;
 	int logger_win_width = 600;
 	int logger_win_height = 300; 
-	int stat_x, start_y;
+	int start_x, start_y;
+	int row_step, col_step;
+	int i, j;
+	
 
 	start_x = (MWINDOW_RX - logger_win_width) >> 1; 
-	start_y = (MWINDOW_BY - logger_win_height) >> 1; 
+	start_y = (SPARE_Y - logger_win_height) >> 1; 
+	row_step = logger_win_height / logger_row_cnt;
+	col_step = logger_win_width / logger_col_cnt;
 
 	logger_perwin_cnt = logger_col_cnt * logger_row_cnt;
 		
 	SetBkMode(hdc,BM_TRANSPARENT);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x88, 0x22, 0xFF));
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x88, 0x22, 0xFF));
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x69, 0x69, 0x69, 0xFF));
         FillBox(hdc, start_x, start_y, logger_win_width, logger_win_height);
 	
 	SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
@@ -796,13 +848,14 @@ void jointwarn_paint_logerlist(HDC hdc)
 	for(i=0; i<(LOGGER_ROW + 1); i++){
 		logger_hx[i] = start_x;
 		logger_hy[i] = start_y + row_step * i;
+		printf("hx %d, hy %d\n", logger_hx[i], logger_hy[i]);
 		LineEx(hdc, logger_hx[i], logger_hy[i], logger_hx[i] + logger_win_width, logger_hy[i]); 
 
 	}
 	for(j=0; j<(LOGGER_COL + 1); j++){
-		logger_vx[i] = start_x + col_step * i;
-		logger_vy[i] = start_y;
-		LineEx(hdc, logger_hx[i], logger_hy[i], logger_hx[i] + logger_win_width, logger_hy[i]); 
+		logger_vx[j] = start_x + col_step * j;
+		logger_vy[j] = start_y;
+		LineEx(hdc, logger_vx[j], logger_vy[j], logger_vx[j], logger_vy[j] + logger_win_height); 
 	}
 
 }
@@ -813,6 +866,7 @@ void jointwarn_create_logerlist(HDC hdc)
 	back_color = 0x2292ddff;
 
 	JointWarn_paint_back(hdc, back_color);
+	jointwarn_paint_logerlist(hdc);
 
 
 }
