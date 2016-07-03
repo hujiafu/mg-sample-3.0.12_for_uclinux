@@ -16,6 +16,7 @@ struct selStruct{
 
 struct formStruct{
         unsigned char index[4];
+	unsigned char color[10]
 	unsigned char text1[22];
 };
 

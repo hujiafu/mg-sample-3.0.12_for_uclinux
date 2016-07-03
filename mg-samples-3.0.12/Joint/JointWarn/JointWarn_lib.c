@@ -820,6 +820,26 @@ void jointwarn_system_create_main(HDC hdc)
 int logger_total_cnt;
 int logger_perwin_cnt;
 int logger_hx[LOGGER_ROW + 1], logger_hy[LOGGER_ROW + 1], logger_vx[LOGGER_COL + 1], logger_vy[LOGGER_COL + 1];
+int logger_x[LOGGER_ROW * LOGGER_COL], logger_y[LOGGER_ROW * LOGGER_COL];
+int g_logger_count;
+int logger_row_step, logger_col_step;
+
+void jointwarn_repaint_logerlist(HDC hdc, struct formStruct * text)
+{
+	int i;
+	unsigned char red, green, blue;
+
+	for(i=0; i<g_logger_count; i++){
+		red = (color & 0xff000000) >> 24;	
+		green = (color & 0x00ff0000) >> 16;	
+		blue = (color & 0x0000ff00) >> 8;	
+		SetBkMode(hdc,BM_TRANSPARENT);
+		SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
+        	FillBox(hdc, logger_x[i], logger_y[i], logger_row_step, logger_col_step);
+		
+	}
+}
+
 void jointwarn_paint_logerlist(HDC hdc)
 {
 	int logger_row_cnt = LOGGER_ROW;
@@ -835,6 +855,8 @@ void jointwarn_paint_logerlist(HDC hdc)
 	start_y = (SPARE_Y - logger_win_height) >> 1; 
 	row_step = logger_win_height / logger_row_cnt;
 	col_step = logger_win_width / logger_col_cnt;
+	logger_row_step = row_step;
+	logger_col_step = col_step;
 
 	logger_perwin_cnt = logger_col_cnt * logger_row_cnt;
 		
@@ -850,7 +872,7 @@ void jointwarn_paint_logerlist(HDC hdc)
 		logger_hy[i] = start_y + row_step * i;
 		printf("hx %d, hy %d\n", logger_hx[i], logger_hy[i]);
 		LineEx(hdc, logger_hx[i], logger_hy[i], logger_hx[i] + logger_win_width, logger_hy[i]); 
-
+		
 	}
 	for(j=0; j<(LOGGER_COL + 1); j++){
 		logger_vx[j] = start_x + col_step * j;
@@ -858,9 +880,18 @@ void jointwarn_paint_logerlist(HDC hdc)
 		LineEx(hdc, logger_vx[j], logger_vy[j], logger_vx[j], logger_vy[j] + logger_win_height); 
 	}
 
+	for(i=0; i<LOGGER_ROW; i++){
+		for(j=0; j<LOGGER_COL; j++){
+		
+			logger_x[i*LOGGER_ROW + j] = logger_vx[j];
+			logger_y[i*LOGGER_ROW + j] = logger_hy[i];
+		}
+
+	}
+
 }
 
-void jointwarn_create_logerlist(HDC hdc)
+void jointwarn_create_logerlist(HDC hdc, struct formStruct * text)
 {
 	unsigned int back_color;
 	back_color = 0x2292ddff;
