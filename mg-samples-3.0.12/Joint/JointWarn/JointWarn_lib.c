@@ -9,6 +9,8 @@
 #include <minigui/window.h>
 
 #include "JointWarn_UImain.h"
+#include "JointWarn_Json.h"
+#include "JointWarn_lib.h"
 
 extern struct textStruct back;
 extern struct buttonObject btn_back_1;
@@ -42,6 +44,9 @@ extern struct textStruct system_volume_txt;
 extern struct textStruct system_light_txt;
 extern struct textStruct system_reset_txt;
 extern struct textStruct system_back_txt;
+extern int max_font_cnt;
+extern struct selStruct g_sel[MAX_SEL_NUM];
+extern int g_sel_count;
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -408,8 +413,11 @@ void JointWarn_create_msg(HDC hdc, struct warnForm *warn, int cnt, int border)
 
 	start_x = (MWINDOW_RX - width) >> 1;
 	//start_y = (SPARE_Y - height) >> 1;
-	start_y = (MWINDOW_BY - height) >> 1;
-
+	if(1 == border){
+		start_y = (SPARE_Y - height) >> 1;
+	}else{
+		start_y = (MWINDOW_BY - height) >> 1;
+	}
 	for(i=0; i<cnt ; i++){
 		s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
                                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, warn[i].text[0]->filesize, 0);
@@ -814,9 +822,6 @@ void jointwarn_system_create_main(HDC hdc)
 
 }
 
-#define LOGGER_ROW	4
-#define LOGGER_COL	4
-
 int logger_total_cnt;
 int logger_perwin_cnt;
 int logger_hx[LOGGER_ROW + 1], logger_hy[LOGGER_ROW + 1], logger_vx[LOGGER_COL + 1], logger_vy[LOGGER_COL + 1];
@@ -824,20 +829,41 @@ int logger_x[LOGGER_ROW * LOGGER_COL], logger_y[LOGGER_ROW * LOGGER_COL];
 int g_logger_count;
 int logger_row_step, logger_col_step;
 
-void jointwarn_repaint_logerlist(HDC hdc, struct formStruct * text)
+void jointwarn_repaint_logerlist(HDC hdc, struct selStruct *warn)
 {
+	PLOGFONT s_font;
 	int i;
+	unsigned int color;
 	unsigned char red, green, blue;
+	int font_cnt, font_len;
+	int tmp;
+		
+	max_font_cnt = 8;	
+	SetBkMode(hdc,BM_TRANSPARENT);
+		
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                	FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 20, 0);
+        SelectFont(hdc, s_font);
+        SetTextColor(hdc, COLOR_lightwhite);
 
-	for(i=0; i<g_logger_count; i++){
+	for(i=0; i<g_sel_count; i++){
+		font_cnt = strlen(warn[i].text1) > max_font_cnt ? max_font_cnt : strlen(warn[i].text1);
+		tmp = (max_font_cnt - font_cnt) >> 1;
+		font_len = (logger_col_step - 3) / max_font_cnt;
+		if(0 == strcmp("green", warn[i].color)){
+			color = 0x228822ff;
+		}else{
+			color = 0xff0000ff;
+		}
 		red = (color & 0xff000000) >> 24;	
 		green = (color & 0x00ff0000) >> 16;	
 		blue = (color & 0x0000ff00) >> 8;	
-		SetBkMode(hdc,BM_TRANSPARENT);
 		SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
-        	FillBox(hdc, logger_x[i], logger_y[i], logger_row_step, logger_col_step);
-		
+        	FillBox(hdc, logger_x[i] + 2, logger_y[i] + 2, logger_col_step - 3, logger_row_step - 3);
+        	TextOut(hdc, logger_x[i] + 5 + (tmp * font_len), logger_y[i] + 25, warn[i].text1);
+			
 	}
+        DestroyLogFont(s_font);
 }
 
 void jointwarn_paint_logerlist(HDC hdc)
@@ -885,19 +911,22 @@ void jointwarn_paint_logerlist(HDC hdc)
 		
 			logger_x[i*LOGGER_ROW + j] = logger_vx[j];
 			logger_y[i*LOGGER_ROW + j] = logger_hy[i];
+			printf("index %d, x %d,y %d\n", i*LOGGER_ROW + j, logger_x[i*LOGGER_ROW + j], logger_y[i*LOGGER_ROW + j]);
 		}
 
 	}
 
 }
 
-void jointwarn_create_logerlist(HDC hdc, struct formStruct * text)
+void jointwarn_create_logerlist(HDC hdc, struct selStruct * text, struct textStruct *msg)
 {
 	unsigned int back_color;
 	back_color = 0x2292ddff;
 
 	JointWarn_paint_back(hdc, back_color);
 	jointwarn_paint_logerlist(hdc);
-
-
+	jointwarn_repaint_logerlist(hdc, text);
+	jointwarn_prompt(hdc, msg, 1);
+	jointwarn_create_flag(hdc);
+	jointwarn_paint_back(hdc);
 }

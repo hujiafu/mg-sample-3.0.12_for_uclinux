@@ -5,7 +5,7 @@
 
 #define MAX_FORM_NUM	50
 #define MAX_SEL_NUM	50
-#define MAX_MSGFORM_NUM 4
+#define MAX_MSGFORM_NUM 10
 
 struct selStruct{
         unsigned char index[4];
@@ -16,7 +16,7 @@ struct selStruct{
 
 struct formStruct{
         unsigned char index[4];
-	unsigned char color[10]
+	unsigned char color[10];
 	unsigned char text1[22];
 };
 

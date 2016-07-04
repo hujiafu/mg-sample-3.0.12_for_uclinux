@@ -153,8 +153,8 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 			text_msg[i].color = 0x000000ff;
 		}
 		text_msg[i].offsetx = 2*FONT30_PIXEL;
-		text_msg[i].offsety = 18;
-		text_msg[i].filesize = 30;
+		text_msg[i].offsety = 5;
+		text_msg[i].filesize = 25;
 		strcpy(text_msg[i].name, msg[i].text1);
 		warn[i].messageCount = 1;
 		if(0 == strcmp("red", msg[i].color)){
@@ -170,7 +170,7 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 			warn[i].formColor = 0xffffffff;
 		}
 		warn[i].width = font_len;
-		warn[i].height = FONT30_HIGH_PIXEL * 2;
+		warn[i].height = WARN_FRAME_HIGH * 2;
 		warn[i].text[0] = &text_msg[i];
 		warn[i].borderColor = 0xffff00ff;
 	}

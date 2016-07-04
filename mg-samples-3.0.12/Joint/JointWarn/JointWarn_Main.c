@@ -56,6 +56,8 @@ extern int g_sel_count;
 extern struct formStruct g_form[MAX_FORM_NUM];
 extern struct msgformStruct g_msgform[MAX_MSGFORM_NUM];
 extern struct selStruct g_sel[MAX_SEL_NUM];
+extern int logger_perwin_cnt;
+extern unsigned int g_form_color;
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -1084,8 +1086,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 			//EndPaint(hWnd,hdc);
 
-			//final_cmd = CMD_CREATE_101; 
-			final_cmd = CMD_CREATE_124; 
+			final_cmd = CMD_CREATE_101; 
+			//final_cmd = CMD_CREATE_124; 
 			//final_cmd = CMD_CREATE_125; 
 			JointRunCmdLine(hdc);
 
@@ -1590,6 +1592,7 @@ void JointRunCmdLine(HDC hdc)
 			memcpy(select_project_str + project_str_len, warn_msg[1].name, len);
 			project_str_len += len;
 		#endif
+			g_form_color = 0x228822ff;
 			jointwarn_crate_mainui(hdc, g_form, equi_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
@@ -1603,6 +1606,7 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
 			strcpy(warn_msg[0].name, msg_104_2[0]);
+			g_form_color = 0x228822ff;
 			jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
@@ -1981,7 +1985,55 @@ void JointRunCmdLine(HDC hdc)
 			printf("CMD_CREATE_125\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "125");
-			jointwarn_create_logerlist(hdc);
+			strcpy(sel_prompt_msg[0].name, "请选择终端登记器");	
+			window_frame_cnt = LOGGER_ROW * LOGGER_COL;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_logerlist(hdc, g_sel, &sel_prompt_msg);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_126:
+			printf("CMD_CREATE_126\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "126");
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_127:
+			printf("CMD_CREATE_127\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "127");
+			gRow = 4;
+			gColumn = 3;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			strcpy(sel_prompt_msg[0].name, "请选择查询区域！");
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_128:
+			printf("CMD_CREATE_128\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "128");
+			gRow = 4;
+			gColumn = 3;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			strcpy(sel_prompt_msg[0].name, "请选择查询设备！");
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_129:
+			printf("CMD_CREATE_129\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "129");
+			
+			gRow = 5;
+			gColumn = 2;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			strcpy(sel_prompt_msg[0].name, "请选择作业项目！");
+			g_form_color = 0xff0000ff;
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		default:

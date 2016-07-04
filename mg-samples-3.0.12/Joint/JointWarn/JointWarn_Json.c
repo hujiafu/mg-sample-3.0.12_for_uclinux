@@ -491,9 +491,8 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				tmpLen = 98 > strlen(tmp) ? strlen(tmp) : 98;
 				memcpy(g_msgform[i].text1, tmp, tmpLen);
 			}
-
 		}
-		return count;
+		goto JointAnalysisEnd;	
 
 	}
 	if(0 == strcmp(action, "update_sel")){
@@ -586,8 +585,8 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
 				memcpy(g_sel[i].text2, tmp, tmpLen);	
 			}
-			json_object_put(tmpObject);
 		}
+		goto JointAnalysisEnd;	
 	}
 	if((0 == strcmp(action, "update_area")) || (0 == strcmp(action, "update_equi")) || (0 == strcmp(action, "update_pro"))){
 		selArrayObject = json_object_object_get(newObject, "selects");
@@ -642,14 +641,105 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "104-2")){
 			final_cmd = CMD_CREATE_104_2;
 		}
-		return count;	
+		if(0 == strcmp(display_no, "127")){
+			final_cmd = CMD_CREATE_127;
+		}	
+		if(0 == strcmp(display_no, "128")){
+			final_cmd = CMD_CREATE_128;
+		}	
+		if(0 == strcmp(display_no, "129")){
+			final_cmd = CMD_CREATE_129;
+		}	
+		goto JointAnalysisEnd;	
 	}
 	if(0 == strcmp(action, "system")){
 		
 		if(0 == strcmp(display_no, "124")){
 			final_cmd = CMD_CREATE_124;
+			goto JointAnalysisEnd;
 		}
-		return 0;
+		if(0 == strcmp(display_no, "125")){
+			final_cmd = CMD_CREATE_125;
+		selArrayObject = json_object_object_get(newObject, "selects");
+		count = json_object_array_length(selArrayObject);
+		g_sel_count = count;
+		printf("json count = %d\n", count);
+		len = json_object_array_length(selArrayObject) > MAX_SEL_NUM ? MAX_SEL_NUM : json_object_array_length(selArrayObject);
+		for(i=0; i < len; i++){
+			selObject = json_object_array_get_idx(selArrayObject, i);
+			if(selObject == NULL){
+				printf("selObject NULL\n");
+				continue;
+			}else{
+				selObject = json_tokener_parse(json_object_get_string(selObject));
+			}
+
+			tmpObject = json_object_object_get(selObject, "index");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+				memcpy(g_sel[i].index, tmp, tmpLen);	
+			}
+			tmpObject = json_object_object_get(selObject, "color");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memcpy(g_sel[i].color, tmp, tmpLen);	
+			}
+			tmpObject = json_object_object_get(selObject, "text1");
+			if(tmpObject != NULL){
+				tmp = json_object_get_string(tmpObject);
+				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				memcpy(g_sel[i].text1, tmp, tmpLen);	
+			}
+		}
+		goto JointAnalysisEnd;
+		}
+		if(0 == strcmp(display_no, "126")){
+			final_cmd = CMD_CREATE_126;
+			selArrayObject = json_object_object_get(newObject, "selects");
+			count = json_object_array_length(selArrayObject);
+			g_msgform_count = count;
+			printf("msgform count = %d\n", count);
+			len = json_object_array_length(selArrayObject) > MAX_MSGFORM_NUM ? MAX_MSGFORM_NUM : json_object_array_length(selArrayObject);
+			for(i=0; i < len; i++){
+				selObject = json_object_array_get_idx(selArrayObject, i);
+				if(selObject == NULL){
+					printf("selObject NULL\n");
+					continue;
+				}else{
+					selObject = json_tokener_parse(json_object_get_string(selObject));
+				}
+			
+				tmpObject = json_object_object_get(selObject, "index");
+				if(tmpObject != NULL){
+					tmp = json_object_get_string(tmpObject);
+					tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+					memcpy(g_msgform[i].index, tmp, tmpLen);	
+				}
+				tmpObject = json_object_object_get(selObject, "color");
+				if(tmpObject != NULL){
+					tmp = json_object_get_string(tmpObject);
+					tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+					memcpy(g_msgform[i].color, tmp, tmpLen);
+					printf("color %s\n", tmp);
+				}
+				tmpObject = json_object_object_get(selObject, "textcolor");
+				if(tmpObject != NULL){
+					tmp = json_object_get_string(tmpObject);
+					tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+					memcpy(g_msgform[i].textcolor, tmp, tmpLen);
+					printf("textcolor %s\n", tmp);
+				}
+				tmpObject = json_object_object_get(selObject, "text1");
+				if(tmpObject != NULL){
+					tmp = json_object_get_string(tmpObject);
+					tmpLen = 98 > strlen(tmp) ? strlen(tmp) : 98;
+					memcpy(g_msgform[i].text1, tmp, tmpLen);
+				}
+			}
+			goto JointAnalysisEnd;
+		}
 	}
 	if(0 == strcmp(action, "update_top")){
 		printf("Json: update_top\n");
@@ -843,6 +933,8 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}
 
 	}
+
+JointAnalysisEnd:
 	if(selObject != NULL)
 		json_object_put(selObject);
 

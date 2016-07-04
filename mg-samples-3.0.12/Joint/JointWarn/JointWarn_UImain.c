@@ -64,6 +64,8 @@ struct formStruct * gPform_area;
 struct formStruct * gPform_equi;
 struct formStruct * gPform_pro;
 
+unsigned int g_form_color;
+
 void jointwarn_test(HDC hdc)
 {
 	SetBkMode(hdc,BM_TRANSPARENT);
@@ -176,6 +178,7 @@ void jointwarn_paint_frame(HDC hdc, struct formStruct *form, int count, int inde
 	int offsetx = 5;
 	int offsety = 22;
 	int filesize = 30;
+	unsigned char red, green, blue;
 	PLOGFONT s_font;
 	
 	if(index == 3)
@@ -183,7 +186,11 @@ void jointwarn_paint_frame(HDC hdc, struct formStruct *form, int count, int inde
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetTextColor(hdc, COLOR_lightwhite);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
+	red = (g_form_color & 0xff000000) >> 24;
+        green = (g_form_color & 0x00ff0000) >> 16;
+        blue = (g_form_color & 0x0000ff00) >> 8;
+
+	SetBrushColor(hdc, RGBA2Pixel(hdc, red, green, blue, 0xFF));
 	for(i=0; i<gRow; i++){
 		for(j=0; j<gColumn; j++){
 			x[k] = vx[j] - partWidth + 5;
