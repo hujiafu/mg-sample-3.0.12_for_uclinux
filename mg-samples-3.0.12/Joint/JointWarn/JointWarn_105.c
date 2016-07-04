@@ -114,13 +114,14 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 			warn[i].text[0] = &text_msg[i];
 		}
 	}
-	back_color = 0x473c8bff;
-	JointWarn_paint_back(hdc, back_color);
+	back_color = 0x2292ddff;
+        JointWarn_paint_back(hdc, back_color);
 	//if(0 == strcmp("105-1", display_no_str)){
 	//	JointWarn_create_spare(hdc);
 	//}
 	if(1 == has_back){
-		JointWarn_create_backbtn(hdc);
+		//JointWarn_create_backbtn(hdc);
+		jointwarn_paint_back(hdc);
 	}
 	JointWarn_create_msg(hdc, warn, max_count, 0);
 
@@ -174,10 +175,12 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 		warn[i].text[0] = &text_msg[i];
 		warn[i].borderColor = 0xffff00ff;
 	}
-	back_color = 0x473c8bff;
-	JointWarn_paint_back(hdc, back_color);
+	back_color = 0x2292ddff;
+        JointWarn_paint_back(hdc, back_color);
+	//if(0 == strcmp("105-1", display_no_str)){
 	if(1 == has_back){
-		JointWarn_create_backbtn(hdc);
+		//JointWarn_create_backbtn(hdc);
+		jointwarn_paint_back(hdc);
 	}
 	JointWarn_create_msg(hdc, warn, max_count, 1);
 

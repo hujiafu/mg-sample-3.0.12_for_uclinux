@@ -12,7 +12,8 @@
 //#define TOTAL_FRAME     12
 #define FONT40_PIXEL    22      //FORNT SIZE 40
 #define FONT35_PIXEL    19      //FORNT SIZE 35
-#define FONT30_PIXEL    16      //FORNT SIZE 30
+//#define FONT30_PIXEL    16      //FORNT SIZE 30
+#define FONT30_PIXEL    15      //FORNT SIZE 30
 #define FONT20_PIXEL    10     //FORNT SIZE 20
 #define FONT40_HIGH_PIXEL       45
 #define FONT30_HIGH_PIXEL       35

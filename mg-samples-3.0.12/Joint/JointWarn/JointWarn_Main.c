@@ -230,7 +230,7 @@ struct textStruct sel_prompt_msg[2] = {
 	{
 	.name = "",
 	.filesize = 30,
-	.offsetx = 10,
+	.offsetx = 30,
 	.offsety = 6,
 	.color = 0x00008BFF,
 	},
@@ -1087,6 +1087,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//EndPaint(hWnd,hdc);
 
 			final_cmd = CMD_CREATE_101; 
+			//final_cmd = CMD_CREATE_136; 
+			//final_cmd = CMD_CREATE_137; 
+			//final_cmd = CMD_CREATE_138; 
 			//final_cmd = CMD_CREATE_124; 
 			//final_cmd = CMD_CREATE_125; 
 			JointRunCmdLine(hdc);
@@ -1523,7 +1526,8 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_101_NO;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "101");
-			jointwarn_create_select(hdc, &menu_hz1[0], &menu_hz1_warn);
+			strcpy(sel_prompt_msg[0].name, "请选择操作项目!");	
+			jointwarn_create_select(hdc, &menu_hz1[0], &sel_prompt_msg);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_102:
@@ -1540,7 +1544,10 @@ void JointRunCmdLine(HDC hdc)
 			total_frame_cnt = g_form_count;
 			strcpy(warn_msg[0].name, select_msg[0]);
 			//jointwarn_crate_mainui(hdc, g_pform, warn_msg, 1);
-			jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
+			//g_form_color = 0x228822ff;
+			g_form_color = 0x173093ff;
+			//jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_103:
@@ -1553,9 +1560,9 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_103_NO;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			strcpy(area_msg[0].name, area_sel_str);
-			strcat(area_msg[0].name, "，");
-			strcat(area_msg[0].name, select_msg[1]);
+			//strcpy(area_msg[0].name, area_sel_str);
+			//strcat(area_msg[0].name, "，");
+			//strcat(area_msg[0].name, select_msg[1]);
 			#if 0
 			strcpy(warn_msg[1].name, select_msg[1]);
 	
@@ -1566,34 +1573,24 @@ void JointRunCmdLine(HDC hdc)
 			memcpy(select_project_str, warn_msg[0].name, len);
 			project_str_len += len;
 	#endif
-			jointwarn_crate_mainui(hdc, g_form, area_msg, 1);
+			//g_form_color = 0x228822ff;
+			g_form_color = 0x173093ff;
+			//jointwarn_crate_mainui(hdc, g_form, area_msg, 1);
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_1:
 			printf("CMD_CREATE_104_1\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "104-1");
-			
 			gRow = 5;
 			gColumn = 2;
 			window_no = WIN_104_1_NO;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			strcpy(equi_msg[0].name, area_sel_str);
-			strcat(equi_msg[0].name, equi_sel_str);
-			strcat(equi_msg[0].name, "，");
-			strcat(equi_msg[0].name, select_msg[2]);
-		#if 0
-			strcpy(warn_msg[1].name, equi_sel_str);
-			strcpy(warn_msg[2].name, select_msg[2]);
-
-			len = strlen(warn_msg[1].name);
-			len = len > (50 - project_str_len) ? (50 - project_str_len) : len;
-			memcpy(select_project_str + project_str_len, warn_msg[1].name, len);
-			project_str_len += len;
-		#endif
 			g_form_color = 0x228822ff;
-			jointwarn_crate_mainui(hdc, g_form, equi_msg, 1);
+			//g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_2:
@@ -1606,8 +1603,9 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
 			strcpy(warn_msg[0].name, msg_104_2[0]);
+			//g_form_color = 0x173093ff;
 			g_form_color = 0x228822ff;
-			jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_1:
@@ -1754,6 +1752,19 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "111-2");
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_112:
+			printf("CMD_CREATE_112\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "112");
+			strcpy(sel_prompt_msg[0].name, "请选择撤销作业项目！");	
+			gRow = 5;
+			gColumn = 2;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0xff0000ff;
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_111_3:
@@ -1943,7 +1954,7 @@ void JointRunCmdLine(HDC hdc)
 			printf("CMD_CREATE_120\n");
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "120");
-			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_121_1:
@@ -2006,7 +2017,7 @@ void JointRunCmdLine(HDC hdc)
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			strcpy(sel_prompt_msg[0].name, "请选择查询区域！");
+			g_form_color = 0x173093ff;
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
@@ -2018,7 +2029,7 @@ void JointRunCmdLine(HDC hdc)
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			strcpy(sel_prompt_msg[0].name, "请选择查询设备！");
+			g_form_color = 0x173093ff;
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
@@ -2031,9 +2042,122 @@ void JointRunCmdLine(HDC hdc)
 			gColumn = 2;
 			window_frame_cnt = gRow * gColumn;
 			total_frame_cnt = g_form_count;
-			strcpy(sel_prompt_msg[0].name, "请选择作业项目！");
 			g_form_color = 0xff0000ff;
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_130:
+			printf("CMD_CREATE_130\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "130");
+			gRow = 4;
+			gColumn = 3;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_131:
+			printf("CMD_CREATE_131\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "131");
+			gRow = 5;
+			gColumn = 2;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0xff0000ff;
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_132_1:
+			printf("CMD_CREATE_132_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "132-1");
+			gRow = 4;
+			gColumn = 3;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_132_2:
+			printf("CMD_CREATE_132_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "132-2");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_133:
+			printf("CMD_CREATE_133\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "133");
+			gRow = 5;
+			gColumn = 2;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0xff0000ff;
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_134_1:
+			printf("CMD_CREATE_134_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "134-1");
+			JointWarn_create_msgform(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_134_2:
+			printf("CMD_CREATE_134_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "134-2");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_135_1:
+			printf("CMD_CREATE_135_1\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "135-1");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_135_2:
+			printf("CMD_CREATE_135_2\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "135-2");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_135_3:
+			printf("CMD_CREATE_135_3\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "135-3");
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_136:
+			printf("CMD_CREATE_136\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "136");
+			jointwarn_system_create_main(hdc);
+			jointwarn_system_create_volume(hdc);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_137:
+			printf("CMD_CREATE_137\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "137");
+			jointwarn_system_create_main(hdc);
+			jointwarn_system_create_light(hdc);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_138:
+			printf("CMD_CREATE_138\n");
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "138");
+			jointwarn_system_create_main(hdc);
+			jointwarn_system_create_reset(hdc);
 			final_cmd = CMD_NULL;
 			break;
 		default:
