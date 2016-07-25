@@ -183,6 +183,8 @@ void jointwarn_paint_frame(HDC hdc, struct formStruct *form, int count, int inde
 	
 	if(index == 3)
 		offsety = 10;
+	if(gRow == 5)
+		offsety = 15;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetTextColor(hdc, COLOR_lightwhite);
@@ -391,6 +393,7 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 	int width, height;
 	int offsety;
 	int tmp;
+	int back_color;
 	PLOGFONT s_font;
 
 	printf("jointwarn_crate_mainui \n");
@@ -415,8 +418,14 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 		vy[i] = 0;
 		xx += partWidth;
 	}
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
-	FillBox(hdc, 0, 0, width, height);	
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x47, 0x3c, 0x8b, 0xFF));
+	//FillBox(hdc, 0, 0, width, height);	
+	back_color = 0x2292ddff;
+        JointWarn_paint_back(hdc, back_color);
+
+
+	SetPenColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
+        SetPenWidth(hdc, 4);
 	
 	for(i=0; i<gRow; i++){
 		//DrawHDotLine(hdc, hx[i], hy[i], width);
@@ -542,11 +551,15 @@ void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruc
 	int frame_height = 100;
 	int start_x, start_y;
 	int i;
+	unsigned int back_color;
 	PLOGFONT s_font;
 	
 	SetBkMode(hdc,BM_TRANSPARENT);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
-	FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);	
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x20, 0xB2, 0xAA, 0xFF));
+	//FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);	
+        back_color = 0x2292ddff;
+        JointWarn_paint_back(hdc, back_color);
+
 	
 	SetTextColor(hdc, COLOR_lightwhite);
 

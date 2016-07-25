@@ -699,7 +699,7 @@ void jointwarn_system_create_bottom(HDC hdc)
 
 }
 
-void jointwarn_system_create_voluem(HDC hdc)
+void jointwarn_system_create_volume(HDC hdc)
 {
 	PLOGFONT s_font;
 	int start_x, start_y;
@@ -784,7 +784,7 @@ void jointwarn_system_create_reset(HDC hdc)
 	int png_height = 180;
 	int start_x, start_y;
 
-	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/usr/local/minigui/local/share/minigui/res/bmp/reset.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/usr/local/minigui/local/share/minigui/res/bmp/reset_logo.png");
 	
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
@@ -816,8 +816,8 @@ void jointwarn_system_create_main(HDC hdc)
 	jointwarn_system_log(hdc);
 	jointwarn_system_create_bottom(hdc);
 
-	//jointwarn_system_create_voluem(hdc);
-	jointwarn_system_create_light(hdc);
+	//jointwarn_system_create_volume(hdc);
+	//jointwarn_system_create_light(hdc);
 	//jointwarn_system_create_reset(hdc);
 
 }

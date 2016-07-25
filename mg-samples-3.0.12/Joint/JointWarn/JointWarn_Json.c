@@ -180,9 +180,9 @@ extern unsigned char jointwarn_sn[4];
 extern unsigned char area_sel_no_str[4];
 extern unsigned char equi_sel_no_str[4];
 extern unsigned char pro_sel_no_str[4];
-extern struct textStruct sel_prompt_msg;
 extern int index_105;
 extern int final_cmd;
+struct textStruct sel_prompt_msg[2];
 
 unsigned int select_cnt;
 unsigned char sn[20];
@@ -451,6 +451,25 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "123")){
 			final_cmd = CMD_CREATE_123;
 		}	
+		if(0 == strcmp(display_no, "132-2")){
+			final_cmd = CMD_CREATE_132_2;
+		}	
+		if(0 == strcmp(display_no, "134-1")){
+			final_cmd = CMD_CREATE_134_1;
+		}	
+		if(0 == strcmp(display_no, "134-2")){
+			final_cmd = CMD_CREATE_134_2;
+		}
+		if(0 == strcmp(display_no, "135-1")){
+			final_cmd = CMD_CREATE_135_1;
+		}
+		if(0 == strcmp(display_no, "135-2")){
+			final_cmd = CMD_CREATE_135_2;
+		}
+		if(0 == strcmp(display_no, "135-3")){
+			final_cmd = CMD_CREATE_135_3;
+		}
+
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
 		g_msgform_count = count;
@@ -588,11 +607,17 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}
 		goto JointAnalysisEnd;	
 	}
-	if((0 == strcmp(action, "update_area")) || (0 == strcmp(action, "update_equi")) || (0 == strcmp(action, "update_pro"))){
+	if((0 == strcmp(action, "update_area")) || (0 == strcmp(action, "update_equi")) || (0 == strcmp(action, "update_pro")) ||  (0 == strcmp(action, "work_type"))){
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
 		g_form_count = count;
 		printf("json count = %d\n", count);
+	
+		tmpObject = json_object_object_get(newObject, "title");
+		if(tmpObject != NULL){
+			strcpy(sel_prompt_msg[0].name, json_object_get_string(tmpObject));
+		}
+		
 		//size = count * sizeof(struct formStruct);
 		//g_pform = malloc(size);
 		//if(g_pform == NULL){
@@ -641,6 +666,9 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "104-2")){
 			final_cmd = CMD_CREATE_104_2;
 		}
+		if(0 == strcmp(display_no, "112")){
+			final_cmd = CMD_CREATE_112;
+		}	
 		if(0 == strcmp(display_no, "127")){
 			final_cmd = CMD_CREATE_127;
 		}	
@@ -649,6 +677,18 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}	
 		if(0 == strcmp(display_no, "129")){
 			final_cmd = CMD_CREATE_129;
+		}	
+		if(0 == strcmp(display_no, "130")){
+			final_cmd = CMD_CREATE_130;
+		}	
+		if(0 == strcmp(display_no, "131")){
+			final_cmd = CMD_CREATE_131;
+		}	
+		if(0 == strcmp(display_no, "132-1")){
+			final_cmd = CMD_CREATE_132_1;
+		}	
+		if(0 == strcmp(display_no, "133")){
+			final_cmd = CMD_CREATE_133;
 		}	
 		goto JointAnalysisEnd;	
 	}
