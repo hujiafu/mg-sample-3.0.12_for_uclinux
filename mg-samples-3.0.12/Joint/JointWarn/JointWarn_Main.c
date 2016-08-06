@@ -295,6 +295,14 @@ struct textStruct equi_msg[] = {
 	},
 };
 
+const char* logo_100_1[]=
+{
+	"安全生产，人人有责！",
+};
+const char* logo_100_2[]=
+{
+	"遵章守纪，保障安全！",
+};
 const char* menu_hz[]=
 { 	
 	"液压站",
@@ -856,7 +864,6 @@ unsigned char test_102[] =
         {\"index\" : \"24\", \"text1\" : \"mytest24\"},\
         {\"index\" : \"25\", \"text1\" : \"mytest25\"}\
         ]}";
-
 unsigned char test_106_1[] = 
 	"{\"sn\" : \"JointCtrl1\", \"action\" : \"update_sel\", \"selects\" : \
         [{\"index\" : \"1\", \"color\" : \"green\", \"text1\" : \"mytest1\", \"text2\" : \"mytext2\"},\
@@ -896,6 +903,7 @@ void test_output(HDC hdc, char * str)
 	TextOut(hdc,300,295, str);
 }
 
+#if 1
 void create_project_window(HDC hdc)
 {
 	unsigned char * origin_str;
@@ -972,7 +980,7 @@ void create_select_window(HDC hdc, struct textStruct * text, struct textStruct *
 	window_no = WIN_101_NO;
 	jointwarn_create_select(hdc, text, warn);
 }
-
+#endif
 static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 {
 	static BITMAP s_startbmp,s_background;
@@ -989,7 +997,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 	HDC hdc;
 	unsigned char * origin_str;	
 	unsigned int ptr;
-
+#if 1
 	
 	switch(message)
 	{
@@ -1086,7 +1094,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 			//EndPaint(hWnd,hdc);
 
-			final_cmd = CMD_CREATE_101; 
+			final_cmd = CMD_CREATE_100_2; 
+			//final_cmd = CMD_CREATE_101; 
 			//final_cmd = CMD_CREATE_136; 
 			//final_cmd = CMD_CREATE_137; 
 			//final_cmd = CMD_CREATE_138; 
@@ -1104,6 +1113,14 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			pre_y = HIWORD(lParam);
 			printf("x = %d, y = %d\n", pre_x, pre_y);
 			if(top_window == 0){
+			if(window_no == WIN_100_2_NO){
+				origin_str = JointWarn_102_get_data(0);
+				printf("=======================================\n");
+				JointAnalysisCmdLine(origin_str, &ptr);
+				printf("=======================================\n");
+				JointRunCmdLine(hdc);
+				printf("=======================================\n");
+			}
 			if(window_no == WIN_101_NO){
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
@@ -1121,6 +1138,9 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if(select_canel.active == 1){
 					if((pre_x > select_canel.point_start.x && pre_x < select_canel.point_end.x) && (pre_y > select_canel.point_start.y && pre_y < select_canel.point_end.y)){
 						printf("select_canel press\n");
+						origin_str = JointWarn_102_get_data(1);
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
 						break;
 					}
 				}
@@ -1129,7 +1149,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				if((pre_x > btn_back_1.point_start.x && pre_x < btn_back_1.point_end.x) && (pre_y > btn_back_1.point_start.y && pre_y < btn_back_1.point_end.y)){
 					printf("back pressed\n");
 					
-					if(WIN_103_NO == window_no){
+					if(WIN_103_NO == window_no || WIN_102_NO == window_no || WIN_101_NO == window_no){
 						//JointWarn_free_area_buf();
 						//origin_str = JointWarn_102_get_data(0);
 						origin_str = JointWarn_back_request();
@@ -1154,12 +1174,70 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						break;
 					
 					}
-					if(WIN_106_1_NO == window_no){
-						JointWarn_free_pro_buf();
-						create_project_window(hdc);
+					if(WIN_106_1_NO == window_no || WIN_106_2_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
 					}
-					if(4 == window_no){
-						printf("back to 100-2\n");
+					if(WIN_107_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_110_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_112_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_113_1_NO == window_no || WIN_113_4_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_114_1_NO == window_no || WIN_114_2_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_115_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_118_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_120_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_125_NO == window_no || WIN_126_NO == window_no || WIN_127_NO == window_no || WIN_128_NO == window_no || WIN_129_NO == window_no || WIN_130_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
+						break;
+					}
+					if(WIN_131_NO == window_no || WIN_132_1_NO == window_no || WIN_133_NO == window_no || WIN_134_1_NO == window_no){
+						origin_str = JointWarn_back_request();
+						JointAnalysisCmdLine(origin_str, &ptr);
+						JointRunCmdLine(hdc);
 						break;
 					}
 					//EnableWindow(hWnd, FALSE);
@@ -1167,7 +1245,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				}
 			}
 			//if((window_no >= 1 && window_no <=3) || window_no == 8){
-			if((WIN_102_NO == window_no) || (WIN_103_NO == window_no) || (WIN_104_1_NO == window_no) || (WIN_106_1_NO == window_no)){
+			//if((WIN_102_NO == window_no) || (WIN_103_NO == window_no) || (WIN_104_1_NO == window_no) || (WIN_106_1_NO == window_no)){
 			if(btn_front_page_1.active == 1){
 				if((pre_x > btn_front_page_1.point_start.x && pre_x < btn_front_page_1.point_end.x) && (pre_y > btn_front_page_1.point_start.y && pre_y < btn_front_page_1.point_end.y)){
 					printf("front page pressed\n");
@@ -1338,19 +1416,27 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						}
 					}
 				}
-				}
-				if(WIN_106_1_NO == window_no){
-					for(i=0; i<6; i++){
+			}
+				if(WIN_106_1_NO == window_no || WIN_106_2_NO == window_no || WIN_107_NO == window_no || WIN_110_NO == window_no || WIN_114_1_NO == window_no || WIN_114_2_NO == window_no || WIN_115_NO == window_no || WIN_118_NO == window_no ){
+					for(i=0; i<g_sel_count; i++){
 						if(((pre_x > select_obj[i].point_start.x) && (pre_x < select_obj[i].point_end.x)) && \
 							((pre_y > select_obj[i].point_start.y) && (pre_y < select_obj[i].point_end.y))){
 							select_obj_no = i + window_frame_cnt * page_cnt1;
 							printf("select %d sel\n", select_obj_no);										
-							JointWarn_create_top_back(hdc, 480, 280);
+							origin_str = JointWarn_103_get_data(select_obj_no);
+							printf("=======================================\n");
+							JointAnalysisCmdLine(origin_str, &ptr);
+							printf("=======================================\n");
+							JointRunCmdLine(hdc);
+							printf("=======================================\n");
+							//create_equipment_window(hdc);
+							goto WinProcEnd;
+							//JointWarn_create_top_back(hdc, 480, 280);
 							//InitConfirmWindow(hWnd, 480, 280, &warnform1, 1);
 						}
 					}	
 				}
-			}
+			//}
 
 			}
 			}else{
@@ -1359,8 +1445,11 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
                         	&& ((pre_y > btn_cancel.point_start.y) && (pre_y < btn_cancel.point_end.y)) \
                         	){
 					printf("cancel pressed\n");
-					top_window = 0;
-					JointWarn_create_106(hdc, 1);
+					//top_window = 0;
+					//JointWarn_create_106(hdc, 1);
+					origin_str = JointWarn_back_request();
+					JointAnalysisCmdLine(origin_str, &ptr);
+					JointRunCmdLine(hdc);
 				}
 
 			}
@@ -1475,6 +1564,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 		default:
 			return(DefaultMainWinProc(hWnd,message,wParam,lParam));
 	}
+
+#endif
 WinProcEnd:
 	return(0);	
 }
@@ -1512,7 +1603,7 @@ int InitMainWindow(void)
 	if(hMainWnd == HWND_INVALID) return(0);
 	else return(1);
 }
-
+#if 1
 void JointRunCmdLine(HDC hdc)
 {
 	int len;
@@ -1522,7 +1613,22 @@ void JointRunCmdLine(HDC hdc)
 		case CMD_NULL:
 			printf("CMD_NULL\n");
 			break;
+		case CMD_CREATE_100_2:
+			window_no = WIN_100_2_NO;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "100-2");
+			jointwarn_create_100_2(hdc);
+			final_cmd = CMD_NULL;
+			break;	
+		case CMD_CREATE_100_3:
+			window_no = WIN_100_3_NO;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "100-3");
+			jointwarn_create_100_3(hdc);
+			final_cmd = CMD_NULL;
+			break;	
 		case CMD_CREATE_101:
+			top_window = 0;
 			window_no = WIN_101_NO;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "101");
@@ -1532,6 +1638,7 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_102:
 			printf("CMD_CREATE_102\n");
+			top_window = 0;
 			//create_area_window(hdc);
 			//gPform_area = g_pform;
 			memset(display_no_str, 0, 10);
@@ -1552,6 +1659,7 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_103:
 			printf("CMD_CREATE_103\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "103");
 			//create_equipment_window(hdc);
@@ -1581,6 +1689,7 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_104_1:
 			printf("CMD_CREATE_104_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "104-1");
 			gRow = 5;
@@ -1595,6 +1704,7 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_104_2:
 			printf("CMD_CREATE_104_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "104-2");
 			gRow = 5;
@@ -1610,29 +1720,37 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_105_1:
 			printf("CMD_CREATE_105_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-1");
+			window_no = WIN_105_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_2:
 			printf("CMD_CREATE_105_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-2");
+			window_no = WIN_105_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_3:
 			printf("CMD_CREATE_105_3\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-3");
+			window_no = WIN_105_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_106_1:
 			printf("CMD_CREATE_106_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-1");
+			window_no = WIN_106_1_NO;
 			strcpy(sel_prompt_msg[0].name, "请实施介质安全关闭!");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1641,8 +1759,10 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_106_2:
 			printf("CMD_CREATE_106_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-2");
+			window_no = WIN_106_2_NO;
 			strcpy(sel_prompt_msg[0].name, "请实施部分介质安全关闭!");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1651,22 +1771,28 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_106_3:
 			printf("CMD_CREATE_106_3\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-3");
+			window_no = WIN_106_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_106_4:
 			printf("CMD_CREATE_106_4\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-4");
+			window_no = WIN_106_4_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_107:
 			printf("CMD_CREATE_107\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "107");
+			window_no = WIN_107_NO;
 			strcpy(sel_prompt_msg[0].name, "请选择单项介质安全关闭状态确认！");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1675,64 +1801,80 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_108_1:
 			printf("CMD_CREATE_108_1\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "108-1");
+			window_no = WIN_108_1_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_2:
 			printf("CMD_CREATE_108_2\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "108-2");
+			window_no = WIN_108_2_NO;
 			top_has_canel = 1;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_3:
 			printf("CMD_CREATE_108_3\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "108-3");
+			window_no = WIN_108_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_4:
 			printf("CMD_CREATE_108_4\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "108-4");
+			window_no = WIN_108_4_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_1:
 			printf("CMD_CREATE_109_1\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "109-1");
+			window_no = WIN_109_1_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_2:
 			printf("CMD_CREATE_109_2\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "109-2");
+			window_no = WIN_109_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_3:
 			printf("CMD_CREATE_109_3\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "109-3");
+			window_no = WIN_109_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_110:
 			printf("CMD_CREATE_110\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "110");
+			window_no = WIN_110_NO;
 			strcpy(sel_prompt_msg[0].name, "请岗位操作人员打卡确认作业项目启动！");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1741,23 +1883,29 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_111_1:
 			printf("CMD_CREATE_111_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "111-1");
+			window_no = WIN_111_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_111_2:
 			printf("CMD_CREATE_111_2\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "111-2");
+			window_no = WIN_111_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_112:
 			printf("CMD_CREATE_112\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "112");
+			window_no = WIN_112_NO;
 			strcpy(sel_prompt_msg[0].name, "请选择撤销作业项目！");	
 			gRow = 5;
 			gColumn = 2;
@@ -1769,44 +1917,56 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_111_3:
 			printf("CMD_CREATE_111_3\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "111-3");
+			window_no = WIN_111_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_1:
 			printf("CMD_CREATE_113_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-1");
+			window_no = WIN_113_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_2:
 			printf("CMD_CREATE_113_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-2");
+			window_no = WIN_113_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_3:
 			printf("CMD_CREATE_113_3\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-3");
+			window_no = WIN_113_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_4:
 			printf("CMD_CREATE_113_4\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-4");
+			window_no = WIN_113_4_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_1:
 			printf("CMD_CREATE_114_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-1");
+			window_no = WIN_114_1_NO;
 			strcpy(sel_prompt_msg[0].name, "请实施介质安全复位！");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1815,8 +1975,11 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_114_2:
 			printf("CMD_CREATE_114_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-2");
+			window_no = WIN_114_2_NO;
+			memset(display_no_str, 0, 10);
 			strcpy(sel_prompt_msg[0].name, "请实施部分介质复位！");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1825,36 +1988,46 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_114_3:
 			printf("CMD_CREATE_114_3\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-3");
+			window_no = WIN_114_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_4:
 			printf("CMD_CREATE_114_4\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-4");
+			window_no = WIN_114_4_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_5:
 			printf("CMD_CREATE_114_5\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-5");
+			window_no = WIN_114_5_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_6:
 			printf("CMD_CREATE_114_6\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-6");
+			window_no = WIN_114_6_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_115:
 			printf("CMD_CREATE_115\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "115");
+			window_no = WIN_115_NO;
 			strcpy(sel_prompt_msg[0].name, "请选择单项介质复位状态确认！");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1863,64 +2036,80 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_116_1:
 			printf("CMD_CREATE_116_1\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "116-1");
+			window_no = WIN_116_1_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_2:
 			printf("CMD_CREATE_116_2\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "116-2");
+			window_no = WIN_116_2_NO;
 			top_has_canel = 1;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_3:
 			printf("CMD_CREATE_116_3\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "116-3");
+			window_no = WIN_116_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_4:
 			printf("CMD_CREATE_116_4\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "116-4");
+			window_no = WIN_116_4_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_117_1:
 			printf("CMD_CREATE_117_1\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "117-1");
+			window_no = WIN_117_1_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_117_2:
 			printf("CMD_CREATE_117_2\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "117-2");
+			window_no = WIN_117_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_117_3:
 			printf("CMD_CREATE_117_3\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "117-3");
+			window_no = WIN_117_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_118:
 			printf("CMD_CREATE_118\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "118");
+			window_no = WIN_118_NO;
 			strcpy(sel_prompt_msg[0].name, "请岗位操作人员打卡确认完成！");	
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
@@ -1929,73 +2118,93 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_119_1:
 			printf("CMD_CREATE_119_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "119-1");
+			window_no = WIN_119_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_2:
 			printf("CMD_CREATE_119_2\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "119-2");
+			window_no = WIN_119_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_3:
 			printf("CMD_CREATE_119_3\n");
+			top_window = 1;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "119-3");
+			window_no = WIN_119_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_120:
 			printf("CMD_CREATE_120\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "120");
+			window_no = WIN_120_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_121_1:
 			printf("CMD_CREATE_121_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "121-1");
+			window_no = WIN_121_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_121_2:
 			printf("CMD_CREATE_121_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "121-2");
+			window_no = WIN_121_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_122:
 			printf("CMD_CREATE_122\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "122");
+			window_no = WIN_122_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_123:
 			printf("CMD_CREATE_123\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "123");
+			window_no = WIN_123_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_124:
 			printf("CMD_CREATE_124\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "124");
+			window_no = WIN_124_NO;
 			jointwarn_system_create_main(hdc);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_125:
 			printf("CMD_CREATE_125\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "125");
+			window_no = WIN_125_NO;
 			strcpy(sel_prompt_msg[0].name, "请选择终端登记器");	
 			window_frame_cnt = LOGGER_ROW * LOGGER_COL;
 			total_frame_cnt = g_sel_count;
@@ -2004,15 +2213,19 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_126:
 			printf("CMD_CREATE_126\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "126");
+			window_no = WIN_126_NO;
 			jointwarn_create_normal_msgfrom(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_127:
 			printf("CMD_CREATE_127\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "127");
+			window_no = WIN_127_NO;
 			gRow = 4;
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
@@ -2023,8 +2236,10 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_128:
 			printf("CMD_CREATE_128\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "128");
+			window_no = WIN_128_NO;
 			gRow = 4;
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
@@ -2035,8 +2250,10 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_129:
 			printf("CMD_CREATE_129\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "129");
+			window_no = WIN_129_NO;
 			
 			gRow = 5;
 			gColumn = 2;
@@ -2048,8 +2265,10 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_130:
 			printf("CMD_CREATE_130\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "130");
+			window_no = WIN_130_NO;
 			gRow = 4;
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
@@ -2060,8 +2279,10 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_131:
 			printf("CMD_CREATE_131\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "131");
+			window_no = WIN_131_NO;
 			gRow = 5;
 			gColumn = 2;
 			window_frame_cnt = gRow * gColumn;
@@ -2072,8 +2293,10 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_132_1:
 			printf("CMD_CREATE_132_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "132-1");
+			window_no = WIN_132_1_NO;
 			gRow = 4;
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
@@ -2084,15 +2307,19 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_132_2:
 			printf("CMD_CREATE_132_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "132-2");
+			window_no = WIN_132_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_133:
 			printf("CMD_CREATE_133\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "133");
+			window_no = WIN_133_NO;
 			gRow = 5;
 			gColumn = 2;
 			window_frame_cnt = gRow * gColumn;
@@ -2103,59 +2330,75 @@ void JointRunCmdLine(HDC hdc)
 			break;
 		case CMD_CREATE_134_1:
 			printf("CMD_CREATE_134_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "134-1");
+			window_no = WIN_134_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_134_2:
 			printf("CMD_CREATE_134_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "134-2");
+			window_no = WIN_134_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_135_1:
 			printf("CMD_CREATE_135_1\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "135-1");
+			window_no = WIN_135_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_135_2:
 			printf("CMD_CREATE_135_2\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "135-2");
+			window_no = WIN_135_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_135_3:
 			printf("CMD_CREATE_135_3\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "135-3");
+			window_no = WIN_135_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_136:
 			printf("CMD_CREATE_136\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "136");
+			window_no = WIN_136_NO;
 			jointwarn_system_create_main(hdc);
 			jointwarn_system_create_volume(hdc);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_137:
 			printf("CMD_CREATE_137\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "137");
+			window_no = WIN_137_NO;
 			jointwarn_system_create_main(hdc);
 			jointwarn_system_create_light(hdc);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_138:
 			printf("CMD_CREATE_138\n");
+			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "138");
+			window_no = WIN_138_NO;
 			jointwarn_system_create_main(hdc);
 			jointwarn_system_create_reset(hdc);
 			final_cmd = CMD_NULL;
@@ -2169,7 +2412,7 @@ void JointRunCmdLine(HDC hdc)
 	return;
 
 }
-
+#endif
 unsigned long gCounter;
 
 void check_task(int *counter)
@@ -2221,7 +2464,7 @@ int MiniGUIMain (int argc, const char* argv[])
 
     	ShowWindow(hMainWnd, SW_SHOWNORMAL);
 #endif
-	pthread_create(&thrd, NULL, (void*)check_task, (void*)&gCounter);
+	//pthread_create(&thrd, NULL, (void*)check_task, (void*)&gCounter);
 	InitMainWindow();	
 		
 	//printf("argc = %d\n", argc);

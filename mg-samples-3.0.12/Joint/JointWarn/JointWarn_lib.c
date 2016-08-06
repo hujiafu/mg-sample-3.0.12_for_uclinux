@@ -47,6 +47,9 @@ extern struct textStruct system_back_txt;
 extern int max_font_cnt;
 extern struct selStruct g_sel[MAX_SEL_NUM];
 extern int g_sel_count;
+extern const char* logo_100_1[];
+extern const char* logo_100_2[];
+extern const char* menu_hz[];
 
 POINT form_pos_start[2];
 POINT form_pos_end[2];
@@ -63,20 +66,58 @@ struct buttonObject btn_cancel;
 //struct textStruct top_text[3];
 int top_window;
 
+static BITMAP s_png[2];
+
+void jointwarn_create_100_3(HDC hdc)
+{
+	PLOGFONT s_font;
+
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xff, 0x0, 0x0, 0xFF));
+	FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 40, 0);
+	SelectFont(hdc,s_font);
+        SetTextColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xff));
+        TextOut(hdc, 220, 150, logo_100_1[0]);
+        TextOut(hdc, 220, 250, logo_100_2[0]);
+        DestroyLogFont(s_font);
+#if 0
+#if DEBUG_QVFB
+	LoadBitmap(HDC_SCREEN,&s_png[1],"/usr/local/minigui/local/share/minigui/res/bmp/100-3.png");
+#else
+	LoadBitmap(HDC_SCREEN,&s_png[0],"/etc/minigui/res/bmp/100-3.png");
+#endif
+
+	FillBoxWithBitmap(hdc, 0, 0, 800, 480, &s_png[1]);
+#endif
+}
+
 void jointwarn_create_100_2(HDC hdc)
 {
+#if 1
 	PLOGFONT s_font;
 
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
 	FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
-                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 20, 0);
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 40, 0);
 	SelectFont(hdc,s_font);
-        SetTextColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0x0, 0xff));
-        TextOut(hdc, 50, 50, cancel_text[0]);
+        SetTextColor(hdc, RGBA2Pixel(hdc, 0xff, 0x0, 0x0, 0xff));
+        TextOut(hdc, 220, 150, logo_100_1[0]);
+        TextOut(hdc, 220, 250, logo_100_2[0]);
         DestroyLogFont(s_font);
+#endif
+#if 0	
+#if DEBUG_QVFB
+	LoadBitmap(HDC_SCREEN,&s_png[0],"/usr/local/minigui/local/share/minigui/res/bmp/100-2.png");
+#else
+	LoadBitmap(HDC_SCREEN,&s_png[0],"/etc/minigui/res/bmp/100-2.png");
 
+#endif
+	FillBoxWithBitmap(hdc, 0, 0, 800, 480, &s_png[0]);
+#endif
 }
 
 void jointwarn_paint_cancel(HDC hdc)
@@ -113,6 +154,8 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 	int i, j;
 	int offset_x;
 	unsigned char red, green, blue;
+	unsigned char * origin_str;
+	unsigned int ptr;
 	PLOGFONT s_font;
 	
 	form_width = width;
@@ -163,7 +206,16 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 	if(1 == has_canel){
 		jointwarn_paint_cancel(hdc);
 	}else{
+		sleep(3);
+		printf("sleep 3000\n");
 		//auto canel after 3s
+		origin_str = JointWarn_102_get_data(0);
+                printf("=======================================\n");
+                JointAnalysisCmdLine(origin_str, &ptr);
+                printf("=======================================\n");
+                JointRunCmdLine(hdc);
+                printf("=======================================\n");
+
 	}
 }
 

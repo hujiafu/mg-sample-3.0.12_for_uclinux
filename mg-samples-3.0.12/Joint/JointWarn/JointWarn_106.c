@@ -76,6 +76,7 @@ void JointWarn_106_repaint_sel(HDC hdc, struct selStruct * psel, int start_index
 			testText[0].filesize = 20;
 			testText[0].offsetx = 5;
 			testText[0].offsety = 20;
+			memset(testText[0].name, 100, 0);
 			strcpy(testText[0].name, psel[i + start_index].text1);
 			if(0 == strcmp("green", psel[i + start_index].color)){
 				warn[0].formColor = 0x3cb371ff;
@@ -89,6 +90,8 @@ void JointWarn_106_repaint_sel(HDC hdc, struct selStruct * psel, int start_index
 			testText[0].filesize = 20;
 			testText[0].offsetx = 5;
 			testText[0].offsety = 20;
+			memset(testText[0].name, 100, 0);
+			printf("%s\n", psel[i + start_index].text2);
 			strcpy(testText[0].name, psel[i + start_index].text2);
 			warn[0].formColor = 0xffffffff;
 			warn[0].text[0] = &testText[0];

@@ -545,10 +545,12 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 
 }
 
+static BITMAP s_101_png[2];
+
 void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruct *warn)
 {
-	int frame_width = 400;
-	int frame_height = 100;
+	int frame_width = 355;
+	int frame_height = 113;
 	int start_x, start_y;
 	int i;
 	unsigned int back_color;
@@ -563,6 +565,7 @@ void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruc
 	
 	SetTextColor(hdc, COLOR_lightwhite);
 
+#if 1
 	for(i=0; i<2; i++){
 		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
 		start_x = (MWINDOW_RX - frame_width) >> 1;
@@ -597,6 +600,55 @@ void jointwarn_create_select(HDC hdc, struct textStruct * text, struct textStruc
 		TextOut(hdc, start_x + text[i].offsetx, start_y + text[i].offsety, text[i].name);	
 		DestroyLogFont(s_font);
 	}
+#endif
+#if 0
+#if DEBUG_QVFB
+	LoadBitmap(HDC_SCREEN,&s_101_png[0],"/usr/local/minigui/local/share/minigui/res/bmp/quest_prj.png");
+	LoadBitmap(HDC_SCREEN,&s_101_png[1],"/usr/local/minigui/local/share/minigui/res/bmp/reset_prj.png");
+#else
+	LoadBitmap(HDC_SCREEN,&s_101_png[0],"/etc/minigui/res/bmp/quest_prj.png");
+	LoadBitmap(HDC_SCREEN,&s_101_png[1],"/etc/minigui/res/bmp/reset_prj.png");
+#endif
+#endif
+	for(i=0; i<2; i++){
+		SetBrushColor(hdc, RGBA2Pixel(hdc, 0x27, 0x40, 0x8B, 0xFF));
+		start_x = (MWINDOW_RX - frame_width) >> 1;
+		if(i == 1){
+			start_y = SPARE_Y >> 1;
+			select_canel.point_start.x = start_x;
+			select_canel.point_start.y = start_y;
+			select_canel.point_end.x = start_x + frame_width;
+			select_canel.point_end.y = start_y + frame_height;
+			select_canel.active = 1;
+		}else{
+			start_y = ((SPARE_Y >> 1) - frame_height) >> 1;
+			select_apply.point_start.x = start_x;
+			select_apply.point_start.y = start_y;
+			select_apply.point_end.x = start_x + frame_width;
+			select_apply.point_end.y = start_y + frame_height;
+			select_apply.active = 1;
+		}
+
+
+		FillBoxWithBitmap(hdc, start_x, start_y, frame_width, frame_height, &s_101_png[i]);	
+		//FillBox(hdc, start_x, start_y, frame_width, frame_height);
+			
+		//SetPenColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0x00, 0xFF));
+        	//SetPenWidth(hdc, 1);
+        	//LineEx(hdc, start_x + 1, start_y + 1, start_x + frame_width - 1, start_y + 1);
+        	//LineEx(hdc, start_x + frame_width - 1, start_y + 1, start_x + frame_width - 1, start_y + frame_height - 1);
+        	//LineEx(hdc, start_x + frame_width - 1, start_y + frame_height - 1, start_x + 1, start_y + frame_height - 1);
+        	//LineEx(hdc, start_x + 1, start_y + frame_height - 1, start_x + 1, start_y + 1);
+
+		//SetTextColor(hdc, COLOR_lightwhite);
+		//s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+			FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, text[i].filesize, 0);
+		//SelectFont(hdc,s_font);
+		//TextOut(hdc, start_x + text[i].offsetx, start_y + text[i].offsety, text[i].name);	
+		//DestroyLogFont(s_font);
+	}
+		
+
 
 	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0xFF, 0xFF, 0xFF, 0xFF));
 	//FillBox(hdc, 0, SPARE_Y, MWINDOW_RX, MWINDOW_BY - SPARE_Y);	

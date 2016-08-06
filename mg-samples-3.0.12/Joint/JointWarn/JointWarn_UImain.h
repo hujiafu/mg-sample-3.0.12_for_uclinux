@@ -1,6 +1,8 @@
 #ifndef __JOINT_WARN_MAINUI_H__
 #define __JOINT_WARN_MAINUI_H__
 
+#define DEBUG_QVFB  0
+
 #define MWINDOW_LX   0
 #define MWINDOW_TY   0
 #define MWINDOW_RX   800

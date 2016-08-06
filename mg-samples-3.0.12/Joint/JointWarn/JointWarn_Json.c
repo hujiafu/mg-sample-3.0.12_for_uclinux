@@ -390,6 +390,13 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}	
 
 	}
+	if(0 == strcmp(action, "display_normal")){
+		if(0 == strcmp(display_no, "101")){
+			final_cmd = CMD_CREATE_101;
+			printf("final_cmd %d\n", final_cmd);
+		}	
+		goto JointAnalysisEnd;	
+	}
 	if(0 == strcmp(action, "display_form")){
 		if(0 == strcmp(display_no, "105-1")){
 			final_cmd = CMD_CREATE_105_1;
@@ -488,12 +495,14 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+				memset(g_msgform[i].index, 0, 4);
 				memcpy(g_msgform[i].index, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "color");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memset(g_msgform[i].color, 0, 10);
 				memcpy(g_msgform[i].color, tmp, tmpLen);
 				printf("color %s\n", tmp);
 			}
@@ -501,6 +510,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memset(g_msgform[i].textcolor, 0, 10);
 				memcpy(g_msgform[i].textcolor, tmp, tmpLen);
 				printf("textcolor %s\n", tmp);
 			}
@@ -508,6 +518,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 98 > strlen(tmp) ? strlen(tmp) : 98;
+				memset(g_msgform[i].text1, 0, 100);
 				memcpy(g_msgform[i].text1, tmp, tmpLen);
 			}
 		}
@@ -544,12 +555,14 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(tmpObject != NULL){
 			tmp = json_object_get_string(tmpObject);
 			tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+			memset(sel_title_color, 0, 10);
 			memcpy(sel_title_color, tmp, tmpLen);	
 		}
 		tmpObject = json_object_object_get(newObject, "title");
 		if(tmpObject != NULL){
 			tmp = json_object_get_string(tmpObject);
 			tmpLen = 48 > strlen(tmp) ? strlen(tmp) : 48;
+			memset(sel_title, 0, 50);
 			memcpy(sel_title, tmp, tmpLen);	
 		}
 		//g_update_sel_index = atoi(json_object_get_string(tmpObject));
@@ -584,24 +597,28 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+				memset(g_sel[i].index, 0, 4);
 				memcpy(g_sel[i].index, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "color");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memset(g_sel[i].color, 0, 10);
 				memcpy(g_sel[i].color, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				memset(g_sel[i].text1, 0, 22);
 				memcpy(g_sel[i].text1, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text2");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				memset(g_sel[i].text2, 0, 22);
 				memcpy(g_sel[i].text2, tmp, tmpLen);	
 			}
 		}
@@ -642,6 +659,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
 				//memcpy(g_pform[i].index, tmp, tmpLen);	
+				memset(g_form[i].index, 0, 4);
 				memcpy(g_form[i].index, tmp, tmpLen);	
 			}
 			
@@ -650,6 +668,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
 				//memcpy(g_pform[i].text1, tmp, tmpLen);
+				memset(g_form[i].text1, 0, 22);
 				memcpy(g_form[i].text1, tmp, tmpLen);
 				printf("%s\n", g_form[i].text1);	
 			}
@@ -718,18 +737,21 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+				memset(g_sel[i].index, 0, 4);
 				memcpy(g_sel[i].index, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "color");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+				memset(g_sel[i].color, 0, 10);
 				memcpy(g_sel[i].color, tmp, tmpLen);	
 			}
 			tmpObject = json_object_object_get(selObject, "text1");
 			if(tmpObject != NULL){
 				tmp = json_object_get_string(tmpObject);
 				tmpLen = 20 > strlen(tmp) ? strlen(tmp) : 20;
+				memset(g_sel[i].text1, 0, 22);
 				memcpy(g_sel[i].text1, tmp, tmpLen);	
 			}
 		}
@@ -755,12 +777,14 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				if(tmpObject != NULL){
 					tmp = json_object_get_string(tmpObject);
 					tmpLen = 3 > strlen(tmp) ? strlen(tmp) : 3;
+					memset(g_msgform[i].index, 0, 4);
 					memcpy(g_msgform[i].index, tmp, tmpLen);	
 				}
 				tmpObject = json_object_object_get(selObject, "color");
 				if(tmpObject != NULL){
 					tmp = json_object_get_string(tmpObject);
 					tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+					memset(g_msgform[i].color, 0, 10);
 					memcpy(g_msgform[i].color, tmp, tmpLen);
 					printf("color %s\n", tmp);
 				}
@@ -768,6 +792,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				if(tmpObject != NULL){
 					tmp = json_object_get_string(tmpObject);
 					tmpLen = 8 > strlen(tmp) ? strlen(tmp) : 8;
+					memset(g_msgform[i].textcolor, 0, 10);
 					memcpy(g_msgform[i].textcolor, tmp, tmpLen);
 					printf("textcolor %s\n", tmp);
 				}
@@ -775,6 +800,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 				if(tmpObject != NULL){
 					tmp = json_object_get_string(tmpObject);
 					tmpLen = 98 > strlen(tmp) ? strlen(tmp) : 98;
+					memset(g_msgform[i].text1, 0, 100);
 					memcpy(g_msgform[i].text1, tmp, tmpLen);
 				}
 			}

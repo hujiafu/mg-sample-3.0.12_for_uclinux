@@ -20,6 +20,9 @@ extern const unsigned char request_oper[];
 extern unsigned char udp_buf[UDP_MAX_LEN];
 extern unsigned char display_no_str[10];
 extern int g_msgform_count;
+extern struct buttonObject btn_back_1;
+extern struct buttonObject btn_front_page_1;
+extern struct buttonObject btn_next_page_1;
 int index_105 = 0;
 
 
@@ -122,7 +125,12 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 	if(1 == has_back){
 		//JointWarn_create_backbtn(hdc);
 		jointwarn_paint_back(hdc);
+	}else{
+		btn_back_1.active = 0;
 	}
+
+	btn_front_page_1.active = 0;
+	btn_next_page_1.active = 0;
 	JointWarn_create_msg(hdc, warn, max_count, 0);
 
 }
