@@ -63,6 +63,22 @@ struct buttonObject btn_cancel;
 //struct textStruct top_text[3];
 int top_window;
 
+void jointwarn_create_100_2(HDC hdc)
+{
+	PLOGFONT s_font;
+
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY);
+	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, 20, 0);
+	SelectFont(hdc,s_font);
+        SetTextColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0x0, 0xff));
+        TextOut(hdc, 50, 50, cancel_text[0]);
+        DestroyLogFont(s_font);
+
+}
+
 void jointwarn_paint_cancel(HDC hdc)
 {
 	PLOGFONT s_font;
