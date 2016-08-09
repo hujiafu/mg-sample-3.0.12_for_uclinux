@@ -2417,18 +2417,32 @@ unsigned long gCounter;
 
 void check_task(int *counter)
 {
-	printf("check_task\n");
-	while(1){
-		switch(final_cmd)
-		{
-			case CMD_CREATE_102:
-				printf("CMD_CREATE_102\n");
-				//create_area_window(hdc);
-				final_cmd = CMD_NULL;
-				break;
-		}
+	int ret = 0;
+	int fd = -1;
+	int value = 0;
 
+	printf("check_task\n");
+
+	fd = open("/dev/lpc178x-eint", 0);
+	if(fd < 0)
+	{
+		printf("can't open /dev/lpc178x-eint\n");
+		return -1;
 	}
+	while(1){
+		ret = read(fd, value, sizeof(value));
+		if(ret == 0){
+			if(value == 0x1)
+			{
+				printf("rfid-0 dectect\n");
+			}
+			if(value == 0x2)
+			{
+				printf("rfid-1 dectect\n");
+			}
+		}
+	}
+	close(fd);
 
 	return;
 }
@@ -2464,7 +2478,7 @@ int MiniGUIMain (int argc, const char* argv[])
 
     	ShowWindow(hMainWnd, SW_SHOWNORMAL);
 #endif
-	//pthread_create(&thrd, NULL, (void*)check_task, (void*)&gCounter);
+	pthread_create(&thrd, NULL, (void*)check_task, (void*)&gCounter);
 	InitMainWindow();	
 		
 	//printf("argc = %d\n", argc);
