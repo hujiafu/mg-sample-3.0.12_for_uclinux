@@ -10,7 +10,8 @@ all:
 	$(CC) $(CFLAGS) -c -o JointWarn_network.o JointWarn_network.c
 	$(CC) $(CFLAGS) -c -o JointWarn_105.o JointWarn_105.c
 	$(CC) $(CFLAGS) -c -o JointWarn_106.o JointWarn_106.c
-	$(CC) -o JointWarn JointWarn_confirm.o \
+	$(CC) $(CFLAGS) -c -o JointWarn_Wtv.o JointWarn_Wtv.c
+	$(CC) $(CFLAGS) -o JointWarn JointWarn_confirm.o \
 			   JointWarn_UImain.o \
 			   JointWarn_Logic.o \
 			   JointWarn_Main.o \
@@ -19,6 +20,7 @@ all:
 			   JointWarn_network.o \
 			   JointWarn_105.o \
 			   JointWarn_106.o \
+			   JointWarn_Wtv.o \
 		           $(LDFLAGS) $(LIBS)
 	
 clean:
