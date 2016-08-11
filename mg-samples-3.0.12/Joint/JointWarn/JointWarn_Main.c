@@ -2415,11 +2415,38 @@ void JointRunCmdLine(HDC hdc)
 #endif
 unsigned long gCounter;
 
+void read_rfidi_1()
+{
+	int ret = 0;
+	int fd = -1;
+	int i = 0;
+	unsigned char buf[30];
+	
+	fd = open("/dev/rfid-1", 0);
+	if(fd < 0)
+	{
+		printf("can't open /dev/rfid-1\n");
+		return -1;
+	}
+
+	
+	ret = read(fd, buf, sizeof(buf));
+	printf("ret = %d\n", ret);
+	if(ret != -1){
+		printf("read count %d\n rfid-1 id\n", ret);
+		for(i=0; i<ret; i++){
+			printf("%x ", buf[i]);
+		}
+		printf("\n");
+	}	
+	close(fd);
+}
 
 void read_rfidi_0()
 {
 	int ret = 0;
 	int fd = -1;
+	int i = 0;
 	unsigned char buf[30];
 	
 	fd = open("/dev/rfid-0", 0);
@@ -2433,7 +2460,11 @@ void read_rfidi_0()
 	ret = read(fd, buf, sizeof(buf));
 	printf("ret = %d\n", ret);
 	if(ret != -1){
-		printf("read successful\n");
+		printf("read count %d\n rfid-0 id\n", ret);
+		for(i=0; i<ret; i++){
+			printf("%x ", buf[i]);
+		}
+		printf("\n");
 	}	
 	close(fd);
 }
@@ -2464,6 +2495,7 @@ void check_task(int *counter)
 			if(value == 0x2)
 			{
 				printf("rfid-1 dectect\n");
+				read_rfidi_1();
 			}
 		}
 	}
