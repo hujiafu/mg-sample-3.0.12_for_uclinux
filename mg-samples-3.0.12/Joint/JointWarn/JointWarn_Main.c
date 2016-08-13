@@ -87,6 +87,8 @@ unsigned char display_no_str[10];
 int project_str_len;
 int top_has_canel;
 
+unsigned char rfid_id[16];
+
 const char *msg_104_2[]=
 {
 	"请选择作业项目！",
@@ -1618,6 +1620,7 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "100-2");
 			jointwarn_create_100_2(hdc);
+			JointWarn_PlayWtv(0x1);
 			final_cmd = CMD_NULL;
 			break;	
 		case CMD_CREATE_100_3:
@@ -2199,27 +2202,50 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_system_create_main(hdc);
 			final_cmd = CMD_NULL;
 			break;
-		case CMD_CREATE_125:
-			printf("CMD_CREATE_125\n");
+		case CMD_CREATE_125_1:
+			printf("CMD_CREATE_125_1\n");
 			top_window = 0;
 			memset(display_no_str, 0, 10);
-			strcpy(display_no_str, "125");
-			window_no = WIN_125_NO;
-			strcpy(sel_prompt_msg[0].name, "请选择终端登记器");	
-			window_frame_cnt = LOGGER_ROW * LOGGER_COL;
-			total_frame_cnt = g_sel_count;
-			jointwarn_create_logerlist(hdc, g_sel, &sel_prompt_msg);
+			strcpy(display_no_str, "125-1");
+			gRow = 5;
+			gColumn = 2;
+			window_no = WIN_125_1_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0xff0000ff;
+			strcpy(sel_prompt_msg[0].name, "请选择查询作业项目！");	
+			//g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
-		case CMD_CREATE_126:
-			printf("CMD_CREATE_126\n");
+		case CMD_CREATE_125_2:
+			printf("CMD_CREATE_125_2\n");
 			top_window = 0;
 			memset(display_no_str, 0, 10);
-			strcpy(display_no_str, "126");
-			window_no = WIN_126_NO;
+			strcpy(display_no_str, "125-2");
+			window_no = WIN_125_2_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_126_1:
+			printf("CMD_CREATE_126_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "126-1");
+			window_no = WIN_126_1_NO;
 			jointwarn_create_normal_msgfrom(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
+		case CMD_CREATE_126_2:
+			printf("CMD_CREATE_126_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "126-2");
+			window_no = WIN_126_2_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_127:
 			printf("CMD_CREATE_127\n");
 			top_window = 0;
@@ -2234,6 +2260,41 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_127_1:
+			printf("CMD_CREATE_127_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "127-1");
+			gRow = 5;
+			gColumn = 2;
+			window_no = WIN_127_1_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0xff0000ff;
+			strcpy(sel_prompt_msg[0].name, "请选择查询介质！");	
+			//g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
+			break;
+		case CMD_CREATE_127_2:
+			printf("CMD_CREATE_127_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "127-2");
+			window_no = WIN_127_2_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_128:
+			printf("CMD_CREATE_128\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "128");
+			window_no = WIN_128_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_128:
 			printf("CMD_CREATE_128\n");
 			top_window = 0;
@@ -2248,6 +2309,19 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_129:
+			printf("CMD_CREATE_129\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "129");
+			window_no = WIN_129_NO;
+			strcpy(sel_prompt_msg[0].name, "请选择终端登记器");	
+			window_frame_cnt = LOGGER_ROW * LOGGER_COL;
+			total_frame_cnt = g_sel_count;
+			jointwarn_create_logerlist(hdc, g_sel, &sel_prompt_msg);
+			break;
+#if 0
 		case CMD_CREATE_129:
 			printf("CMD_CREATE_129\n");
 			top_window = 0;
@@ -2263,6 +2337,8 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+#if 0
 		case CMD_CREATE_130:
 			printf("CMD_CREATE_130\n");
 			top_window = 0;
@@ -2277,6 +2353,35 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_130_1:
+			printf("CMD_CREATE_130_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "130-1");
+			window_no = WIN_130_1_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_130_2:
+			printf("CMD_CREATE_130_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "130-2");
+			window_no = WIN_130_2_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_130_3:
+			printf("CMD_CREATE_130_3\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "130-3");
+			window_no = WIN_130_3_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_131:
 			printf("CMD_CREATE_131\n");
 			top_window = 0;
@@ -2291,6 +2396,22 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_131:
+			printf("CMD_CREATE_131\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "131");
+			window_no = WIN_127_NO;
+			gRow = 4;
+			gColumn = 3;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_132_1:
 			printf("CMD_CREATE_132_1\n");
 			top_window = 0;
@@ -2314,6 +2435,23 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_132:
+			printf("CMD_CREATE_132\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "132");
+			gRow = 5;
+			gColumn = 2;
+			window_no = WIN_127_1_NO;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0x0000ffff;
+			strcpy(sel_prompt_msg[0].name, "");	
+			//g_form_color = 0x173093ff;
+			jointwarn_crate_mainui(hdc, g_form, 0, 1);
+			break;
+#if 0
 		case CMD_CREATE_133:
 			printf("CMD_CREATE_133\n");
 			top_window = 0;
@@ -2328,6 +2466,17 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_crate_mainui(hdc, g_form, sel_prompt_msg, 1);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_133:
+			printf("CMD_CREATE_133\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "133");
+			window_no = WIN_133_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+#if 0	
 		case CMD_CREATE_134_1:
 			printf("CMD_CREATE_134_1\n");
 			top_window = 0;
@@ -2346,6 +2495,35 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_134_1:
+			printf("CMD_CREATE_134_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "134-1");
+			window_no = WIN_134_1_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_134_2:
+			printf("CMD_CREATE_134_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "134_2");
+			window_no = WIN_134_2_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_134_3:
+			printf("CMD_CREATE_134_3\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "134_3");
+			window_no = WIN_134_3_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_135_1:
 			printf("CMD_CREATE_135_1\n");
 			top_window = 0;
@@ -2355,6 +2533,23 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_135_1:
+			printf("CMD_CREATE_135_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "135-1");
+			window_no = WIN_135_1_NO;
+			strcpy(sel_prompt_msg[0].name, "请选择复位作业人员登记项目！");	
+			gRow = 5;
+			gColumn = 2;
+			window_frame_cnt = gRow * gColumn;
+			total_frame_cnt = g_form_count;
+			g_form_color = 0xff0000ff;
+			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_135_2:
 			printf("CMD_CREATE_135_2\n");
 			top_window = 0;
@@ -2373,6 +2568,17 @@ void JointRunCmdLine(HDC hdc)
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_135_2:
+			printf("CMD_CREATE_135_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "135_2");
+			window_no = WIN_135_2_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_136:
 			printf("CMD_CREATE_136\n");
 			top_window = 0;
@@ -2383,6 +2589,26 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_system_create_volume(hdc);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_136_1:
+			printf("CMD_CREATE_136_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "136-1");
+			window_no = WIN_136_1_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 1);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_136_2:
+			printf("CMD_CREATE_136_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "136-2");
+			window_no = WIN_136_2_NO;
+			JointWarn_create_msgform(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_137:
 			printf("CMD_CREATE_137\n");
 			top_window = 0;
@@ -2393,6 +2619,35 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_system_create_light(hdc);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_137_1:
+			printf("CMD_CREATE_137_1\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "137-1");
+			window_no = WIN_137_1_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_137_2:
+			printf("CMD_CREATE_137_2\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "137-2");
+			window_no = WIN_137_2_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+		case CMD_CREATE_137_3:
+			printf("CMD_CREATE_137_3\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "137-3");
+			window_no = WIN_137_3_NO;
+			jointwarn_create_normal_msgfrom(hdc, g_msgform, 0);
+			final_cmd = CMD_NULL;
+			break;
+#if 0
 		case CMD_CREATE_138:
 			printf("CMD_CREATE_138\n");
 			top_window = 0;
@@ -2403,6 +2658,29 @@ void JointRunCmdLine(HDC hdc)
 			jointwarn_system_create_reset(hdc);
 			final_cmd = CMD_NULL;
 			break;
+#endif
+		case CMD_CREATE_138:
+			printf("CMD_CREATE_138\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "138");
+			window_no = WIN_138_NO;
+			jointwarn_system_create_main(hdc);
+			jointwarn_system_create_volume(hdc);
+			final_cmd = CMD_NULL;
+			break;
+		
+		case CMD_CREATE_140:
+			printf("CMD_CREATE_140\n");
+			top_window = 0;
+			memset(display_no_str, 0, 10);
+			strcpy(display_no_str, "140");
+			window_no = WIN_140_NO;
+			jointwarn_system_create_main(hdc);
+			jointwarn_system_create_reset(hdc);
+			final_cmd = CMD_NULL;
+			break;
+
 		default:
 			break;
 		
@@ -2461,10 +2739,14 @@ void read_rfidi_0()
 	printf("ret = %d\n", ret);
 	if(ret != -1){
 		printf("read count %d\n rfid-0 id\n", ret);
-		for(i=0; i<ret; i++){
-			printf("%x ", buf[i]);
+		if(ret == 19){
+			printf("rfid_id");
+			for(i=0; i<16; i++){
+				rfid_id[i] = buf[2+i];
+				printf("%x ");
+			}
+			printf("\n");
 		}
-		printf("\n");
 	}	
 	close(fd);
 }

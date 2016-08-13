@@ -458,14 +458,44 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "123")){
 			final_cmd = CMD_CREATE_123;
 		}	
+		if(0 == strcmp(display_no, "125-2")){
+			final_cmd = CMD_CREATE_125_2;
+		}	
+		if(0 == strcmp(display_no, "126-1")){
+			final_cmd = CMD_CREATE_126_1;
+		}	
+		if(0 == strcmp(display_no, "126-2")){
+			final_cmd = CMD_CREATE_126_2;
+		}	
+		if(0 == strcmp(display_no, "127-2")){
+			final_cmd = CMD_CREATE_127_2;
+		}	
+		if(0 == strcmp(display_no, "128")){
+			final_cmd = CMD_CREATE_128;
+		}	
+		if(0 == strcmp(display_no, "130-1")){
+			final_cmd = CMD_CREATE_130_1;
+		}	
+		if(0 == strcmp(display_no, "130-2")){
+			final_cmd = CMD_CREATE_130_2;
+		}	
+		if(0 == strcmp(display_no, "130-3")){
+			final_cmd = CMD_CREATE_130_3;
+		}	
 		if(0 == strcmp(display_no, "132-2")){
 			final_cmd = CMD_CREATE_132_2;
+		}	
+		if(0 == strcmp(display_no, "133")){
+			final_cmd = CMD_CREATE_133;
 		}	
 		if(0 == strcmp(display_no, "134-1")){
 			final_cmd = CMD_CREATE_134_1;
 		}	
 		if(0 == strcmp(display_no, "134-2")){
 			final_cmd = CMD_CREATE_134_2;
+		}
+		if(0 == strcmp(display_no, "134-3")){
+			final_cmd = CMD_CREATE_134_3;
 		}
 		if(0 == strcmp(display_no, "135-1")){
 			final_cmd = CMD_CREATE_135_1;
@@ -475,6 +505,21 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}
 		if(0 == strcmp(display_no, "135-3")){
 			final_cmd = CMD_CREATE_135_3;
+		}
+		if(0 == strcmp(display_no, "136-1")){
+			final_cmd = CMD_CREATE_136_1;
+		}
+		if(0 == strcmp(display_no, "136-2")){
+			final_cmd = CMD_CREATE_136_2;
+		}
+		if(0 == strcmp(display_no, "137-1")){
+			final_cmd = CMD_CREATE_137_1;
+		}
+		if(0 == strcmp(display_no, "137-2")){
+			final_cmd = CMD_CREATE_137_2;
+		}
+		if(0 == strcmp(display_no, "137-3")){
+			final_cmd = CMD_CREATE_137_3;
 		}
 
 		selArrayObject = json_object_object_get(newObject, "selects");
@@ -688,26 +733,38 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		if(0 == strcmp(display_no, "112")){
 			final_cmd = CMD_CREATE_112;
 		}	
-		if(0 == strcmp(display_no, "127")){
-			final_cmd = CMD_CREATE_127;
+		if(0 == strcmp(display_no, "125-1")){
+			final_cmd = CMD_CREATE_125_1;
 		}	
+		if(0 == strcmp(display_no, "127-1")){
+			final_cmd = CMD_CREATE_127_1;
+		}	
+		//if(0 == strcmp(display_no, "127")){
+		//	final_cmd = CMD_CREATE_127;
+		//}	
 		if(0 == strcmp(display_no, "128")){
 			final_cmd = CMD_CREATE_128;
 		}	
 		if(0 == strcmp(display_no, "129")){
 			final_cmd = CMD_CREATE_129;
 		}	
-		if(0 == strcmp(display_no, "130")){
-			final_cmd = CMD_CREATE_130;
-		}	
+		//if(0 == strcmp(display_no, "130")){
+		//	final_cmd = CMD_CREATE_130;
+		//}	
 		if(0 == strcmp(display_no, "131")){
 			final_cmd = CMD_CREATE_131;
 		}	
-		if(0 == strcmp(display_no, "132-1")){
-			final_cmd = CMD_CREATE_132_1;
+		if(0 == strcmp(display_no, "132")){
+			final_cmd = CMD_CREATE_132;
 		}	
+		//if(0 == strcmp(display_no, "132-1")){
+		//	final_cmd = CMD_CREATE_132_1;
+		//}	
 		if(0 == strcmp(display_no, "133")){
 			final_cmd = CMD_CREATE_133;
+		}	
+		if(0 == strcmp(display_no, "135-1")){
+			final_cmd = CMD_CREATE_135_1;
 		}	
 		goto JointAnalysisEnd;	
 	}
@@ -717,8 +774,9 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			final_cmd = CMD_CREATE_124;
 			goto JointAnalysisEnd;
 		}
-		if(0 == strcmp(display_no, "125")){
-			final_cmd = CMD_CREATE_125;
+#if 1
+		if(0 == strcmp(display_no, "129")){
+			final_cmd = CMD_CREATE_129;
 		selArrayObject = json_object_object_get(newObject, "selects");
 		count = json_object_array_length(selArrayObject);
 		g_sel_count = count;
@@ -757,6 +815,8 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 		}
 		goto JointAnalysisEnd;
 		}
+#endif
+#if 0
 		if(0 == strcmp(display_no, "126")){
 			final_cmd = CMD_CREATE_126;
 			selArrayObject = json_object_object_get(newObject, "selects");
@@ -806,6 +866,7 @@ int JointAnalysisCmdLine(unsigned char * orignStr, unsigned int *ptr){
 			}
 			goto JointAnalysisEnd;
 		}
+#endif
 	}
 	if(0 == strcmp(action, "update_top")){
 		printf("Json: update_top\n");

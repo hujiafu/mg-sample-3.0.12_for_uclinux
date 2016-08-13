@@ -483,7 +483,8 @@ void jointwarn_crate_mainui(HDC hdc, struct formStruct * text, struct textStruct
 	DestroyLogFont(s_font);
 #endif	
 	//jointwarn_paint_warning(hdc, warn_text, msg_linecnt);
-	jointwarn_prompt(hdc, warn_text, 1);
+	if(warn_text != 0)
+		jointwarn_prompt(hdc, warn_text, 1);
 
 
 

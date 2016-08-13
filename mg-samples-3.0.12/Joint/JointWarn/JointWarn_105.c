@@ -84,6 +84,9 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		if(0 == strcmp("black", msg[i].textcolor)){
 			text_msg[i].color = 0x000000ff;
 		}
+		if(0 == strcmp("yellow", msg[i].textcolor)){
+			text_msg[i].color = 0xFFD700ff;
+		}
 		if(i == (max_count - 1)){
 			text_msg[i].offsetx = 2*FONT40_PIXEL + tmp;
 			text_msg[i].offsety = 24;
@@ -106,6 +109,9 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		}
 		if(0 == strcmp("white", msg[i].color)){
 			warn[i].formColor = 0xffffffff;
+		}
+		if(0 == strcmp("blue", msg[i].color)){
+			warn[i].formColor = 0x0000ffff;
 		}
 		if(i == (max_count - 1)){
 			warn[i].width = font_len;
@@ -155,6 +161,9 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 		if(0 == strcmp("blue", msg[i].textcolor)){
 			text_msg[i].color = 0x00008bff;
 		}
+		if(0 == strcmp("yellow", msg[i].textcolor)){
+			text_msg[i].color = 0xffc125ff;
+		}
 		if(0 == strcmp("red", msg[i].textcolor)){
 			text_msg[i].color = 0xff0000ff;
 		}
@@ -172,11 +181,17 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 		if(0 == strcmp("green", msg[i].color)){
 			warn[i].formColor = 0x228b22ff;
 		}
+		if(0 == strcmp("blue", msg[i].color)){
+			warn[i].formColor = 0x0000ffff;
+		}
 		if(0 == strcmp("yellow", msg[i].color)){
 			warn[i].formColor = 0xffff00ff;
 		}
 		if(0 == strcmp("white", msg[i].color)){
 			warn[i].formColor = 0xffffffff;
+		}
+		if(0 == strcmp("gray", msg[i].color)){
+			warn[i].formColor = 0x878787ff;
 		}
 		warn[i].width = font_len;
 		warn[i].height = WARN_FRAME_HIGH * 2;
