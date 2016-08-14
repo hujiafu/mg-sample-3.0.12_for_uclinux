@@ -60,6 +60,8 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 	int i, tmp, font_len = 0;
 	struct warnForm warn[3];
 	struct textStruct text_msg[3];
+	unsigned char * origin_str;
+	unsigned int ptr;
 
 	max_count = g_msgform_count > 3 ? 3 : g_msgform_count;
 	for(i=0; i<(max_count - 1); i++){
@@ -113,6 +115,9 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 		if(0 == strcmp("blue", msg[i].color)){
 			warn[i].formColor = 0x0000ffff;
 		}
+		if(0 == strcmp("gray", msg[i].color)){
+			warn[i].formColor = 0x878787ff;
+		}
 		if(i == (max_count - 1)){
 			warn[i].width = font_len;
 			warn[i].height = FONT40_HIGH_PIXEL * 2;
@@ -128,16 +133,27 @@ void JointWarn_create_msgform(HDC hdc, struct msgformStruct * msg, int has_back)
 	//if(0 == strcmp("105-1", display_no_str)){
 	//	JointWarn_create_spare(hdc);
 	//}
+	btn_front_page_1.active = 0;
+	btn_next_page_1.active = 0;
+	JointWarn_create_msg(hdc, warn, max_count, 0);
+	
 	if(1 == has_back){
 		//JointWarn_create_backbtn(hdc);
 		jointwarn_paint_back(hdc);
 	}else{
 		btn_back_1.active = 0;
+		sleep(3);
+                printf("sleep 3000\n");
+                //auto canel after 3s
+                origin_str = JointWarn_102_get_data(0);
+                printf("=======================================\n");
+                JointAnalysisCmdLine(origin_str, &ptr);
+                printf("=======================================\n");
+                JointRunCmdLine(hdc);
+                printf("=======================================\n");
+
 	}
 
-	btn_front_page_1.active = 0;
-	btn_next_page_1.active = 0;
-	JointWarn_create_msg(hdc, warn, max_count, 0);
 
 }
 
@@ -149,6 +165,9 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 	int i, tmp, font_len = 0;
 	struct warnForm warn[10];
 	struct textStruct text_msg[10];
+	unsigned char * origin_str;
+        unsigned int ptr;
+
 
 	max_count = g_msgform_count > 10 ? 10 : g_msgform_count;
 	for(i=0; i<max_count; i++){
@@ -201,11 +220,24 @@ void jointwarn_create_normal_msgfrom(HDC hdc, struct msgformStruct * msg, int ha
 	back_color = 0x2292ddff;
         JointWarn_paint_back(hdc, back_color);
 	//if(0 == strcmp("105-1", display_no_str)){
+	JointWarn_create_msg(hdc, warn, max_count, 1);
 	if(1 == has_back){
 		//JointWarn_create_backbtn(hdc);
 		jointwarn_paint_back(hdc);
+	}else{
+		btn_back_1.active = 0;
+		sleep(3);
+                printf("sleep 3000\n");
+                //auto canel after 3s
+                origin_str = JointWarn_102_get_data(0);
+                printf("=======================================\n");
+                JointAnalysisCmdLine(origin_str, &ptr);
+                printf("=======================================\n");
+                JointRunCmdLine(hdc);
+                printf("=======================================\n");
+
 	}
-	JointWarn_create_msg(hdc, warn, max_count, 1);
+	//JointWarn_create_msg(hdc, warn, max_count, 1);
 
 }
 

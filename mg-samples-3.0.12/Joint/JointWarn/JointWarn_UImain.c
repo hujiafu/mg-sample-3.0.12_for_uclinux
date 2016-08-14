@@ -37,6 +37,7 @@ extern const unsigned char request_area[];
 extern const unsigned char request_equi[];
 extern const unsigned char request_pro[];
 extern unsigned char display_no_str[10];
+extern unsigned char rfid_id[16];
 
 int page_cnt1;
 int form_tot_cnt;
@@ -51,14 +52,7 @@ struct buttonObject btn_front_page_1;
 struct buttonObject btn_next_page_1;
 struct buttonObject select_apply;
 struct buttonObject select_canel;
-struct buttonObject btn_sys_logger;
-struct buttonObject btn_sys_area;
-struct buttonObject btn_sys_work;
-struct buttonObject btn_sys_error;
-struct buttonObject btn_sys_volume;
-struct buttonObject btn_sys_light;
-struct buttonObject btn_sys_reset;
-struct buttonObject btn_sys_back;
+struct buttonObject btn_sys[10];
 POINT s_point[2][3];
 struct formStruct * gPform_area;
 struct formStruct * gPform_equi;
@@ -80,6 +74,14 @@ unsigned char * JointWarn_back_request(){
 	JointWarn_udp_send(request_str, 0);
         return udp_buf; //only for test
 }
+
+unsigned char * JointWarn_rfid_request(){
+	unsigned char request_str[500];
+	JointWarnCreateRequestRfid(request_str, "normal", display_no_str, "null", "true", "false", rfid_id);
+	JointWarn_udp_send(request_str, 0);
+        return udp_buf; //only for test
+}
+
 
 unsigned char * JointWarn_sel_request(unsigned int sel_index){
 

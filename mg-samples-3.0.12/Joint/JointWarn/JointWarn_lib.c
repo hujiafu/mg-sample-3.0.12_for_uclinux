@@ -28,22 +28,17 @@ extern unsigned char sel_title_color[10];
 extern struct warnForm top_warn[2];
 extern int g_top_count;
 extern struct textStruct system_main;
-extern struct buttonObject btn_sys_logger;
-extern struct buttonObject btn_sys_area;
-extern struct buttonObject btn_sys_work;
-extern struct buttonObject btn_sys_error;
-extern struct buttonObject btn_sys_volume;
-extern struct buttonObject btn_sys_light;
-extern struct buttonObject btn_sys_reset;
-extern struct buttonObject btn_sys_back;
-extern struct textStruct system_logger_txt;
-extern struct textStruct system_area_txt;
-extern struct textStruct system_work_txt;
-extern struct textStruct system_error_txt;
-extern struct textStruct system_volume_txt;
-extern struct textStruct system_light_txt;
-extern struct textStruct system_reset_txt;
-extern struct textStruct system_back_txt;
+extern struct buttonObject btn_sys[10];
+extern struct textStruct system_1_txt;
+extern struct textStruct system_2_txt;
+extern struct textStruct system_3_txt;
+extern struct textStruct system_4_txt;
+extern struct textStruct system_5_txt;
+extern struct textStruct system_6_txt;
+extern struct textStruct system_7_txt;
+extern struct textStruct system_8_txt;
+extern struct textStruct system_9_txt;
+extern struct textStruct system_10_txt;
 extern int max_font_cnt;
 extern struct selStruct g_sel[MAX_SEL_NUM];
 extern int g_sel_count;
@@ -662,7 +657,7 @@ void JointWarn_create_flag(HDC hdc, int total_cnt, int win_cnt)
 
 }
 
-static BITMAP s_bmp[10];
+BITMAP s_bmp[20];
 int sys_border_width, sys_border_height;
 int sys_border_start_x, sys_border_start_y;
 int sys_btn_len, sys_btn_height;
@@ -727,59 +722,116 @@ void jointwarn_system_create_bottom(HDC hdc)
 	int width, height;
 	int border_len;
 	int btn_len;
+	int i = 0;
 
 	width = MWINDOW_RX;
 	height = 80;
 	start_x = 0;
-	start_y = 400;
-
+	start_y = 320;
 	border_len = 10;
+	
+	sys_border_start_x = border_len;
+	sys_border_start_y = start_y + border_len;
+	sys_border_width = width - (2 * border_len);
+	sys_border_height = height - (2 * border_len);
+	
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x80, 0x80, 0x80, 0xFF));
+        FillBox(hdc, start_x, start_y, width, 160);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x14, 0x41, 0x85, 0xFF));
+        FillBox(hdc, border_len, start_y + border_len, width - (2*border_len), 160 - (2*border_len));
+	
+	//SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	//SetPenWidth(hdc, 1);
+	//LineEx(hdc, sys_border_start_x, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y); 
+	//LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height); 
+	//LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y + sys_border_height); 
+	//LineEx(hdc, sys_border_start_x, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y); 
+
+	for(i=0; i<2; i++){
+	if(i == 0){
+		start_y = 330;
+	}
+	if(i == 1){
+		start_y = 390;
+	}
 	sys_border_start_x = border_len;
 	sys_border_start_y = start_y + border_len;
 	sys_border_width = width - (2 * border_len);
 	sys_border_height = height - (2 * border_len);
 
-	SetBkMode(hdc,BM_TRANSPARENT);
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x80, 0x80, 0x80, 0xFF));
-        FillBox(hdc, start_x, start_y, width, height);
-	
-	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x14, 0x41, 0x85, 0xFF));
-        FillBox(hdc, sys_border_start_x, sys_border_start_y, sys_border_width, sys_border_height);
+	//SetBkMode(hdc,BM_TRANSPARENT);
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x80, 0x80, 0x80, 0xFF));
+        //FillBox(hdc, start_x, start_y, width, height);
+	//SetBrushColor(hdc, RGBA2Pixel(hdc, 0x14, 0x41, 0x85, 0xFF));
+        //FillBox(hdc, sys_border_start_x, sys_border_start_y, sys_border_width, sys_border_height);
 		
-	SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
-	SetPenWidth(hdc, 1);
-	LineEx(hdc, sys_border_start_x, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y); 
-	LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height); 
-	LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y + sys_border_height); 
-	LineEx(hdc, sys_border_start_x, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y); 
+	//SetPenColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+	//SetPenWidth(hdc, 1);
+	//LineEx(hdc, sys_border_start_x, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y); 
+	//LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height); 
+	//LineEx(hdc, sys_border_start_x + sys_border_width, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y + sys_border_height); 
+	//LineEx(hdc, sys_border_start_x, sys_border_start_y + sys_border_height, sys_border_start_x, sys_border_start_y); 
 
 
-	sys_btn_len = (sys_border_width - 10)/ 8;
-	jointwarn_system_main_btn(hdc, &btn_sys_logger, sys_btn_len, 1, &system_logger_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_area, sys_btn_len, 2, &system_area_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_work, sys_btn_len, 3, &system_work_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_error, sys_btn_len, 4, &system_error_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_volume, sys_btn_len, 5, &system_volume_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_light, sys_btn_len, 6, &system_light_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_reset, sys_btn_len, 7, &system_reset_txt);
-	jointwarn_system_main_btn(hdc, &btn_sys_back, sys_btn_len, 8, &system_back_txt);
-
+	sys_btn_len = (sys_border_width - 10)/ 5;
+	if(i == 0){
+		jointwarn_system_main_btn(hdc, &btn_sys[0], sys_btn_len, 1, &system_1_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[1], sys_btn_len, 2, &system_2_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[2], sys_btn_len, 3, &system_3_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[3], sys_btn_len, 4, &system_4_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[4], sys_btn_len, 5, &system_5_txt);
+	}	
+	if(i == 1){
+		jointwarn_system_main_btn(hdc, &btn_sys[5], sys_btn_len, 1, &system_6_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[6], sys_btn_len, 2, &system_7_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[7], sys_btn_len, 3, &system_8_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[8], sys_btn_len, 4, &system_9_txt);
+		jointwarn_system_main_btn(hdc, &btn_sys[9], sys_btn_len, 5, &system_10_txt);
+	}	
+	
+//jointwarn_system_main_btn(hdc, &btn_sys_light, sys_btn_len, 6, &system_light_txt);
+	//jointwarn_system_main_btn(hdc, &btn_sys_reset, sys_btn_len, 7, &system_reset_txt);
+	//jointwarn_system_main_btn(hdc, &btn_sys_back, sys_btn_len, 8, &system_back_txt);
+	}
 
 }
 
+int volume_value = 0;
 void jointwarn_system_create_volume(HDC hdc)
 {
 	PLOGFONT s_font;
 	int start_x, start_y;
 	int png_width = 126;
 	int png_height = 102;	
+
+	volume_value = 10;
+#if 0
 	LoadBitmap(HDC_SCREEN,&s_bmp[1],"/usr/local/minigui/local/share/minigui/res/bmp/volume_logo.png");
 	LoadBitmap(HDC_SCREEN,&s_bmp[2],"/usr/local/minigui/local/share/minigui/res/bmp/up.png");
 	LoadBitmap(HDC_SCREEN,&s_bmp[3],"/usr/local/minigui/local/share/minigui/res/bmp/down.png");
 	LoadBitmap(HDC_SCREEN,&s_bmp[4],"/usr/local/minigui/local/share/minigui/res/bmp/process0.png");
+#else
+	LoadBitmap(HDC_SCREEN,&s_bmp[1],"/etc/minigui/res/bmp/volume_logo.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[2],"/etc/minigui/res/bmp/up.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[3],"/etc/minigui/res/bmp/down.png");
+	LoadBitmap(HDC_SCREEN,&s_bmp[4],"/etc/minigui/res/bmp/process0.png");
+
+
+#endif
+	//LoadBitmap(HDC_SCREEN,&s_bmp[5],"/usr/local/minigui/local/share/minigui/res/bmp/process1.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[6],"/usr/local/minigui/local/share/minigui/res/bmp/process2.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[7],"/usr/local/minigui/local/share/minigui/res/bmp/process3.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[8],"/usr/local/minigui/local/share/minigui/res/bmp/process4.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[9],"/usr/local/minigui/local/share/minigui/res/bmp/process5.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[10],"/usr/local/minigui/local/share/minigui/res/bmp/process6.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[11],"/usr/local/minigui/local/share/minigui/res/bmp/process7.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[12],"/usr/local/minigui/local/share/minigui/res/bmp/process8.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[13],"/usr/local/minigui/local/share/minigui/res/bmp/process9.png");
+	//LoadBitmap(HDC_SCREEN,&s_bmp[14],"/usr/local/minigui/local/share/minigui/res/bmp/process10.png");
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
-        FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
+        FillBox(hdc, 0, 0, MWINDOW_RX, 320);
 	
 	start_x = (MWINDOW_RX - png_width) >> 1;
 	start_y = 100;
@@ -789,22 +841,25 @@ void jointwarn_system_create_volume(HDC hdc)
 	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 40, 40, 40, &s_bmp[3]);
 	start_x += 40;
 	start_x += 15;
-	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 42, 393, 33, &s_bmp[4]);
+	SetBkMode(hdc,BM_TRANSPARENT);
+	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0xff, 0xFF));
+        FillBox(hdc, start_x, start_y + png_height + 42, 390, 33);
+	//FillBoxWithBitmap(hdc, start_x, start_y + png_height + 42, 393, 33, &s_bmp[14]);
 	start_x += 393;
 	start_x += 15;
 	FillBoxWithBitmap(hdc, start_x, start_y + png_height + 40, 40, 40, &s_bmp[2]);
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
-        FillBox(hdc, btn_sys_volume.point_start.x + 1, btn_sys_volume.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
+        FillBox(hdc, btn_sys[6].point_start.x + 1, btn_sys[6].point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
         
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
-                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_volume_txt.filesize, 0);
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_7_txt.filesize, 0);
         SelectFont(hdc, s_font);
         SetTextColor(hdc, COLOR_lightwhite);
-        TextOut(hdc, btn_sys_volume.point_start.x + system_volume_txt.offsetx, btn_sys_volume.point_start.y + system_volume_txt.offsety, system_volume_txt.name);
+        TextOut(hdc, btn_sys[6].point_start.x + system_7_txt.offsetx, btn_sys[6].point_start.y + system_7_txt.offsety, system_7_txt.name);
         DestroyLogFont(s_font);
 }
-
+#if 0
 void jointwarn_system_create_light(HDC hdc)
 {
 	PLOGFONT s_font;
@@ -844,6 +899,7 @@ void jointwarn_system_create_light(HDC hdc)
         TextOut(hdc, btn_sys_light.point_start.x + system_light_txt.offsetx, btn_sys_light.point_start.y + system_light_txt.offsety, system_light_txt.name);
         DestroyLogFont(s_font);
 }
+#endif
 
 void jointwarn_system_create_reset(HDC hdc)
 {
@@ -851,9 +907,12 @@ void jointwarn_system_create_reset(HDC hdc)
 	int png_width = 180;
 	int png_height = 180;
 	int start_x, start_y;
-
+#if 0
 	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/usr/local/minigui/local/share/minigui/res/bmp/reset_logo.png");
-	
+#else
+	LoadBitmap(HDC_SCREEN,&s_bmp[0],"/etc/minigui/res/bmp/reset_logo.png");
+
+#endif	
 	SetBkMode(hdc,BM_TRANSPARENT);
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0x22, 0x92, 0xdd, 0xFF));
         FillBox(hdc, 0, 0, MWINDOW_RX, MWINDOW_BY - 80);
@@ -865,13 +924,13 @@ void jointwarn_system_create_reset(HDC hdc)
 
 
 	SetBrushColor(hdc, RGBA2Pixel(hdc, 0xf9, 0x60, 0x3a, 0xFF));
-        FillBox(hdc, btn_sys_reset.point_start.x + 1, btn_sys_reset.point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
+        FillBox(hdc, btn_sys[8].point_start.x + 1, btn_sys[8].point_start.y + 1, sys_btn_len - 2, sys_btn_height - 2);
         
 	s_font = CreateLogFont("FONT_TYPE_NAME_SCALE_TTF", "mini", "GB2312-0", \
-                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_reset_txt.filesize, 0);
+                FONT_WEIGHT_SUBPIXEL, FONT_SLANT_ROMAN, FONT_FLIP_NIL, FONT_OTHER_NIL, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE, system_9_txt.filesize, 0);
         SelectFont(hdc, s_font);
         SetTextColor(hdc, COLOR_lightwhite);
-        TextOut(hdc, btn_sys_reset.point_start.x + system_reset_txt.offsetx, btn_sys_reset.point_start.y + system_reset_txt.offsety, system_reset_txt.name);
+        TextOut(hdc, btn_sys[8].point_start.x + system_9_txt.offsetx, btn_sys[8].point_start.y + system_9_txt.offsety, system_9_txt.name);
         DestroyLogFont(s_font);
 }
 

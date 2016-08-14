@@ -58,6 +58,9 @@ extern struct msgformStruct g_msgform[MAX_MSGFORM_NUM];
 extern struct selStruct g_sel[MAX_SEL_NUM];
 extern int logger_perwin_cnt;
 extern unsigned int g_form_color;
+extern struct buttonObject btn_sys[10];
+extern int volume_value;
+extern BITMAP s_bmp[20];
 HWND hMainWnd;
 
 static const char* syskey = "";
@@ -74,6 +77,7 @@ int form_count = 0;
 int area_select_no = 0;
 int equipment_select_no = 0;
 int project_select_no = 0;
+int system_select_no = 0;
 int gRow, gColumn;
 unsigned char area_sel_no_str[4];
 unsigned char equi_sel_no_str[4];
@@ -86,6 +90,7 @@ unsigned char prj_sel_str[20];
 unsigned char display_no_str[10];
 int project_str_len;
 int top_has_canel;
+HDC g_hdc;
 
 unsigned char rfid_id[16];
 
@@ -415,52 +420,64 @@ struct textStruct system_main ={
 	.offsetx = 310,
 	.offsety = 15,
 };
-struct textStruct system_logger_txt ={
-	.name = "终端登记器",
+struct textStruct system_1_txt ={
+	.name = "作业项目查询",
 	.filesize = 18,
-	.offsetx = 3,
+	.offsetx = 20,
 	.offsety = 15,
 };
-struct textStruct system_area_txt ={
-	.name = "区域设备",
+struct textStruct system_2_txt ={
+	.name = "介质状态查询",
 	.filesize = 18,
-	.offsetx = 12,
+	.offsetx = 20,
 	.offsety = 15,
 };
-struct textStruct system_work_txt ={
-	.name = "工种作业",
+struct textStruct system_3_txt ={
+	.name = "设备状态查询",
 	.filesize = 18,
-	.offsetx = 12,
+	.offsetx = 20,
 	.offsety = 15,
 };
-struct textStruct system_error_txt ={
-	.name = "异常复位",
+struct textStruct system_4_txt ={
+	.name = "标签身份查询",
 	.filesize = 18,
-	.offsetx = 12,
+	.offsetx = 20,
 	.offsety = 15,
 };
-struct textStruct system_volume_txt ={
+struct textStruct system_5_txt ={
+	.name = "区域划分查询",
+	.filesize = 18,
+	.offsetx = 20,
+	.offsety = 15,
+};
+struct textStruct system_6_txt ={
+	.name = "复位作业人员查询",
+	.filesize = 18,
+	.offsetx = 5,
+	.offsety = 15,
+};
+struct textStruct system_7_txt ={
 	.name = "音量调节",
 	.filesize = 18,
-	.offsetx = 12,
+	.offsetx = 40,
 	.offsety = 15,
 };
-struct textStruct system_light_txt ={
-	.name = "亮度调节",
+struct textStruct system_8_txt ={
+	.name = "触屏校准",
 	.filesize = 18,
-	.offsetx = 12,
+	.offsetx = 40,
 	.offsety = 15,
 };
-struct textStruct system_reset_txt ={
-	.name = "设备重启",
+struct textStruct system_9_txt ={
+	.name = "系统重启",
 	.filesize = 18,
-	.offsetx = 12,
+	.offsetx = 40,
 	.offsety = 15,
 };
-struct textStruct system_back_txt ={
+struct textStruct system_10_txt ={
 	.name = "返回",
 	.filesize = 18,
-	.offsetx = 30,
+	.offsetx = 60,
 	.offsety = 15,
 };
 
@@ -1042,6 +1059,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			printf("MSG_PAINT begin1\n");
 			//hdc = BeginPaint(hWnd);
 			hdc = BeginPaint(hMainWnd);
+			g_hdc = hdc;
 			//hdc = GetDC(hMainWnd);
 			//FillBoxWithBitmap(hdc,0,0,800,360,&s_background);
 #if 0
@@ -1123,6 +1141,126 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 				JointRunCmdLine(hdc);
 				printf("=======================================\n");
 			}
+#if 0
+			if(window_no == WIN_129_NO)
+			{
+				for(i=0; i<16; i++){
+					if((pre_x > logger_x[i] && pre_x < btn_sys[i].point_end.x) && (pre_y > btn_sys[i].point_start.y && pre_y < btn_sys[i].point_end.y)){
+						break;
+					}
+				}
+
+			}
+#endif
+			if(window_no == WIN_124_NO){
+				for(i=0; i<10; i++){
+					if((pre_x > btn_sys[i].point_start.x && pre_x < btn_sys[i].point_end.x) && (pre_y > btn_sys[i].point_start.y && pre_y < btn_sys[i].point_end.y)){
+						printf("system select %d\n", i);
+						system_select_no = i;
+						if(system_select_no < 6 || system_select_no == 9){
+							origin_str = JointWarn_103_get_data(system_select_no);
+							JointAnalysisCmdLine(origin_str, &ptr);
+							JointRunCmdLine(hdc);
+						}
+						if(system_select_no == 6){
+							jointwarn_system_create_volume(hdc);
+							window_no = WIN_138_NO;
+						}
+						break;
+					}
+				}	
+			}
+			if(window_no == WIN_138_NO){
+				if((pre_x > 150 && pre_x < 190) && (pre_y > 245 && pre_y < 281)){
+					if(volume_value > 0){
+						volume_value--;
+						SetBkMode(hdc,BM_TRANSPARENT);
+        					SetBrushColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+        					FillBox(hdc, 205 + volume_value * 39, 244, (10 - volume_value) * 39, 33);
+#if 0
+						if(volume_value == 0){
+							LoadBitmap(HDC_SCREEN,&s_bmp[4],"/usr/local/minigui/local/share/minigui/res/bmp/process0.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[4]);
+						}	
+						if(volume_value == 1){
+							LoadBitmap(HDC_SCREEN,&s_bmp[5],"/usr/local/minigui/local/share/minigui/res/bmp/process1.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[5]);
+						}	
+						if(volume_value == 2){
+							LoadBitmap(HDC_SCREEN,&s_bmp[6],"/usr/local/minigui/local/share/minigui/res/bmp/process2.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[6]);
+						}	
+						if(volume_value == 3){
+							LoadBitmap(HDC_SCREEN,&s_bmp[7],"/usr/local/minigui/local/share/minigui/res/bmp/process3.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[7]);
+							break;
+						}	
+						if(volume_value == 4){
+							LoadBitmap(HDC_SCREEN,&s_bmp[8],"/usr/local/minigui/local/share/minigui/res/bmp/process4.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[8]);
+							break;
+						}	
+						if(volume_value == 5){
+							LoadBitmap(HDC_SCREEN,&s_bmp[9],"/usr/local/minigui/local/share/minigui/res/bmp/process5.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[9]);
+							break;
+						}	
+						if(volume_value == 6){
+							LoadBitmap(HDC_SCREEN,&s_bmp[10],"/usr/local/minigui/local/share/minigui/res/bmp/process6.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[10]);
+							break;
+						}	
+						if(volume_value == 7){
+							LoadBitmap(HDC_SCREEN,&s_bmp[11],"/usr/local/minigui/local/share/minigui/res/bmp/process7.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[11]);
+							break;
+						}	
+						if(volume_value == 8){
+							LoadBitmap(HDC_SCREEN,&s_bmp[12],"/usr/local/minigui/local/share/minigui/res/bmp/process8.png");
+							FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[12]);
+							break;
+						}	
+						if(volume_value == 9){
+							SetBkMode(hdc,BM_TRANSPARENT);
+        						SetBrushColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
+        						FillBox(hdc, 205 + volume_value * 39, 244, (10 - volume_value) * 39, 33);
+
+							//LoadBitmap(HDC_SCREEN,&s_bmp[13],"/usr/local/minigui/local/share/minigui/res/bmp/process9.png");
+							//FillBoxWithBitmap(hdc, 205, 244, 393, 33, &s_bmp[13]);
+							break;
+
+						}	
+#endif
+					}
+					printf("volume down pressed %d\n", volume_value);
+				}
+				if((pre_x > 613 && pre_x < 653) && (pre_y > 245 && pre_y < 281)){
+					if(volume_value < 10){
+						SetBkMode(hdc,BM_TRANSPARENT);
+        					SetBrushColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0xff, 0xFF));
+        					FillBox(hdc, 205 + volume_value * 39, 244, 39, 33);
+						volume_value++;
+					}
+					printf("volume up pressed %d\n", volume_value);
+				}
+				for(i=0; i<10; i++){
+					if((pre_x > btn_sys[i].point_start.x && pre_x < btn_sys[i].point_end.x) && (pre_y > btn_sys[i].point_start.y && pre_y < btn_sys[i].point_end.y)){
+						printf("system select %d\n", i);
+						system_select_no = i;
+						if(system_select_no < 6 || system_select_no == 9){
+							origin_str = JointWarn_103_get_data(system_select_no);
+							JointAnalysisCmdLine(origin_str, &ptr);
+							JointRunCmdLine(hdc);
+						}
+						if(system_select_no == 6){
+							
+						}
+						break;
+					}
+				}	
+				
+			}
+
 			if(window_no == WIN_101_NO){
 				if(select_apply.active == 1){
 					if((pre_x > select_apply.point_start.x && pre_x < select_apply.point_end.x) && (pre_y > select_apply.point_start.y && pre_y < select_apply.point_end.y)){
@@ -1173,6 +1311,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						origin_str = JointWarn_back_request();
 						JointAnalysisCmdLine(origin_str, &ptr);
 						JointRunCmdLine(hdc);
+						//read_rfidi_0();
 						break;
 					
 					}
@@ -1230,13 +1369,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						JointRunCmdLine(hdc);
 						break;
 					}
-					if(WIN_125_NO == window_no || WIN_126_NO == window_no || WIN_127_NO == window_no || WIN_128_NO == window_no || WIN_129_NO == window_no || WIN_130_NO == window_no){
+					if(WIN_125_NO == window_no || WIN_125_1_NO == window_no || WIN_126_NO == window_no || WIN_126_1_NO == window_no || WIN_126_2_NO == window_no || WIN_127_1_NO == window_no || WIN_128_NO == window_no || WIN_129_NO == window_no || WIN_130_1_NO == window_no){
 						origin_str = JointWarn_back_request();
 						JointAnalysisCmdLine(origin_str, &ptr);
 						JointRunCmdLine(hdc);
 						break;
 					}
-					if(WIN_131_NO == window_no || WIN_132_1_NO == window_no || WIN_133_NO == window_no || WIN_134_1_NO == window_no){
+					if(WIN_131_NO == window_no || WIN_132_NO == window_no || WIN_133_NO == window_no || WIN_134_1_NO == window_no || WIN_135_1_NO == window_no || WIN_136_1_NO == window_no){
 						origin_str = JointWarn_back_request();
 						JointAnalysisCmdLine(origin_str, &ptr);
 						JointRunCmdLine(hdc);
@@ -1358,12 +1497,12 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 			}
 			if(((pre_x > 5) && (pre_x < (MWINDOW_RX - 5))) && ((pre_y > 5) && (pre_y < (MWINDOW_BY - 5)))){
 				//printf("form_count = %d\n", form_count);
-				if((WIN_104_1_NO == window_no) || (WIN_103_NO == window_no) || (WIN_102_NO == window_no)){
+				if((WIN_104_1_NO == window_no) || (WIN_103_NO == window_no) || (WIN_102_NO == window_no) || (WIN_112_NO == window_no) || (WIN_125_1_NO == window_no) || (WIN_127_1_NO == window_no) || (WIN_131_NO == window_no) || (WIN_135_1_NO == window_no)){
 				for(i=0; i<form_count; i++){
 					if(pre_x >= x[i] && pre_x <= (x[i] + partWidth - 10) && pre_y >= y[i] && pre_y <= (y[i] + partHeight - 10)){
 
 						printf("window_no = %d\n", window_no);
-						if(WIN_104_1_NO == window_no){
+						if((WIN_104_1_NO == window_no) || (WIN_112_NO == window_no) || (WIN_125_1_NO == window_no) || (WIN_127_1_NO == window_no) || (WIN_135_1_NO == window_no)){
 							project_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(pro_sel_no_str,"%d", project_select_no);
 							printf("frame %s project select \n", pro_sel_no_str);
@@ -1385,7 +1524,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							//create_project_window(hdc);
 							goto WinProcEnd;
 						}
-						if(WIN_103_NO == window_no){
+						if((WIN_103_NO == window_no) || (WIN_131_NO == window_no)){
 							equipment_select_no = i + window_frame_cnt * page_cnt1;
 							sprintf(equi_sel_no_str,"%d", equipment_select_no);
 							printf("frame %s equipment select \n", equi_sel_no_str);
@@ -1619,8 +1758,8 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_100_2_NO;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "100-2");
+			JointWarn_PlayWtv(0x10);
 			jointwarn_create_100_2(hdc);
-			JointWarn_PlayWtv(0x1);
 			final_cmd = CMD_NULL;
 			break;	
 		case CMD_CREATE_100_3:
@@ -1637,6 +1776,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "101");
 			strcpy(sel_prompt_msg[0].name, "请选择操作项目!");	
 			jointwarn_create_select(hdc, &menu_hz1[0], &sel_prompt_msg);
+			JointWarn_PlayWtv(0); // 播放请选择
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_102:
@@ -1658,6 +1798,7 @@ void JointRunCmdLine(HDC hdc)
 			g_form_color = 0x173093ff;
 			//jointwarn_crate_mainui(hdc, g_form, warn_msg, 1);
 			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(0); // 播放请选择
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_103:
@@ -1688,6 +1829,7 @@ void JointRunCmdLine(HDC hdc)
 			g_form_color = 0x173093ff;
 			//jointwarn_crate_mainui(hdc, g_form, area_msg, 1);
 			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(0); // 播放请选择
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_1:
@@ -1703,6 +1845,7 @@ void JointRunCmdLine(HDC hdc)
 			g_form_color = 0x228822ff;
 			//g_form_color = 0x173093ff;
 			jointwarn_crate_mainui(hdc, g_form, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(0); // 播放请选择
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_104_2:
@@ -1728,6 +1871,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "105-1");
 			window_no = WIN_105_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_2:
@@ -1747,6 +1891,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_105_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			break;
 		case CMD_CREATE_106_1:
 			printf("CMD_CREATE_106_1\n");
@@ -1779,6 +1924,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "106-3");
 			window_no = WIN_106_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_106_4:
@@ -1788,6 +1934,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "106-4");
 			window_no = WIN_106_4_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_107:
@@ -1800,6 +1947,7 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(0); // 播放请选择
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_1:
@@ -1820,6 +1968,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_108_2_NO;
 			top_has_canel = 1;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_108_3:
@@ -1850,6 +1999,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_109_1_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(2); // 确认完成
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_2:
@@ -1860,6 +2010,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_109_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_3:
@@ -1870,6 +2021,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_109_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_110:
@@ -1882,6 +2034,7 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_111_1:
@@ -1891,6 +2044,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "111-1");
 			window_no = WIN_111_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(4); // 确认成功，安全作业
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_111_2:
@@ -1901,6 +2055,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_111_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_112:
@@ -1926,6 +2081,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_111_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_1:
@@ -1935,6 +2091,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "113-1");
 			window_no = WIN_113_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_2:
@@ -1944,6 +2101,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "113-2");
 			window_no = WIN_113_2_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_3:
@@ -1953,6 +2111,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "113-3");
 			window_no = WIN_113_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(5); // 有人作业，禁止销项
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_4:
@@ -1962,6 +2121,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "113-4");
 			window_no = WIN_113_4_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 1);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_1:
@@ -1996,6 +2156,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "114-3");
 			window_no = WIN_114_3_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_4:
@@ -2005,6 +2166,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "114-4");
 			window_no = WIN_114_4_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_5:
@@ -2014,6 +2176,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "114-5");
 			window_no = WIN_114_5_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_6:
@@ -2023,6 +2186,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "114-6");
 			window_no = WIN_114_6_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_115:
@@ -2035,6 +2199,7 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(0); // 播放请选择
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_1:
@@ -2055,6 +2220,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_116_2_NO;
 			top_has_canel = 1;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_116_3:
@@ -2095,6 +2261,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_117_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_117_3:
@@ -2105,6 +2272,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_117_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_118:
@@ -2117,6 +2285,7 @@ void JointRunCmdLine(HDC hdc)
 			window_frame_cnt = SEL_MAX_COUNT;
 			total_frame_cnt = g_sel_count;
 			jointwarn_create_sel_win(hdc, g_sel, &sel_prompt_msg, 1);
+			JointWarn_PlayWtv(1); // 请打卡确认
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_1:
@@ -2126,6 +2295,7 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "119-1");
 			window_no = WIN_119_1_NO;
 			JointWarn_create_msgform(hdc, g_msgform, 0);
+			JointWarn_PlayWtv(10); // 异常复位成功
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_2:
@@ -2136,6 +2306,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_119_2_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_3:
@@ -2146,6 +2317,7 @@ void JointRunCmdLine(HDC hdc)
 			window_no = WIN_119_3_NO;
 			top_has_canel = 0;
 			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
+			JointWarn_PlayWtv(9); // 播放 请规范操作
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_120:
@@ -2402,7 +2574,7 @@ void JointRunCmdLine(HDC hdc)
 			top_window = 0;
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "131");
-			window_no = WIN_127_NO;
+			window_no = WIN_131_NO;
 			gRow = 4;
 			gColumn = 3;
 			window_frame_cnt = gRow * gColumn;
@@ -2706,7 +2878,6 @@ void read_rfidi_1()
 		printf("can't open /dev/rfid-1\n");
 		return -1;
 	}
-
 	
 	ret = read(fd, buf, sizeof(buf));
 	printf("ret = %d\n", ret);
@@ -2726,7 +2897,13 @@ void read_rfidi_0()
 	int fd = -1;
 	int i = 0;
 	unsigned char buf[30];
-	
+	unsigned char * origin_str;	
+	unsigned int ptr;
+	HDC hdc;
+
+#if 1	
+		//hdc = BeginPaint(hMainWnd);
+		hdc = GetDC(hMainWnd);
 	fd = open("/dev/rfid-0", 0);
 	if(fd < 0)
 	{
@@ -2746,9 +2923,24 @@ void read_rfidi_0()
 				printf("%x ");
 			}
 			printf("\n");
+			origin_str = JointWarn_rfid_request();
+                        JointAnalysisCmdLine(origin_str, &ptr);
+                        JointRunCmdLine(hdc);
+
 		}
 	}	
 	close(fd);
+		//EndPaint(hMainWnd,hdc);
+#endif
+#if 0
+		hdc = BeginPaint(hMainWnd);
+			rfid_id[0] = 1;
+			rfid_id[1] = 2;
+			origin_str = JointWarn_rfid_request();
+                        JointAnalysisCmdLine(origin_str, &ptr);
+                        JointRunCmdLine(hdc);
+		EndPaint(hMainWnd,hdc);
+#endif
 }
 
 void check_task(int *counter)
@@ -2756,6 +2948,7 @@ void check_task(int *counter)
 	int ret = 0;
 	int fd = -1;
 	int value = 0;
+	HDC hdc;
 
 	printf("check_task\n");
 
@@ -2772,12 +2965,19 @@ void check_task(int *counter)
 			if(value == 0x1)
 			{
 				printf("rfid-0 dectect\n");
-				read_rfidi_0();
+				if((WIN_100_3_NO == window_no)|| (WIN_100_2_NO == window_no) || (WIN_105_1_NO == window_no) || (WIN_106_3_NO == window_no) || (WIN_106_4_NO == window_no) || (WIN_108_2_NO == window_no) || (WIN_110_NO == window_no) || (WIN_113_3_NO == window_no) || (WIN_113_4_NO == window_no) || (WIN_114_3_NO == window_no) || (WIN_114_4_NO == window_no) || (WIN_116_2_NO == window_no) || (WIN_118_NO == window_no) || (WIN_120_NO == window_no) || (WIN_133_NO == window_no) || (WIN_136_1_NO == window_no) || (WIN_137_1_NO == window_no) || (WIN_137_2_NO == window_no) || (WIN_137_3_NO == window_no)){
+
+					read_rfidi_0();
+				}
 			}
 			if(value == 0x2)
 			{
 				printf("rfid-1 dectect\n");
-				read_rfidi_1();
+				final_cmd = CMD_CREATE_124; 
+				hdc = BeginPaint(hMainWnd);
+				JointRunCmdLine(hdc);
+				EndPaint(hMainWnd,hdc);
+				//read_rfidi_1();
 			}
 		}
 	}
