@@ -214,15 +214,15 @@ static int HelloWinProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 struct textStruct menu_hz1[] = {
 	{
 		.name = "申请作业项目",
-		.filesize = 50,
+		.filesize = 35,
 		.offsetx = 60,
-		.offsety = 25,
+		.offsety = 35,
 	},
 	{
 		.name = "撤销作业项目",
-		.filesize = 50,
+		.filesize = 35,
 		.offsetx = 60,
-		.offsety = 25,
+		.offsety = 35,
 	},
 }; 
 
@@ -2977,9 +2977,10 @@ void check_task(int *counter)
 			{
 				printf("rfid-1 dectect\n");
 				final_cmd = CMD_CREATE_124; 
-				hdc = BeginPaint(hMainWnd);
+				//hdc = BeginPaint(hMainWnd);
+				hdc = GetDC(hMainWnd);
 				JointRunCmdLine(hdc);
-				EndPaint(hMainWnd,hdc);
+				//EndPaint(hMainWnd,hdc);
 				//read_rfidi_1();
 			}
 		}
