@@ -797,7 +797,7 @@ void jointwarn_system_create_bottom(HDC hdc)
 
 }
 
-int volume_value = 0;
+unsigned char volume_value = 0;
 void jointwarn_system_create_volume(HDC hdc)
 {
 	PLOGFONT s_font;

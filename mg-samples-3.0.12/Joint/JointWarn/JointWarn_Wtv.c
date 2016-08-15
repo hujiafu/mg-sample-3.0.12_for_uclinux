@@ -71,3 +71,14 @@ void JointWarn_PlayWtv(int sel)
 	JointWarn_DelWtv(fd);
 }
 
+void JointWarn_SetVolume(unsigned char val)
+{
+	int fd;
+	fd = JointWarn_GetWtv();
+	if(fd != -1){
+		write_buf[0] = val + 0xE5;
+		JointWarn_WriteWtv(fd, write_buf, 1);
+	}
+	JointWarn_DelWtv(fd);
+}
+

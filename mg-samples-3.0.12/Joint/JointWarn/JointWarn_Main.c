@@ -59,7 +59,7 @@ extern struct selStruct g_sel[MAX_SEL_NUM];
 extern int logger_perwin_cnt;
 extern unsigned int g_form_color;
 extern struct buttonObject btn_sys[10];
-extern int volume_value;
+extern unsigned char volume_value;
 extern BITMAP s_bmp[20];
 HWND hMainWnd;
 
@@ -1177,6 +1177,7 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 						SetBkMode(hdc,BM_TRANSPARENT);
         					SetBrushColor(hdc, RGBA2Pixel(hdc, 0xff, 0xff, 0xff, 0xFF));
         					FillBox(hdc, 205 + volume_value * 39, 244, (10 - volume_value) * 39, 33);
+						JointWarn_SetVolume(volume_value);
 #if 0
 						if(volume_value == 0){
 							LoadBitmap(HDC_SCREEN,&s_bmp[4],"/usr/local/minigui/local/share/minigui/res/bmp/process0.png");
@@ -1240,6 +1241,8 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
         					SetBrushColor(hdc, RGBA2Pixel(hdc, 0x0, 0x0, 0xff, 0xFF));
         					FillBox(hdc, 205 + volume_value * 39, 244, 39, 33);
 						volume_value++;
+						
+						JointWarn_SetVolume(volume_value);
 					}
 					printf("volume up pressed %d\n", volume_value);
 				}
