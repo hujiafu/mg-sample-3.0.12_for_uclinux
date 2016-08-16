@@ -1166,6 +1166,13 @@ static int WinProc(HWND hWnd,int message,WPARAM wParam,LPARAM lParam)
 							jointwarn_system_create_volume(hdc);
 							window_no = WIN_138_NO;
 						}
+						if(system_select_no == 8){
+							system("reboot");	
+						}
+						if(system_select_no == 7){
+							system("./bin/ts_calibrate");	
+							system("reboot");	
+						}
 						break;
 					}
 				}	
@@ -1873,8 +1880,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-1");
 			window_no = WIN_105_1_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 1);
 			JointWarn_PlayWtv(1); // 请打卡确认
+			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_105_2:
@@ -1892,9 +1899,9 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "105-3");
 			window_no = WIN_105_3_NO;
+			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
-			JointWarn_PlayWtv(8); // 播放请勿越权操作
 			break;
 		case CMD_CREATE_106_1:
 			printf("CMD_CREATE_106_1\n");
@@ -1926,8 +1933,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-3");
 			window_no = WIN_106_3_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_106_4:
@@ -1936,8 +1943,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "106-4");
 			window_no = WIN_106_4_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_107:
@@ -2001,8 +2008,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "109-1");
 			window_no = WIN_109_1_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(2); // 确认完成
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_2:
@@ -2012,8 +2019,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "109-2");
 			window_no = WIN_109_2_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_109_3:
@@ -2023,8 +2030,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "109-3");
 			window_no = WIN_109_3_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_110:
@@ -2046,8 +2053,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "111-1");
 			window_no = WIN_111_1_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(4); // 确认成功，安全作业
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_111_2:
@@ -2057,8 +2064,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "111-2");
 			window_no = WIN_111_2_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_112:
@@ -2083,8 +2090,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "111-3");
 			window_no = WIN_111_3_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_1:
@@ -2093,8 +2100,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-1");
 			window_no = WIN_113_1_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 1);
 			JointWarn_PlayWtv(1); // 请打卡确认
+			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_2:
@@ -2103,8 +2110,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-2");
 			window_no = WIN_113_2_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_3:
@@ -2113,8 +2120,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-3");
 			window_no = WIN_113_3_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(5); // 有人作业，禁止销项
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_113_4:
@@ -2123,8 +2130,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "113-4");
 			window_no = WIN_113_4_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 1);
 			JointWarn_PlayWtv(1); // 请打卡确认
+			JointWarn_create_msgform(hdc, g_msgform, 1);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_1:
@@ -2158,8 +2165,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-3");
 			window_no = WIN_114_3_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_4:
@@ -2168,8 +2175,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-4");
 			window_no = WIN_114_4_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_5:
@@ -2178,8 +2185,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-5");
 			window_no = WIN_114_5_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_114_6:
@@ -2188,8 +2195,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "114-6");
 			window_no = WIN_114_6_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_115:
@@ -2263,8 +2270,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "117-2");
 			window_no = WIN_117_2_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_117_3:
@@ -2274,8 +2281,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "117-3");
 			window_no = WIN_117_3_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_118:
@@ -2297,8 +2304,8 @@ void JointRunCmdLine(HDC hdc)
 			memset(display_no_str, 0, 10);
 			strcpy(display_no_str, "119-1");
 			window_no = WIN_119_1_NO;
-			JointWarn_create_msgform(hdc, g_msgform, 0);
 			JointWarn_PlayWtv(10); // 异常复位成功
+			JointWarn_create_msgform(hdc, g_msgform, 0);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_2:
@@ -2308,8 +2315,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "119-2");
 			window_no = WIN_119_2_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(8); // 播放请勿越权操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_119_3:
@@ -2319,8 +2326,8 @@ void JointRunCmdLine(HDC hdc)
 			strcpy(display_no_str, "119-3");
 			window_no = WIN_119_3_NO;
 			top_has_canel = 0;
-			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			JointWarn_PlayWtv(9); // 播放 请规范操作
+			JointWarn_create_top_back(hdc, TOP_WIN_WIDTH, TOP_WIN_HIGHT, top_has_canel);
 			final_cmd = CMD_NULL;
 			break;
 		case CMD_CREATE_120:

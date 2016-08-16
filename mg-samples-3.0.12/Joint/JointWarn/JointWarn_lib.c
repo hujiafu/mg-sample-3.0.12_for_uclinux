@@ -201,9 +201,9 @@ void JointWarn_create_top(HDC hdc, struct warnForm *warn, int count, int width, 
 	if(1 == has_canel){
 		jointwarn_paint_cancel(hdc);
 	}else{
-		sleep(3);
-		printf("sleep 3000\n");
-		//auto canel after 3s
+		sleep(5);
+		printf("sleep 5000\n");
+		//auto canel after 5s
 		origin_str = JointWarn_102_get_data(0);
                 printf("=======================================\n");
                 JointAnalysisCmdLine(origin_str, &ptr);
